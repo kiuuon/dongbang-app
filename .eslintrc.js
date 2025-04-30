@@ -15,6 +15,9 @@ module.exports = {
     node: true,
   },
   settings: {
+    'import/resolver': {
+      typescript: {},
+    },
     react: {
       version: 'detect',
     },
@@ -26,5 +29,7 @@ module.exports = {
     'react-native/no-inline-styles': 'off', // 필요한 경우 꺼도 됨
     'no-use-before-define': 'off',
     '@typescript-eslint/no-use-before-define': ['error'],
+    '@typescript-eslint/no-use-before-define': 'off',
+    'react-native/sort-styles': 'off',
   },
 };
