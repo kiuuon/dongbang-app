@@ -28,8 +28,9 @@ module.exports = {
     'react/react-in-jsx-scope': 'off', // React 17+
     'react-native/no-inline-styles': 'off', // 필요한 경우 꺼도 됨
     'no-use-before-define': 'off',
-    '@typescript-eslint/no-use-before-define': ['error'],
     '@typescript-eslint/no-use-before-define': 'off',
     'react-native/sort-styles': 'off',
+    'import/prefer-default-export': 'off',
+    camelcase: 'off',
   },
 };

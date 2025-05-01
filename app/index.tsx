@@ -1,38 +1,53 @@
-import { View, StyleSheet, Image, StatusBar } from 'react-native';
+import { useEffect } from 'react';
+import { View, Alert, StatusBar } from 'react-native';
+import { WebView, WebViewMessageEvent } from 'react-native-webview';
+import { router } from 'expo-router';
 
-import KakaoLoginButton from '@/components/login/KakaoLoginButton';
-import GoogleLoginButton from '@/components/login/GoogleLoginButton';
+import { supabase } from '@/apis/supabaseClient';
 import Colors from '@/constants/colors';
-import logo from '@/assets/images/logo.png';
 
-export default function LoginScreen() {
+function LoginScreen() {
+  useEffect(() => {
+    const checkLoginStatus = async () => {
+      const { data } = await supabase.auth.getSession();
+      if (data.session) {
+        router.replace('/post');
+      }
+    };
+    checkLoginStatus();
+  }, []);
+
+  const handleMessage = async (event: WebViewMessageEvent) => {
+    try {
+      const { accessToken, refreshToken } = JSON.parse(event.nativeEvent.data);
+
+      const { error } = await supabase.auth.setSession({
+        access_token: accessToken,
+        refresh_token: refreshToken,
+      });
+
+      if (error) {
+        Alert.alert('로그인 실패', error.message);
+      } else {
+        router.replace('/post');
+      }
+    } catch (err) {
+      Alert.alert('메시지 파싱 실패', String(err));
+    }
+  };
+
   return (
-    <View style={styles.container}>
-      <StatusBar backgroundColor={Colors.secondary} barStyle="dark-content" />
-      <Image source={logo} style={styles.logo} resizeMode="contain" />
-      <View style={styles.buttonContainer}>
-        <KakaoLoginButton />
-        <GoogleLoginButton />
-      </View>
+    <View style={{ flex: 1 }}>
+      <StatusBar backgroundColor="#FFE6A1" barStyle="dark-content" />
+      <WebView
+        source={{ uri: `${process.env.EXPO_PUBLIC_WEB_URL}/login` }}
+        onMessage={handleMessage}
+        style={{ flex: 1, backgroundColor: Colors.secondary }}
+        javaScriptEnabled
+        originWhitelist={['*']}
+      />
     </View>
   );
 }
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: Colors.secondary,
-    alignItems: 'center',
-    paddingHorizontal: 48,
-    paddingTop: 210,
-    gap: 172,
-  },
-  logo: {
-    width: 140,
-    height: 140,
-  },
-  buttonContainer: {
-    width: '100%',
-    gap: 12,
-  },
-});
+export default LoginScreen;
