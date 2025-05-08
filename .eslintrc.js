@@ -31,6 +31,7 @@ module.exports = {
     '@typescript-eslint/no-use-before-define': 'off',
     'react-native/sort-styles': 'off',
     'import/prefer-default-export': 'off',
+    'react/jsx-props-no-spreading': 'off',
     camelcase: 'off',
   },
 };
