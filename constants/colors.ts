@@ -1,5 +1,5 @@
 const Colors = {
-  primary: '#F3ECDE',
+  primary: '#F9A825',
   primary_dark: '#C8BBA3',
   secondary: '#FFE6A1',
   secondary_light: '#FFF3CE',
@@ -8,12 +8,12 @@ const Colors = {
   tertiary_dark: '#5C4A25',
   white: '#FFFFFF',
   black: '#000000',
-  gray0: '#E0E0E0',
-  gray1: '#B4B4B4',
-  gray2: '#969696',
+  gray0: '#EDF0F4',
+  gray1: '#C3C3C3',
+  gray2: '#989898',
   gray3: '#6B6B6B',
   gray4: '#3C3C3C',
-  error: '#FF5252',
+  error: '#F40707',
   kakao: '#FFEB3B',
 };
 
