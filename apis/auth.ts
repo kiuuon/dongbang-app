@@ -1,0 +1,12 @@
+import { supabase } from './supabaseClient';
+
+export async function login(accessToken: string, refreshToken: string) {
+  await supabase.auth.setSession({
+    access_token: accessToken,
+    refresh_token: refreshToken,
+  });
+}
+
+export async function logout() {
+  await supabase.auth.signOut();
+}
