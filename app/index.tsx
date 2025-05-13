@@ -1,13 +1,16 @@
-import { useEffect } from 'react';
-import { View, Alert, StatusBar } from 'react-native';
+import { useState, useEffect } from 'react';
+import { SafeAreaView } from 'react-native-safe-area-context';
 import { WebViewMessageEvent } from 'react-native-webview';
 import { router } from 'expo-router';
 
 import CustomWebView from '@/components/common/CustomWebView';
 import { fetchSession, login } from '@/apis/auth';
 import { fetchUser } from '@/apis/user';
+import Colors from '@/constants/colors';
 
 function LoginScreen() {
+  const [isLoading, setIsLoading] = useState(true);
+
   useEffect(() => {
     (async () => {
       const session = await fetchSession();
@@ -19,24 +22,29 @@ function LoginScreen() {
           router.replace('/sign-up/terms');
         }
       }
+      setIsLoading(false);
     })();
   }, []);
 
   const handleMessage = async (event: WebViewMessageEvent) => {
-    try {
-      const { accessToken, refreshToken } = JSON.parse(event.nativeEvent.data);
-      await login(accessToken, refreshToken);
+    const { accessToken, refreshToken } = JSON.parse(event.nativeEvent.data);
+    await login(accessToken, refreshToken);
+    const user = await fetchUser();
+    if (user) {
       router.replace('/post');
-    } catch (err) {
-      Alert.alert('메시지 파싱 실패', String(err));
+    } else {
+      router.replace('/sign-up/terms');
     }
   };
 
+  if (isLoading) {
+    return null;
+  }
+
   return (
-    <View style={{ flex: 1 }}>
-      <StatusBar backgroundColor="#FFE6A1" barStyle="dark-content" />
+    <SafeAreaView style={{ flex: 1, backgroundColor: Colors.primary }}>
       <CustomWebView source={{ uri: `${process.env.EXPO_PUBLIC_WEB_URL}/login` }} onMessage={handleMessage} />
-    </View>
+    </SafeAreaView>
   );
 }
 

@@ -1,3 +1,4 @@
+import { UserType } from '@/types/UserType';
 import { supabase } from './supabaseClient';
 
 export async function fetchUserId() {
@@ -16,4 +17,8 @@ export async function fetchUser() {
   }
 
   return data[0];
+}
+
+export async function signUp(body: UserType) {
+  await supabase.from('User').insert([body]);
 }

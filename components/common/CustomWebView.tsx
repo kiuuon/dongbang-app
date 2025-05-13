@@ -1,6 +1,7 @@
 import { useRef } from 'react';
 import { WebView } from 'react-native-webview';
 import type { WebView as WebViewType, WebViewMessageEvent } from 'react-native-webview';
+import { useNavigation } from 'expo-router';
 
 import { fetchSession } from '@/apis/auth';
 
@@ -11,6 +12,7 @@ function CustomWebView({
   source: { uri: string };
   onMessage: (event: WebViewMessageEvent) => void;
 }) {
+  const navigation = useNavigation();
   const webViewRef = useRef<WebViewType | null>(null);
 
   const sendTokenToWeb = async () => {
@@ -29,7 +31,13 @@ function CustomWebView({
       ref={webViewRef}
       source={source}
       onLoadEnd={sendTokenToWeb}
-      onMessage={onMessage}
+      onMessage={(event) => {
+        if (event.nativeEvent.data === 'back') {
+          navigation.goBack();
+          return;
+        }
+        onMessage(event);
+      }}
       javaScriptEnabled
       originWhitelist={['*']}
       userAgent="rn-webview"

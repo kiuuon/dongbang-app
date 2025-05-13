@@ -3,14 +3,25 @@ import { router } from 'expo-router';
 
 import CustomWebView from '@/components/common/CustomWebView';
 import Colors from '@/constants/colors';
+import termsStore from '@/stores/terms-store';
 
 function TermsScreen() {
+  const setTermOfUse = termsStore((state) => state.setTermOfUse);
+  const setPrivacyPolicy = termsStore((state) => state.setPrivacyPolicy);
+  const setThirdPartyConsent = termsStore((state) => state.setThirdPartyConsent);
+  const setMarketing = termsStore((state) => state.setMarketing);
+
   return (
-    <SafeAreaView edges={['top']} style={{ flex: 1, backgroundColor: Colors.white }}>
+    <SafeAreaView style={{ flex: 1, backgroundColor: Colors.white }}>
       <CustomWebView
         source={{ uri: `${process.env.EXPO_PUBLIC_WEB_URL}/sign-up/terms` }}
         onMessage={(event) => {
-          console.log(event.nativeEvent.data);
+          const { termOfUse, privacyPolicy, thirdPartyConsent, marketing } = JSON.parse(event.nativeEvent.data);
+          setTermOfUse(termOfUse);
+          setPrivacyPolicy(privacyPolicy);
+          setThirdPartyConsent(thirdPartyConsent);
+          setMarketing(marketing);
+
           router.push('/sign-up/info');
         }}
       />

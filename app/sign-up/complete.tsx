@@ -7,7 +7,7 @@ import Colors from '@/constants/colors';
 
 function CompleteScreen() {
   return (
-    <SafeAreaView edges={['top']} style={{ flex: 1, backgroundColor: Colors.white }}>
+    <SafeAreaView style={{ flex: 1, backgroundColor: Colors.white }}>
       <CustomWebView
         source={{ uri: `${process.env.EXPO_PUBLIC_WEB_URL}/sign-up/complete` }}
         onMessage={() => {
