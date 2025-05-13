@@ -1,5 +1,11 @@
 import { supabase } from './supabaseClient';
 
+export async function fetchSession() {
+  const { data } = await supabase.auth.getSession();
+
+  return data?.session;
+}
+
 export async function login(accessToken: string, refreshToken: string) {
   await supabase.auth.setSession({
     access_token: accessToken,

@@ -1,17 +1,23 @@
 import { useEffect } from 'react';
 import { View, Alert, StatusBar } from 'react-native';
-import { WebView, WebViewMessageEvent } from 'react-native-webview';
+import { WebViewMessageEvent } from 'react-native-webview';
 import { router } from 'expo-router';
 
-import { supabase } from '@/apis/supabaseClient';
-import { login } from '@/apis/auth';
+import CustomWebView from '@/components/common/CustomWebView';
+import { fetchSession, login } from '@/apis/auth';
+import { fetchUser } from '@/apis/user';
 
 function LoginScreen() {
   useEffect(() => {
     (async () => {
-      const { data } = await supabase.auth.getSession();
-      if (data.session) {
-        router.replace('/post');
+      const session = await fetchSession();
+      const user = await fetchUser();
+      if (session) {
+        if (user) {
+          router.replace('/post');
+        } else {
+          router.replace('/sign-up/terms');
+        }
       }
     })();
   }, []);
@@ -29,12 +35,7 @@ function LoginScreen() {
   return (
     <View style={{ flex: 1 }}>
       <StatusBar backgroundColor="#FFE6A1" barStyle="dark-content" />
-      <WebView
-        source={{ uri: `${process.env.EXPO_PUBLIC_WEB_URL}/login` }}
-        onMessage={handleMessage}
-        javaScriptEnabled
-        originWhitelist={['*']}
-      />
+      <CustomWebView source={{ uri: `${process.env.EXPO_PUBLIC_WEB_URL}/login` }} onMessage={handleMessage} />
     </View>
   );
 }
