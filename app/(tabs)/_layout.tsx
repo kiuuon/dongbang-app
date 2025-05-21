@@ -1,3 +1,5 @@
+import { useEffect } from 'react';
+import { BackHandler } from 'react-native';
 import { Tabs } from 'expo-router';
 import type { BottomTabBarProps } from '@react-navigation/bottom-tabs';
 
@@ -9,12 +11,21 @@ function customTabBar(props: BottomTabBarProps) {
 }
 
 export default function TabLayout() {
+  useEffect(() => {
+    const backHandler = BackHandler.addEventListener('hardwareBackPress', () => true);
+
+    return () => {
+      backHandler.remove();
+    };
+  }, []);
+
   return (
     <Tabs
       tabBar={customTabBar}
       screenOptions={() => ({
         headerShown: false,
         title: '',
+        gestureEnabled: false,
       })}
     >
       <Tabs.Screen name="post/index" />

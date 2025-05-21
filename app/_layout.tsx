@@ -15,6 +15,13 @@ export default function RootLayout() {
       screenOptions={{
         headerShown: false,
       }}
-    />
+    >
+      <Stack.Screen
+        name="(tabs)"
+        options={{
+          gestureEnabled: false,
+        }}
+      />
+    </Stack>
   );
 }

@@ -6,6 +6,7 @@ const Colors = {
   tertiary: '#A17C4A',
   tertiary_light: '#B5986A',
   tertiary_dark: '#5C4A25',
+  background: '#F9F9F9',
   white: '#FFFFFF',
   black: '#000000',
   gray0: '#EDF0F4',

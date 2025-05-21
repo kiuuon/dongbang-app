@@ -6,6 +6,12 @@ export async function fetchSession() {
   return data?.session;
 }
 
+export async function fetchUserId() {
+  const { data } = await supabase.auth.getUser();
+
+  return data?.user?.id;
+}
+
 export async function login(accessToken: string, refreshToken: string) {
   await supabase.auth.setSession({
     access_token: accessToken,

@@ -90,6 +90,8 @@ const styles = StyleSheet.create({
     backgroundColor: Colors.white,
     height: 70,
     paddingHorizontal: 34,
+    borderTopWidth: 1,
+    borderTopColor: Colors.background,
   },
   item: {
     flexDirection: 'column',

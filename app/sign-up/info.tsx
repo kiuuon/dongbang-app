@@ -36,7 +36,7 @@ function InfoScreen() {
     <SafeAreaView style={{ flex: 1, backgroundColor: Colors.white }}>
       <CustomWebView
         source={{ uri: `${process.env.EXPO_PUBLIC_WEB_URL}/sign-up/info` }}
-        onMessage={(event) => {
+        onMessage={async (event) => {
           const body = {
             ...JSON.parse(event.nativeEvent.data),
             term_of_use: termOfUse,
@@ -45,7 +45,7 @@ function InfoScreen() {
             marketing,
           };
 
-          signUp(body);
+          await signUp(body);
 
           navigation.reset({
             index: 0,
