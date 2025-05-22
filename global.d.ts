@@ -3,7 +3,7 @@ declare module '*.png' {
   export default content;
 }
 
-declare module '*.ttf' {
+declare module '*.otf' {
   const content: number;
   export default content;
 }

@@ -33,5 +33,11 @@ module.exports = {
     'import/prefer-default-export': 'off',
     'react/jsx-props-no-spreading': 'off',
     camelcase: 'off',
+    'react-native/no-raw-text': [
+      'error',
+      {
+        skip: ['BoldText', 'RegularText'],
+      },
+    ],
   },
 };

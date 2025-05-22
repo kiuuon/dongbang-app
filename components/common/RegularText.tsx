@@ -10,8 +10,7 @@ function RegularText({ style, fontSize, ...props }: StyledTextProps) {
 
 const styles = StyleSheet.create({
   baseText: {
-    fontFamily: 'Pretendard',
-    fontWeight: '400',
+    fontFamily: 'PretendardRegular',
     fontStyle: 'normal',
   },
 });

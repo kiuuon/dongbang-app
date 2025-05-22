@@ -10,8 +10,7 @@ function BoldText({ style, fontSize, ...props }: StyledTextProps) {
 
 const styles = StyleSheet.create({
   baseText: {
-    fontFamily: 'Pretendard',
-    fontWeight: '600',
+    fontFamily: 'PretendardSemiBold',
     fontStyle: 'normal',
   },
 });

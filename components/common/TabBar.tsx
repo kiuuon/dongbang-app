@@ -12,7 +12,7 @@ import InteractIcon from '@/icons/interact-icon';
 import ProfileIcon from '@/icons/profile-icon';
 
 const titles: Record<string, string> = {
-  'post/index': '홈',
+  'post/[clubType]/index': '홈',
   'search/index': '검색',
   'club/index': '동아리',
   'interact/index': '교류',
@@ -20,7 +20,7 @@ const titles: Record<string, string> = {
 };
 
 const icons: Record<string, (props: { color: string }) => JSX.Element> = {
-  'post/index': ({ color }) => <HomeIcon color={color} />,
+  'post/[clubType]/index': ({ color }) => <HomeIcon color={color} />,
   'search/index': ({ color }) => <SearchIcon color={color} />,
   'club/index': ({ color }) => <ClubIcon color={color} />,
   'interact/index': ({ color }) => <InteractIcon color={color} />,

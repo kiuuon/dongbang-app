@@ -17,7 +17,7 @@ function LoginScreen() {
       const user = await fetchUser();
       if (session) {
         if (user) {
-          router.replace('/post');
+          router.replace('/post/my');
         } else {
           router.replace('/sign-up/terms');
         }
@@ -31,7 +31,7 @@ function LoginScreen() {
     await login(accessToken, refreshToken);
     const user = await fetchUser();
     if (user) {
-      router.replace('/post');
+      router.replace('/post/my');
     } else {
       router.replace('/sign-up/terms');
     }

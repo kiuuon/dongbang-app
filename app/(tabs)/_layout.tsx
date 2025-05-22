@@ -28,7 +28,7 @@ export default function TabLayout() {
         gestureEnabled: false,
       })}
     >
-      <Tabs.Screen name="post/index" />
+      <Tabs.Screen name="post/[clubType]/index" />
       <Tabs.Screen name="search/index" />
       <Tabs.Screen name="club/index" />
       <Tabs.Screen name="interact/index" />
