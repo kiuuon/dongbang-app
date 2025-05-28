@@ -4,7 +4,7 @@ import { router } from 'expo-router';
 import CustomWebView from '@/components/common/CustomWebView';
 import Colors from '@/constants/colors';
 
-function ClubScreen() {
+function ClubListScreen() {
   return (
     <SafeAreaView edges={['top']} style={{ flex: 1, backgroundColor: Colors.white }}>
       <CustomWebView
@@ -12,6 +12,9 @@ function ClubScreen() {
         onMessage={(event) => {
           if (event.nativeEvent.data === 'create club') {
             router.push('/club/create');
+          } else {
+            const clubId = event.nativeEvent.data;
+            router.push(`/club/${clubId}`);
           }
         }}
       />
@@ -19,4 +22,4 @@ function ClubScreen() {
   );
 }
 
-export default ClubScreen;
+export default ClubListScreen;

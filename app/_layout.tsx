@@ -1,5 +1,7 @@
+import { useState } from 'react';
 import { Stack } from 'expo-router';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { useFonts } from 'expo-font';
 
 import pretendardRegular from '@/assets/fonts/Pretendard-Regular.otf';
@@ -10,6 +12,8 @@ export const unstable_settings = {
 };
 
 export default function RootLayout() {
+  const [queryClient] = useState(() => new QueryClient());
+
   const [fontsLoaded] = useFonts({
     PretendardRegular: pretendardRegular,
     PretendardSemiBold: pretendardSemiBold,
@@ -18,20 +22,22 @@ export default function RootLayout() {
   if (!fontsLoaded) return null;
 
   return (
-    <GestureHandlerRootView style={{ flex: 1 }}>
-      <Stack
-        screenOptions={{
-          headerShown: false,
-        }}
-      >
-        <Stack.Screen name="index" />
-        <Stack.Screen
-          name="(tabs)"
-          options={{
-            gestureEnabled: false,
+    <QueryClientProvider client={queryClient}>
+      <GestureHandlerRootView style={{ flex: 1 }}>
+        <Stack
+          screenOptions={{
+            headerShown: false,
           }}
-        />
-      </Stack>
-    </GestureHandlerRootView>
+        >
+          <Stack.Screen name="index" />
+          <Stack.Screen
+            name="(tabs)"
+            options={{
+              gestureEnabled: false,
+            }}
+          />
+        </Stack>
+      </GestureHandlerRootView>
+    </QueryClientProvider>
   );
 }

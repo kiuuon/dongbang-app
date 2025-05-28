@@ -12,7 +12,7 @@ function ClubCreateScreen() {
         onMessage={(event) => {
           if (event.nativeEvent.data === 'campus') {
             router.push('/club/create/campus/info');
-          } else {
+          } else if (event.nativeEvent.data === 'union') {
             router.push('/club/create/union/info');
           }
         }}

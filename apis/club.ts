@@ -29,3 +29,14 @@ export async function createClub(body: ClubType) {
     },
   ]);
 }
+
+export async function fetchMyClubs() {
+  const userId = await fetchUserId();
+  const { data: clubData } = await supabase.from('Club_User').select('club_id').eq('user_id', userId);
+
+  const clubIds = clubData?.map((club) => club.club_id) || [];
+
+  const { data: clubs } = await supabase.from('Club').select('*').in('id', clubIds);
+
+  return clubs;
+}
