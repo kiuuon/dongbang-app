@@ -8,7 +8,7 @@ export default function NavigationModal({ visible, onClose }: { visible: boolean
   const { clubType } = useLocalSearchParams();
 
   const goToSelectedClubType = (selectedClubType: string) => {
-    router.push(`/post/${selectedClubType}`);
+    router.push(`/feed/${selectedClubType}`);
     onClose();
   };
 

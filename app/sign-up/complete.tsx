@@ -11,7 +11,7 @@ function CompleteScreen() {
       <CustomWebView
         source={{ uri: `${process.env.EXPO_PUBLIC_WEB_URL}/sign-up/complete` }}
         onMessage={() => {
-          router.push('/post');
+          router.push('/feed/my');
         }}
       />
     </SafeAreaView>
