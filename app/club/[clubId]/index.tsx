@@ -19,6 +19,8 @@ function ClubScreen() {
             setIsNavigationOpen(true);
           } else if (event.nativeEvent.data === 'comingSoon') {
             router.push('/coming-soon');
+          } else if (event.nativeEvent.data === 'go to write feed page') {
+            router.push(`/feed/write/${clubId}`);
           }
         }}
       />

@@ -57,8 +57,8 @@ const styles = StyleSheet.create({
     height: 337,
     paddingVertical: 10,
     paddingHorizontal: 20,
-    borderTopLeftRadius: 20,
-    borderTopRightRadius: 20,
+    borderTopLeftRadius: 24,
+    borderTopRightRadius: 24,
   },
   modalButton: {
     width: '100%',
