@@ -3,6 +3,7 @@ import { Stack } from 'expo-router';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { useFonts } from 'expo-font';
+import { BottomSheetModalProvider } from '@gorhom/bottom-sheet';
 
 import pretendardRegular from '@/assets/fonts/Pretendard-Regular.otf';
 import pretendardSemiBold from '@/assets/fonts/Pretendard-SemiBold.otf';
@@ -24,19 +25,21 @@ export default function RootLayout() {
   return (
     <QueryClientProvider client={queryClient}>
       <GestureHandlerRootView style={{ flex: 1 }}>
-        <Stack
-          screenOptions={{
-            headerShown: false,
-          }}
-        >
-          <Stack.Screen name="index" />
-          <Stack.Screen
-            name="(tabs)"
-            options={{
-              gestureEnabled: false,
+        <BottomSheetModalProvider>
+          <Stack
+            screenOptions={{
+              headerShown: false,
             }}
-          />
-        </Stack>
+          >
+            <Stack.Screen name="index" />
+            <Stack.Screen
+              name="(tabs)"
+              options={{
+                gestureEnabled: false,
+              }}
+            />
+          </Stack>
+        </BottomSheetModalProvider>
       </GestureHandlerRootView>
     </QueryClientProvider>
   );

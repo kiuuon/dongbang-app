@@ -1,6 +1,7 @@
 import { useState } from 'react';
-import { View, Image, ScrollView, TouchableOpacity, StyleSheet, TextInput } from 'react-native';
+import { View, Image, ScrollView, TouchableOpacity, StyleSheet } from 'react-native';
 import { useQuery } from '@tanstack/react-query';
+import { BottomSheetTextInput, BottomSheetModal } from '@gorhom/bottom-sheet';
 
 import { fetchAllClubs } from '@/apis/club';
 import Colors from '@/constants/colors';
@@ -9,9 +10,11 @@ import BoldText from '@/components/common/SemiBoldText';
 function ClubTagModal({
   selected,
   setSelected,
+  bottomSheetModalRef,
 }: {
   selected: string[];
   setSelected: React.Dispatch<React.SetStateAction<string[]>>;
+  bottomSheetModalRef: React.RefObject<BottomSheetModal | null>;
 }) {
   const [searchText, setSearchText] = useState('');
 
@@ -30,18 +33,21 @@ function ClubTagModal({
 
   return (
     <View style={styles.container}>
-      <TextInput
+      <BottomSheetTextInput
         style={styles.searchInput}
         placeholder="검색"
         placeholderTextColor={Colors.gray2}
         value={searchText}
         onChangeText={setSearchText}
+        onBlur={() => {
+          bottomSheetModalRef.current?.snapToIndex(0);
+        }}
       />
-
       <ScrollView
         style={styles.scrollContainer}
         contentContainerStyle={{ flexGrow: 1 }}
         showsVerticalScrollIndicator={false}
+        keyboardShouldPersistTaps="always"
       >
         {filteredClubs?.map((club) => (
           <View key={club.id} style={styles.clubRow}>
@@ -63,7 +69,7 @@ const styles = StyleSheet.create({
   },
   searchInput: {
     marginBottom: 20,
-    marginTop: 23,
+    marginTop: 24,
     height: 40,
     width: '100%',
     borderRadius: 10,
@@ -95,6 +101,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'space-between',
     paddingRight: 10,
+    height: '100%',
   },
   selectButton: {
     width: 20,

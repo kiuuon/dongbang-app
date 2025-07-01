@@ -1,7 +1,7 @@
 import { useState } from 'react';
-import { View, Image, ScrollView, TouchableOpacity, StyleSheet, TextInput } from 'react-native';
-import { useLocalSearchParams } from 'expo-router';
+import { View, Image, ScrollView, TouchableOpacity, StyleSheet } from 'react-native';
 import { useQuery } from '@tanstack/react-query';
+import { BottomSheetTextInput, BottomSheetModal } from '@gorhom/bottom-sheet';
 
 import { fetchClubMembers } from '@/apis/club';
 import Colors from '@/constants/colors';
@@ -9,13 +9,16 @@ import BoldText from '@/components/common/SemiBoldText';
 import ToggleIcon2 from '@/icons/toggle-icon';
 
 function PersonTagModal({
+  clubId,
   selected,
   setSelected,
+  bottomSheetModalRef,
 }: {
+  clubId: string;
   selected: string[];
   setSelected: React.Dispatch<React.SetStateAction<string[]>>;
+  bottomSheetModalRef: React.RefObject<BottomSheetModal | null>;
 }) {
-  const { clubId } = useLocalSearchParams();
   const [searchText, setSearchText] = useState('');
 
   const { data: members } = useQuery({
@@ -45,17 +48,21 @@ function PersonTagModal({
           <ToggleIcon2 active={selected.length === members?.length} />
         </TouchableOpacity>
       </View>
-      <TextInput
+      <BottomSheetTextInput
         style={styles.searchInput}
         placeholder="검색"
         placeholderTextColor={Colors.gray2}
         value={searchText}
         onChangeText={setSearchText}
+        onBlur={() => {
+          bottomSheetModalRef.current?.snapToIndex(0);
+        }}
       />
       <ScrollView
         style={styles.scrollContainer}
         contentContainerStyle={{ flexGrow: 1 }}
         showsVerticalScrollIndicator={false}
+        keyboardShouldPersistTaps="always"
       >
         {filteredMembers?.map((member) => (
           <View key={member.userId} style={styles.memberRow}>
@@ -129,6 +136,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'space-between',
     paddingRight: 10,
+    height: '100%',
   },
   selectButton: {
     width: 20,
