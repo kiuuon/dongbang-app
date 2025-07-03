@@ -13,7 +13,7 @@ function FeedScreen() {
   const [isNavigationOpen, setIsNavigationOpen] = useState(false);
 
   const goToSelectedClubType = (selectedClubType: string) => {
-    router.push(`/feed/${selectedClubType}`);
+    router.replace(`/feed/${selectedClubType}`);
     setIsNavigationOpen(false);
   };
 

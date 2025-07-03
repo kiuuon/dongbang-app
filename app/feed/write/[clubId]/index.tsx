@@ -77,7 +77,7 @@ function FeedWriteScreen() {
               selectedMembers,
               selectedClubs,
             );
-            router.replace(`/club/${clubId}`);
+            router.back();
           }
         }}
       />
