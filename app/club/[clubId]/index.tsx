@@ -37,11 +37,27 @@ function ClubScreen() {
           }
         }}
       />
-      <CustomBottomSheet isOpen={isNavigationOpen} onClose={() => setIsNavigationOpen(false)} scrollable height={306}>
+      <CustomBottomSheet
+        isOpen={isNavigationOpen}
+        onClose={() => setIsNavigationOpen(false)}
+        scrollable={(myClubs?.length as number) > 4 && true}
+        height={(myClubs?.length as number) > 4 ? 350 : -1}
+        scrollViewHeight={(myClubs?.length as number) > 4 ? 290 : '100%'}
+      >
         {myClubs?.map(
-          (club) =>
+          (club, index) =>
             club.id !== clubId && (
-              <TouchableOpacity key={club.id} style={styles.modalButton} onPress={() => goToSelectedClub(club.id)}>
+              <TouchableOpacity
+                key={club.id}
+                style={[
+                  styles.modalButton,
+                  myClubs.length - 1 > index && {
+                    borderBottomWidth: 1,
+                    borderBottomColor: Colors.gray0,
+                  },
+                ]}
+                onPress={() => goToSelectedClub(club.id)}
+              >
                 <Image source={{ uri: club.logo }} style={styles.clubImage} />
                 <BoldText fontSize={16}>{club.name}</BoldText>
               </TouchableOpacity>
@@ -59,8 +75,6 @@ const styles = StyleSheet.create({
     width: '100%',
     gap: 24,
     paddingVertical: 24,
-    borderBottomWidth: 1,
-    borderBottomColor: Colors.gray0,
   },
   clubImage: {
     width: 50,

@@ -8,6 +8,7 @@ export async function writeFeed(
   isNicknameVisible: boolean,
   isPrivate: boolean,
   clubId: string,
+  clubType: 'campus' | 'union',
   selectedMembers: string[],
   selectedClubs: string[],
 ) {
@@ -22,6 +23,7 @@ export async function writeFeed(
       is_nickname_visible: isNicknameVisible,
       is_private: isPrivate,
       club_id: clubId,
+      club_type: clubType,
       author_id: userId,
     })
     .select('id')

@@ -66,14 +66,17 @@ function FeedWriteScreen() {
           if (event.nativeEvent.data === 'open tag modal') {
             setIsTagModalOpen(true);
           } else {
-            const { photos, title, content, isNicknameVisible, isPrivate } = JSON.parse(event.nativeEvent.data);
+            const { photos, title, content, clubType, isNicknameVisible, isPrivate } = JSON.parse(
+              event.nativeEvent.data,
+            );
             writeFeed(
               photos,
-              title,
-              content,
+              title || '',
+              content || '',
               isNicknameVisible,
               isPrivate,
               clubId as string,
+              clubType,
               selectedMembers,
               selectedClubs,
             );

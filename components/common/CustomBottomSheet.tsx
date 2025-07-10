@@ -1,5 +1,6 @@
 import { useCallback, useEffect, useMemo, useRef } from 'react';
-import { StyleSheet } from 'react-native';
+import { StyleSheet, View } from 'react-native';
+import { SafeAreaView } from 'react-native-safe-area-context';
 import {
   BottomSheetModal,
   BottomSheetView,
@@ -9,26 +10,31 @@ import {
 } from '@gorhom/bottom-sheet';
 
 import Colors from '@/constants/colors';
+import BoldText from './SemiBoldText';
 
 function CustomBottomSheet({
   isOpen,
   onClose,
   scrollable = false,
   height = -1,
+  scrollViewHeight = '100%',
   children,
   sheetRef,
+  title,
 }: {
   isOpen: boolean;
   onClose: () => void;
   scrollable?: boolean;
   height?: number;
+  scrollViewHeight?: number | `${number}%`;
   children: React.ReactNode;
   sheetRef?: React.RefObject<BottomSheetModal | null>;
+  title?: string;
 }) {
   const internalRef = useRef<BottomSheetModal>(null);
   const bottomSheetModalRef = sheetRef ?? internalRef;
 
-  const snapPoints = useMemo(() => ['50%'], []);
+  const snapPoints = useMemo(() => [height], [height]);
 
   const bottomSheetProps = height === -1 ? { enableDynamicSizing: true } : { snapPoints, enableDynamicSizing: false };
 
@@ -61,9 +67,27 @@ function CustomBottomSheet({
       {...bottomSheetProps}
     >
       {scrollable ? (
-        <BottomSheetScrollView style={styles.sheetContent}>{children}</BottomSheetScrollView>
+        <View>
+          {title && (
+            <BoldText fontSize={14} style={{ marginBottom: 28, width: '100%', textAlign: 'center' }}>
+              {title}
+            </BoldText>
+          )}
+          <BottomSheetScrollView style={[styles.sheetContent, { maxHeight: scrollViewHeight }]}>
+            {children}
+          </BottomSheetScrollView>
+        </View>
       ) : (
-        <BottomSheetView style={styles.sheetContent}>{children}</BottomSheetView>
+        <BottomSheetView style={styles.sheetContent}>
+          {title && (
+            <BoldText fontSize={14} style={{ marginBottom: 28, width: '100%', textAlign: 'center' }}>
+              {title}
+            </BoldText>
+          )}
+          <SafeAreaView edges={['bottom']} style={{ width: '100%' }}>
+            {children}
+          </SafeAreaView>
+        </BottomSheetView>
       )}
     </BottomSheetModal>
   );
@@ -80,11 +104,9 @@ const styles = StyleSheet.create({
     width: 37,
     height: 4,
     alignSelf: 'center',
-    marginBottom: 17,
   },
   sheetContent: {
     paddingHorizontal: 20,
-    paddingBottom: 20,
   },
 });
 
