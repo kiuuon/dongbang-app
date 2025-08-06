@@ -2,7 +2,11 @@ import { UserType } from '@/types/UserType';
 import { supabase } from './supabaseClient';
 
 export async function fetchUserId() {
-  const { data } = await supabase.auth.getUser();
+  const { data, error } = await supabase.auth.getUser();
+
+  if (error && error.status !== 400) {
+    throw error;
+  }
 
   return data?.user?.id;
 }
@@ -20,5 +24,9 @@ export async function fetchUser() {
 }
 
 export async function signUp(body: UserType) {
-  await supabase.from('User').insert([body]);
+  const { error } = await supabase.from('User').insert([body]);
+
+  if (error) {
+    throw error;
+  }
 }

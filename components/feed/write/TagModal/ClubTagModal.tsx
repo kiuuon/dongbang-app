@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { View, Image, ScrollView, TouchableOpacity, StyleSheet } from 'react-native';
+import { View, Image, ScrollView, TouchableOpacity, StyleSheet, Alert } from 'react-native';
 import { useQuery } from '@tanstack/react-query';
 import { BottomSheetTextInput, BottomSheetModal } from '@gorhom/bottom-sheet';
 
@@ -21,6 +21,10 @@ function ClubTagModal({
   const { data: clubs } = useQuery({
     queryKey: ['allClubs'],
     queryFn: () => fetchAllClubs(),
+    throwOnError: (error) => {
+      Alert.alert('동아리 목록을 불러오는 데 실패했습니다. 다시 시도해주세요.', error.message);
+      return false;
+    },
   });
 
   const selectClub = (selectedClubId: string) => {

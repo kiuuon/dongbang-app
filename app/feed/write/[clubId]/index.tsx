@@ -1,8 +1,9 @@
 import { useEffect, useRef, useState } from 'react';
-import { View, TouchableOpacity, StyleSheet, Keyboard } from 'react-native';
+import { View, TouchableOpacity, StyleSheet, Keyboard, Alert } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { router, useLocalSearchParams } from 'expo-router';
 import { BottomSheetModal } from '@gorhom/bottom-sheet';
+import { useMutation } from '@tanstack/react-query';
 
 import { writeFeed } from '@/apis/feed';
 import Colors from '@/constants/colors';
@@ -23,6 +24,38 @@ function FeedWriteScreen() {
   const [draftSelectedClubs, setDraftSelectedClubs] = useState<string[]>(selectedClubs);
   const bottomSheetModalRef = useRef<BottomSheetModal | null>(null);
   const [isKeyboardOpen, setIsKeyboardOpen] = useState(false);
+
+  const { mutate: writeFeedMutation } = useMutation({
+    mutationFn: (body: {
+      photos: string[];
+      title: string;
+      content: string;
+      isNicknameVisible: boolean;
+      isPrivate: boolean;
+      clubId: string;
+      clubType: 'campus' | 'union';
+      selectedMembers: string[];
+      selectedClubs: string[];
+    }) =>
+      writeFeed(
+        body.photos,
+        body.title,
+        body.content,
+        body.isNicknameVisible,
+        body.isPrivate,
+        body.clubId,
+        body.clubType,
+        body.selectedMembers,
+        body.selectedClubs,
+      ),
+    onSuccess: () => {
+      router.back();
+    },
+    onError: (error) => {
+      Alert.alert('피드를 작성하는데 실패했습니다. 다시 시도해주세요.', error.message);
+      router.back();
+    },
+  });
 
   useEffect(() => {
     const keyboardDidShowListener = Keyboard.addListener('keyboardDidShow', () => {
@@ -69,18 +102,19 @@ function FeedWriteScreen() {
             const { photos, title, content, clubType, isNicknameVisible, isPrivate } = JSON.parse(
               event.nativeEvent.data,
             );
-            writeFeed(
+            const body = {
               photos,
-              title || '',
-              content || '',
+              title: title || '',
+              content: content || '',
               isNicknameVisible,
               isPrivate,
-              clubId as string,
+              clubId: clubId as string,
               clubType,
-              selectedMembers,
-              selectedClubs,
-            );
-            router.back();
+              selectedMembers: isClub ? draftSelectedMembers : [],
+              selectedClubs: isClub ? [] : draftSelectedClubs,
+            };
+
+            writeFeedMutation(body);
           }
         }}
       />

@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { TouchableOpacity, Image, StyleSheet } from 'react-native';
+import { TouchableOpacity, Image, StyleSheet, Alert } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { router, useLocalSearchParams } from 'expo-router';
 import { useQuery } from '@tanstack/react-query';
@@ -16,6 +16,10 @@ function ClubScreen() {
   const { data: myClubs } = useQuery({
     queryKey: ['myClubs'],
     queryFn: fetchMyClubs,
+    throwOnError: (error) => {
+      Alert.alert('동아리 목록을 불러오는 데 실패했습니다. 다시 시도해주세요.', error.message);
+      return false;
+    },
   });
 
   const goToSelectedClub = (selectedClubId: string) => {

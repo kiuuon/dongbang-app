@@ -1,4 +1,4 @@
-import { View, StyleSheet, TouchableOpacity } from 'react-native';
+import { View, StyleSheet, TouchableOpacity, Alert } from 'react-native';
 import { useQuery } from '@tanstack/react-query';
 
 import { fetchUserId } from '@/apis/user';
@@ -14,6 +14,10 @@ function SettingModal({ authorId }: { authorId: string }) {
   const { data: userId } = useQuery({
     queryKey: ['userId'],
     queryFn: fetchUserId,
+    throwOnError: (error) => {
+      Alert.alert('사용자 ID를 불러오는 데 실패했습니다. 다시 시도해주세요.', error.message);
+      return false;
+    },
   });
 
   return (

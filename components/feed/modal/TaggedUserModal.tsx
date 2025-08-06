@@ -7,7 +7,7 @@ function TaggedUserModal({ taggedUsers }: { taggedUsers: { user: { name: string;
   return (
     <View style={styles.container}>
       {taggedUsers.map(({ user }) => (
-        <TouchableOpacity key={user.avatar} style={styles.button}>
+        <TouchableOpacity key={user.name} style={styles.button}>
           {user.avatar ? (
             <Image source={{ uri: user.avatar }} style={styles.userImage} />
           ) : (

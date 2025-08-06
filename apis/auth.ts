@@ -1,15 +1,13 @@
 import { supabase } from './supabaseClient';
 
 export async function fetchSession() {
-  const { data } = await supabase.auth.getSession();
+  const { data, error } = await supabase.auth.getSession();
+
+  if (error && error.status !== 400) {
+    throw error;
+  }
 
   return data?.session;
-}
-
-export async function fetchUserId() {
-  const { data } = await supabase.auth.getUser();
-
-  return data?.user?.id;
 }
 
 export async function login(accessToken: string, refreshToken: string) {

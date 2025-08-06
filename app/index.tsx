@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react';
+import { Alert } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { WebViewMessageEvent } from 'react-native-webview';
 import { router } from 'expo-router';
@@ -13,16 +14,20 @@ function LoginScreen() {
 
   useEffect(() => {
     (async () => {
-      const session = await fetchSession();
-      const user = await fetchUser();
-      if (session) {
-        if (user) {
-          router.replace('/feed/my');
-        } else {
-          router.replace('/sign-up/terms');
+      try {
+        const session = await fetchSession();
+        const user = await fetchUser();
+        if (session) {
+          if (user) {
+            router.replace('/feed/my');
+          } else {
+            router.replace('/sign-up/terms');
+          }
         }
+        setIsLoading(false);
+      } catch (error) {
+        Alert.alert('로그인 상태를 확인하는 데 실패했습니다. 다시 시도해주세요.', (error as Error).message);
       }
-      setIsLoading(false);
     })();
   }, []);
 
