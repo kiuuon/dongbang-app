@@ -11,6 +11,7 @@ import TaggedClubModal from '@/components/feed/modal/TaggedClubModal';
 import TaggedUserModal from '@/components/feed/modal/TaggedUserModal';
 import SettingModal from '@/components/feed/modal/SettingModal';
 import InteractModal from '@/components/feed/modal/InteractModal';
+import exploreStore from '@/stores/exploreStore';
 
 function FeedScreen() {
   const { clubType } = useLocalSearchParams();
@@ -26,6 +27,10 @@ function FeedScreen() {
   const [selectedAuthorId, setSelectedAuthorId] = useState<string | null>(null);
   const [taggedUsers, setTaggedUsers] = useState<{ user: { name: string; avatar: string } }[]>([]);
   const [taggedClubs, setTaggedClubs] = useState<{ club: { name: string; logo: string } }[]>([]);
+
+  const setSearchTarget = exploreStore((state) => state.setSearchTarget);
+  const setKeyword = exploreStore((state) => state.setKeyword);
+  const setSelectedHashtag = exploreStore((state) => state.setSelectedHashtag);
 
   const goToSelectedClubType = (selectedClubType: string) => {
     router.replace(`/feed/${selectedClubType}`);
@@ -54,6 +59,12 @@ function FeedScreen() {
           } else if (type === 'tagged user click') {
             setTaggedUsers(payload);
             setIsTaggedUserModalOpen(true);
+          } else if (type === 'hashtag click') {
+            const hashtag = payload.trim();
+            setSearchTarget('hashtag');
+            setKeyword(hashtag);
+            setSelectedHashtag(hashtag);
+            router.push(`/explore`);
           }
         }}
       />

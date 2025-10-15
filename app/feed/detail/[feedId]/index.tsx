@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { useLocalSearchParams } from 'expo-router';
+import { useLocalSearchParams, router } from 'expo-router';
 
 import Colors from '@/constants/colors';
 import CustomWebView from '@/components/common/CustomWebView';
@@ -9,6 +9,7 @@ import TaggedClubModal from '@/components/feed/modal/TaggedClubModal';
 import TaggedUserModal from '@/components/feed/modal/TaggedUserModal';
 import SettingModal from '@/components/feed/modal/SettingModal';
 import InteractModal from '@/components/feed/modal/InteractModal';
+import exploreStore from '@/stores/exploreStore';
 
 function FeedDetailScreen() {
   const { feedId } = useLocalSearchParams();
@@ -20,6 +21,10 @@ function FeedDetailScreen() {
   const [selectedAuthorId, setSelectedAuthorId] = useState<string | null>(null);
   const [taggedUsers, setTaggedUsers] = useState<{ user: { name: string; avatar: string } }[]>([]);
   const [taggedClubs, setTaggedClubs] = useState<{ club: { name: string; logo: string } }[]>([]);
+
+  const setSearchTarget = exploreStore((state) => state.setSearchTarget);
+  const setKeyword = exploreStore((state) => state.setKeyword);
+  const setSelectedHashtag = exploreStore((state) => state.setSelectedHashtag);
 
   return (
     <SafeAreaView edges={['top']} style={{ flex: 1, backgroundColor: Colors.white }}>
@@ -39,6 +44,12 @@ function FeedDetailScreen() {
           } else if (type === 'tagged user click') {
             setTaggedUsers(payload);
             setIsTaggedUserModalOpen(true);
+          } else if (type === 'hashtag click') {
+            const hashtag = payload.trim();
+            setSearchTarget('hashtag');
+            setKeyword(hashtag);
+            setSelectedHashtag(hashtag);
+            router.push(`/explore`);
           }
         }}
       />
