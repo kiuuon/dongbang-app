@@ -7,7 +7,7 @@ import type { NativeStackNavigationProp } from '@react-navigation/native-stack';
 
 import CustomWebView from '@/components/common/CustomWebView';
 import Colors from '@/constants/colors';
-import termsStore from '@/stores/terms-store';
+import termsStore from '@/stores/termsStore';
 import { signUp } from '@/apis/user';
 import { UserType } from '@/types/UserType';
 

@@ -3,7 +3,7 @@ import { router, useLocalSearchParams } from 'expo-router';
 
 import CustomWebView from '@/components/common/CustomWebView';
 import Colors from '@/constants/colors';
-import clubInfoStore from '@/stores/club-info-store';
+import clubInfoStore from '@/stores/clubInfoStore';
 
 function ClubInfoScreen() {
   const { clubType } = useLocalSearchParams();

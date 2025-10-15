@@ -6,7 +6,7 @@ import { useMutation } from '@tanstack/react-query';
 import CustomWebView from '@/components/common/CustomWebView';
 import { ClubType } from '@/types/ClubType';
 import Colors from '@/constants/colors';
-import clubInfoStore from '@/stores/club-info-store';
+import clubInfoStore from '@/stores/clubInfoStore';
 import { createClub } from '@/apis/club';
 
 function ClubDetailScreen() {

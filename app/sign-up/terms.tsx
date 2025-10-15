@@ -3,7 +3,7 @@ import { router } from 'expo-router';
 
 import CustomWebView from '@/components/common/CustomWebView';
 import Colors from '@/constants/colors';
-import termsStore from '@/stores/terms-store';
+import termsStore from '@/stores/termsStore';
 
 function TermsScreen() {
   const setTermOfUse = termsStore((state) => state.setTermOfUse);

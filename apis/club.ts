@@ -1,7 +1,25 @@
 import { ClubType } from '@/types/ClubType';
-import { FilterType } from '@/types/FilterType';
+import { FilterType } from '@/stores/filterStore';
 import { supabase } from './supabaseClient';
 import { fetchUserId } from './user';
+
+export async function fetchClubsCount(keyword: string, filters: FilterType) {
+  const { data, error } = await supabase.rpc('count_clubs_detailed', {
+    p_keyword: keyword ?? '',
+    p_club_type: filters.clubType ?? null,
+    p_university_name: filters.universityName ?? null,
+    p_detail_types: filters.detailTypes ?? [],
+    p_location: filters.location ?? null,
+    p_categories: filters.categories ?? [],
+    p_recruitment_statuses: filters.recruitmentStatuses ?? [],
+    p_end_date_option: filters.endDateOption ?? null,
+    p_dues_option: filters.duesOption ?? null,
+    p_meeting: filters.meeting ?? null,
+  });
+  if (error) throw error;
+
+  return data ?? 0;
+}
 
 export async function fetchClubs(keyword: string, filters: FilterType, page: number) {
   const PAGE_SIZE = 10;

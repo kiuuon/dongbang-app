@@ -21,6 +21,8 @@ function CustomBottomSheet({
   children,
   sheetRef,
   title,
+  indicator = true,
+  backgroundColor = Colors.white,
 }: {
   isOpen: boolean;
   onClose: () => void;
@@ -30,6 +32,8 @@ function CustomBottomSheet({
   children: React.ReactNode;
   sheetRef?: React.RefObject<BottomSheetModal | null>;
   title?: string;
+  indicator?: boolean;
+  backgroundColor?: string;
 }) {
   const internalRef = useRef<BottomSheetModal>(null);
   const bottomSheetModalRef = sheetRef ?? internalRef;
@@ -62,8 +66,8 @@ function CustomBottomSheet({
       enablePanDownToClose
       backdropComponent={renderBackdrop}
       onDismiss={onClose}
-      backgroundStyle={styles.sheetBackground}
-      handleIndicatorStyle={styles.handleIndicator}
+      backgroundStyle={[styles.sheetBackground, { backgroundColor }]}
+      handleIndicatorStyle={[styles.handleIndicator, { display: indicator ? 'flex' : 'none' }]}
       {...bottomSheetProps}
     >
       {scrollable ? (
@@ -73,18 +77,16 @@ function CustomBottomSheet({
               {title}
             </BoldText>
           )}
-          <BottomSheetScrollView style={[styles.sheetContent, { maxHeight: scrollViewHeight }]}>
-            {children}
-          </BottomSheetScrollView>
+          <BottomSheetScrollView style={{ maxHeight: scrollViewHeight }}>{children}</BottomSheetScrollView>
         </View>
       ) : (
-        <BottomSheetView style={styles.sheetContent}>
+        <BottomSheetView>
           {title && (
             <BoldText fontSize={14} style={{ marginBottom: 28, width: '100%', textAlign: 'center' }}>
               {title}
             </BoldText>
           )}
-          <SafeAreaView edges={['bottom']} style={{ width: '100%' }}>
+          <SafeAreaView edges={['bottom']} style={{ width: '100%', backgroundColor: Colors.white }}>
             {children}
           </SafeAreaView>
         </BottomSheetView>
@@ -104,9 +106,6 @@ const styles = StyleSheet.create({
     width: 37,
     height: 4,
     alignSelf: 'center',
-  },
-  sheetContent: {
-    paddingHorizontal: 20,
   },
 });
 

@@ -123,6 +123,7 @@ function FeedWriteScreen() {
           isOpen={isTagModalOpen}
           onClose={() => setIsTagModalOpen(false)}
           sheetRef={bottomSheetModalRef}
+          indicator={false}
         >
           <View style={styles.toggleButtonContainer}>
             {isClub ? (
@@ -177,7 +178,7 @@ function FeedWriteScreen() {
 }
 
 const styles = StyleSheet.create({
-  toggleButtonContainer: { width: '100%', flexDirection: 'row', gap: 12 },
+  toggleButtonContainer: { width: '100%', flexDirection: 'row', gap: 12, paddingHorizontal: 20, marginTop: 20 },
   activeToggleButton: {
     width: 79,
     height: 36,
@@ -195,7 +196,6 @@ const styles = StyleSheet.create({
     borderRadius: 8,
   },
   confirmButton: {
-    width: '100%',
     height: 56,
     backgroundColor: Colors.primary,
     justifyContent: 'center',
@@ -203,6 +203,7 @@ const styles = StyleSheet.create({
     borderRadius: 24,
     marginTop: 20,
     marginBottom: 20,
+    marginHorizontal: 20,
   },
 });
 

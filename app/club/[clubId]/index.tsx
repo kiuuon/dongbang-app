@@ -79,6 +79,7 @@ const styles = StyleSheet.create({
     width: '100%',
     gap: 24,
     paddingVertical: 24,
+    marginHorizontal: 20,
   },
   clubImage: {
     width: 50,

@@ -30,3 +30,13 @@ export async function signUp(body: UserType) {
     throw error;
   }
 }
+
+export async function fetchUniversityList() {
+  const { data, error } = await supabase.from('University').select('*');
+
+  if (error) {
+    throw error;
+  }
+
+  return data;
+}

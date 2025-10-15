@@ -58,7 +58,7 @@ function SettingModal({ authorId }: { authorId: string }) {
 }
 
 const styles = StyleSheet.create({
-  container: { marginTop: 10 },
+  container: { marginTop: 10, paddingHorizontal: 20 },
   buttonContainer: {
     flexDirection: 'column',
     backgroundColor: Colors.background,

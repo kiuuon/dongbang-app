@@ -101,6 +101,7 @@ function ClubTagModal({
 const styles = StyleSheet.create({
   container: {
     width: '100%',
+    paddingHorizontal: 20,
   },
   searchInput: {
     marginBottom: 20,
