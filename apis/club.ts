@@ -1,6 +1,30 @@
 import { ClubType } from '@/types/ClubType';
+import { FilterType } from '@/types/FilterType';
 import { supabase } from './supabaseClient';
 import { fetchUserId } from './user';
+
+export async function fetchClubs(keyword: string, filters: FilterType, page: number) {
+  const PAGE_SIZE = 10;
+
+  const { data, error } = await supabase.rpc('search_clubs_detailed', {
+    p_keyword: keyword ?? '',
+    p_club_type: filters.clubType ?? null,
+    p_university_name: filters.universityName ?? null,
+    p_detail_types: filters.detailTypes ?? [],
+    p_location: filters.location ?? null,
+    p_categories: filters.categories ?? [],
+    p_recruitment_statuses: filters.recruitmentStatuses ?? [],
+    p_end_date_option: filters.endDateOption ?? null,
+    p_dues_option: filters.duesOption ?? null,
+    p_meeting: filters.meeting ?? null,
+    p_limit_count: PAGE_SIZE,
+    p_offset_count: page * PAGE_SIZE,
+  });
+
+  if (error) throw error;
+
+  return data ?? [];
+}
 
 export async function fetchAllClubs() {
   const { data: clubs, error } = await supabase.from('Clu').select('*');

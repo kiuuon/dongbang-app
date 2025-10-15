@@ -1,39 +1,55 @@
 import { useState } from 'react';
-import { View, Image, ScrollView, TouchableOpacity, StyleSheet, Alert } from 'react-native';
-import { useQuery } from '@tanstack/react-query';
+import { View, Image, TouchableOpacity, StyleSheet, Alert, FlatList, ActivityIndicator } from 'react-native';
+import { useInfiniteQuery } from '@tanstack/react-query';
 import { BottomSheetTextInput, BottomSheetModal } from '@gorhom/bottom-sheet';
 
-import { fetchAllClubs } from '@/apis/club';
+import { fetchClubs } from '@/apis/club';
 import Colors from '@/constants/colors';
 import BoldText from '@/components/common/SemiBoldText';
 
 function ClubTagModal({
+  clubId,
   selected,
   setSelected,
   bottomSheetModalRef,
 }: {
+  clubId: string;
   selected: string[];
   setSelected: React.Dispatch<React.SetStateAction<string[]>>;
   bottomSheetModalRef: React.RefObject<BottomSheetModal | null>;
 }) {
   const [searchText, setSearchText] = useState('');
 
-  const { data: clubs } = useQuery({
-    queryKey: ['allClubs'],
-    queryFn: () => fetchAllClubs(),
+  const filters = {
+    clubType: null,
+    universityName: null,
+    detailTypes: [],
+    location: null,
+    categories: [],
+    recruitmentStatuses: [],
+    endDateOption: null,
+    meeting: null,
+    duesOption: null,
+  };
+
+  const { data, fetchNextPage, hasNextPage, isFetchingNextPage } = useInfiniteQuery({
+    initialPageParam: 0,
+    queryKey: ['clubs', searchText, filters],
+    queryFn: ({ pageParam }) => fetchClubs(searchText, filters, pageParam),
+    getNextPageParam: (lastPage, allPages) => (lastPage?.length ? allPages.length : undefined),
     throwOnError: (error) => {
       Alert.alert('동아리 목록을 불러오는 데 실패했습니다. 다시 시도해주세요.', error.message);
       return false;
     },
   });
 
+  const clubs = data?.pages.flat() ?? [];
+
   const selectClub = (selectedClubId: string) => {
     setSelected((prev) =>
       prev.includes(selectedClubId) ? prev.filter((id) => id !== selectedClubId) : [...prev, selectedClubId],
     );
   };
-
-  const filteredClubs = clubs?.filter((club) => club.name?.toLowerCase().includes(searchText.toLowerCase()));
 
   return (
     <View style={styles.container}>
@@ -47,22 +63,37 @@ function ClubTagModal({
           bottomSheetModalRef.current?.snapToIndex(0);
         }}
       />
-      <ScrollView
+      <FlatList
+        data={clubs}
         style={styles.scrollContainer}
-        contentContainerStyle={{ flexGrow: 1 }}
-        showsVerticalScrollIndicator={false}
-        keyboardShouldPersistTaps="always"
-      >
-        {filteredClubs?.map((club) => (
-          <View key={club.id} style={styles.clubRow}>
-            <Image source={{ uri: club.logo }} style={styles.clubImage} />
-            <TouchableOpacity style={styles.selectButtonContainer} onPress={() => selectClub(club.id)}>
-              <BoldText fontSize={12}>{club.name}</BoldText>
-              <View style={[styles.selectButton, selected.includes(club.id) ? styles.selected : styles.notSelected]} />
-            </TouchableOpacity>
-          </View>
-        ))}
-      </ScrollView>
+        keyExtractor={(item) => item.id}
+        renderItem={({ item: club }) =>
+          club.id !== clubId ? (
+            <View style={styles.clubRow}>
+              <Image source={{ uri: club.logo }} style={styles.clubImage} />
+              <TouchableOpacity style={styles.selectButtonContainer} onPress={() => selectClub(club.id)}>
+                <BoldText fontSize={12}>{club.name}</BoldText>
+                <View
+                  style={[styles.selectButton, selected.includes(club.id) ? styles.selected : styles.notSelected]}
+                />
+              </TouchableOpacity>
+            </View>
+          ) : null
+        }
+        onEndReached={() => {
+          if (hasNextPage && !isFetchingNextPage) {
+            fetchNextPage();
+          }
+        }}
+        onEndReachedThreshold={0.3}
+        ListFooterComponent={
+          isFetchingNextPage ? (
+            <View style={{ paddingVertical: 20 }}>
+              <ActivityIndicator color="#F9A825" size="large" />
+            </View>
+          ) : null
+        }
+      />
     </View>
   );
 }

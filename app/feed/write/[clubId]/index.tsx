@@ -151,6 +151,7 @@ function FeedWriteScreen() {
 
           {isClub ? (
             <ClubTagModal
+              clubId={clubId as string}
               selected={draftSelectedClubs}
               setSelected={setDraftSelectedClubs}
               bottomSheetModalRef={bottomSheetModalRef}
