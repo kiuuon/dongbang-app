@@ -1,7 +1,7 @@
 import React from 'react';
 import { View, TouchableOpacity, StyleSheet } from 'react-native';
 import XIcon from '@/icons/XIcon';
-import Colors from '@/constants/colors';
+import COLORS from '@/constants/colors';
 
 import RegularText from '@/components/common/RegularText';
 
@@ -13,7 +13,7 @@ interface FilterItemProps {
 export default function FilterItem({ label, onRemove }: FilterItemProps) {
   return (
     <View style={styles.container}>
-      <RegularText fontSize={14} style={{ color: Colors.gray2 }}>
+      <RegularText fontSize={14} style={{ color: COLORS.gray2 }}>
         {label}
       </RegularText>
       <TouchableOpacity onPress={onRemove} activeOpacity={0.7}>

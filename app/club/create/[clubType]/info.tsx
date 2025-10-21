@@ -2,7 +2,7 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import { router, useLocalSearchParams } from 'expo-router';
 
 import CustomWebView from '@/components/common/CustomWebView';
-import Colors from '@/constants/colors';
+import COLORS from '@/constants/colors';
 import clubInfoStore from '@/stores/clubInfoStore';
 
 function ClubInfoScreen() {
@@ -15,7 +15,7 @@ function ClubInfoScreen() {
   const setTags = clubInfoStore((state) => state.setTags);
 
   return (
-    <SafeAreaView style={{ flex: 1, backgroundColor: Colors.white }}>
+    <SafeAreaView style={{ flex: 1, backgroundColor: COLORS.white }}>
       <CustomWebView
         source={{ uri: `${process.env.EXPO_PUBLIC_WEB_URL}/club/create/${clubType}/info` }}
         onMessage={(event) => {

@@ -6,7 +6,7 @@ import { BottomSheetModal } from '@gorhom/bottom-sheet';
 import { useMutation } from '@tanstack/react-query';
 
 import { writeFeed } from '@/apis/feed';
-import Colors from '@/constants/colors';
+import COLORS from '@/constants/colors';
 import CustomWebView from '@/components/common/CustomWebView';
 import BoldText from '@/components/common/SemiBoldText';
 import RegularText from '@/components/common/RegularText';
@@ -92,7 +92,7 @@ function FeedWriteScreen() {
   };
 
   return (
-    <SafeAreaView style={{ flex: 1, backgroundColor: Colors.white }}>
+    <SafeAreaView style={{ flex: 1, backgroundColor: COLORS.white }}>
       <CustomWebView
         source={{ uri: `${process.env.EXPO_PUBLIC_WEB_URL}/feed/write/${clubId}` }}
         onMessage={async (event) => {
@@ -132,14 +132,14 @@ function FeedWriteScreen() {
               </TouchableOpacity>
             ) : (
               <TouchableOpacity style={styles.activeToggleButton} onPress={() => toggleClubMode(false)}>
-                <BoldText fontSize={16} style={{ color: Colors.white }}>
+                <BoldText fontSize={16} style={{ color: COLORS.white }}>
                   개인
                 </BoldText>
               </TouchableOpacity>
             )}
             {isClub ? (
               <TouchableOpacity style={styles.activeToggleButton} onPress={() => toggleClubMode(true)}>
-                <BoldText fontSize={16} style={{ color: Colors.white }}>
+                <BoldText fontSize={16} style={{ color: COLORS.white }}>
                   동아리
                 </BoldText>
               </TouchableOpacity>
@@ -167,7 +167,7 @@ function FeedWriteScreen() {
           )}
 
           <TouchableOpacity style={styles.confirmButton} onPress={handleConfirm}>
-            <BoldText fontSize={16} style={{ color: Colors.white }}>
+            <BoldText fontSize={16} style={{ color: COLORS.white }}>
               확인
             </BoldText>
           </TouchableOpacity>
@@ -182,7 +182,7 @@ const styles = StyleSheet.create({
   activeToggleButton: {
     width: 79,
     height: 36,
-    backgroundColor: Colors.primary,
+    backgroundColor: COLORS.primary,
     justifyContent: 'center',
     alignItems: 'center',
     borderRadius: 8,
@@ -190,14 +190,14 @@ const styles = StyleSheet.create({
   inactiveToggleButton: {
     width: 79,
     height: 36,
-    backgroundColor: Colors.gray0,
+    backgroundColor: COLORS.gray0,
     justifyContent: 'center',
     alignItems: 'center',
     borderRadius: 8,
   },
   confirmButton: {
     height: 56,
-    backgroundColor: Colors.primary,
+    backgroundColor: COLORS.primary,
     justifyContent: 'center',
     alignItems: 'center',
     borderRadius: 24,

@@ -5,7 +5,7 @@ import { useMutation } from '@tanstack/react-query';
 
 import CustomWebView from '@/components/common/CustomWebView';
 import { ClubType } from '@/types/ClubType';
-import Colors from '@/constants/colors';
+import COLORS from '@/constants/colors';
 import clubInfoStore from '@/stores/clubInfoStore';
 import { createClub } from '@/apis/club';
 
@@ -31,7 +31,7 @@ function ClubDetailScreen() {
   });
 
   return (
-    <SafeAreaView style={{ flex: 1, backgroundColor: Colors.white }}>
+    <SafeAreaView style={{ flex: 1, backgroundColor: COLORS.white }}>
       <CustomWebView
         source={{ uri: `${process.env.EXPO_PUBLIC_WEB_URL}/club/create/${clubType}/detail` }}
         onMessage={async (event) => {

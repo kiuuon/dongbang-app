@@ -10,7 +10,7 @@ import {
 } from 'react-native';
 import { useInfiniteQuery } from '@tanstack/react-query';
 
-import Colors from '@/constants/colors';
+import COLORS from '@/constants/colors';
 import { fetchHashtags } from '@/apis/feed';
 import exploreStore from '@/stores/exploreStore';
 import RegularText from '@/components/common/RegularText';
@@ -37,7 +37,7 @@ function HashtagSection({ keyword }: { keyword: string }) {
   if (isPending) {
     return (
       <View style={styles.loaderContainer}>
-        <ActivityIndicator size="large" color={Colors.primary} />
+        <ActivityIndicator size="large" color={COLORS.primary} />
       </View>
     );
   }
@@ -70,7 +70,7 @@ function HashtagSection({ keyword }: { keyword: string }) {
           ListFooterComponent={
             isFetchingNextPage ? (
               <View style={styles.footerLoader}>
-                <ActivityIndicator size="small" color={Colors.primary} />
+                <ActivityIndicator size="small" color={COLORS.primary} />
               </View>
             ) : null
           }

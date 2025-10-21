@@ -6,7 +6,7 @@ import { useNavigation } from '@react-navigation/native';
 import type { NativeStackNavigationProp } from '@react-navigation/native-stack';
 
 import CustomWebView from '@/components/common/CustomWebView';
-import Colors from '@/constants/colors';
+import COLORS from '@/constants/colors';
 import termsStore from '@/stores/termsStore';
 import { signUp } from '@/apis/user';
 import { UserType } from '@/types/UserType';
@@ -53,7 +53,7 @@ function InfoScreen() {
   }, [termOfUse, privacyPolicy, thirdPartyConsent, navigation]);
 
   return (
-    <SafeAreaView style={{ flex: 1, backgroundColor: Colors.white }}>
+    <SafeAreaView style={{ flex: 1, backgroundColor: COLORS.white }}>
       <CustomWebView
         source={{ uri: `${process.env.EXPO_PUBLIC_WEB_URL}/sign-up/info` }}
         onMessage={(event) => {

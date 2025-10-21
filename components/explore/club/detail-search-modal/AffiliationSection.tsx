@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { View, Text, TextInput, TouchableOpacity, ScrollView, StyleSheet, Alert } from 'react-native';
 import { useQuery } from '@tanstack/react-query';
 
-import Colors from '@/constants/colors';
+import COLORS from '@/constants/colors';
 import filtersStore from '@/stores/filterStore';
 import BottomArrowIcon from '@/icons/BottomArrowIcon';
 import { fetchUniversityList } from '@/apis/user';
@@ -112,7 +112,7 @@ export default function AffiliationSection() {
             value={draftFilters.universityName || ''}
             onChangeText={handleUniversity}
             placeholder="학교 이름 입력"
-            placeholderTextColor={Colors.gray2}
+            placeholderTextColor={COLORS.gray2}
             style={styles.input}
           />
 
@@ -208,7 +208,7 @@ const styles = StyleSheet.create({
     flex: 1,
     paddingLeft: 30,
     paddingTop: 30,
-    backgroundColor: Colors.white,
+    backgroundColor: COLORS.white,
   },
   sectionTitle: {
     fontFamily: 'PretendardBold',
@@ -223,27 +223,27 @@ const styles = StyleSheet.create({
     height: 32,
     width: 47,
     borderRadius: 16,
-    backgroundColor: Colors.gray0,
+    backgroundColor: COLORS.gray0,
     justifyContent: 'center',
     alignItems: 'center',
   },
   typeButtonActive: {
-    backgroundColor: Colors.primary,
+    backgroundColor: COLORS.primary,
   },
   typeText: {
     fontFamily: 'PretendardRegular',
     fontSize: 12,
-    color: Colors.black,
+    color: COLORS.black,
   },
   activeText: {
-    color: Colors.white,
+    color: COLORS.white,
   },
   input: {
     height: 32,
     width: 162,
     borderRadius: 8,
     borderWidth: 1,
-    borderColor: Colors.gray0,
+    borderColor: COLORS.gray0,
     paddingHorizontal: 9,
     fontSize: 12,
     fontFamily: 'PretendardRegular',
@@ -253,9 +253,9 @@ const styles = StyleSheet.create({
     maxHeight: 224,
     width: 162,
     borderWidth: 1,
-    borderColor: Colors.gray0,
+    borderColor: COLORS.gray0,
     borderRadius: 8,
-    backgroundColor: Colors.white,
+    backgroundColor: COLORS.white,
   },
   dropdownItem: {
     padding: 8,
@@ -268,26 +268,26 @@ const styles = StyleSheet.create({
   detailButton: {
     height: 32,
     borderRadius: 24,
-    backgroundColor: Colors.gray0,
+    backgroundColor: COLORS.gray0,
     justifyContent: 'center',
     alignItems: 'center',
     paddingHorizontal: 10,
     marginVertical: 3,
   },
   detailButtonActive: {
-    backgroundColor: Colors.primary,
+    backgroundColor: COLORS.primary,
   },
   detailText: {
     fontFamily: 'PretendardRegular',
     fontSize: 12,
-    color: Colors.black,
+    color: COLORS.black,
   },
   dropdownButton: {
     height: 32,
     width: 162,
     borderRadius: 8,
     borderWidth: 1,
-    borderColor: Colors.gray0,
+    borderColor: COLORS.gray0,
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
@@ -296,6 +296,6 @@ const styles = StyleSheet.create({
   },
   dropdownButtonText: {
     fontSize: 12,
-    color: Colors.black,
+    color: COLORS.black,
   },
 });

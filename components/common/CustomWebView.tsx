@@ -2,10 +2,11 @@ import { useRef } from 'react';
 import { Alert } from 'react-native';
 import { WebView } from 'react-native-webview';
 import type { WebView as WebViewType, WebViewMessageEvent } from 'react-native-webview';
-import { useNavigation } from 'expo-router';
+import { useNavigation, router } from 'expo-router';
 import { useQuery } from '@tanstack/react-query';
 
-import { fetchSession } from '@/apis/auth';
+import { fetchSession, login } from '@/apis/auth';
+import { fetchUser } from '@/apis/user';
 
 function CustomWebView({
   source,
@@ -40,7 +41,7 @@ function CustomWebView({
       ref={webViewRef}
       source={source}
       onLoadEnd={sendTokenToWeb}
-      onMessage={(event) => {
+      onMessage={async (event) => {
         let data;
 
         try {
@@ -49,9 +50,20 @@ function CustomWebView({
           data = event.nativeEvent.data;
         }
 
-        if (data === 'back') {
-          navigation.goBack();
-          return;
+        const { type, action, payload } = data;
+
+        if (type === 'event') {
+          if (action === 'login success') {
+            await login(payload.accessToken, payload.refreshToken);
+            const user = await fetchUser();
+            if (user) {
+              router.replace('/feed/my');
+            } else {
+              router.replace('/sign-up/terms');
+            }
+          } else if (action === 'back button click') {
+            navigation.goBack();
+          }
         }
 
         if (data.type === 'error') {

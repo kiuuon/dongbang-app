@@ -3,7 +3,7 @@ import { View, TextInput, TouchableOpacity, Text, StyleSheet } from 'react-nativ
 import { SafeAreaView } from 'react-native-safe-area-context';
 import Animated, { useAnimatedStyle, withTiming } from 'react-native-reanimated';
 
-import Colors from '@/constants/colors';
+import COLORS from '@/constants/colors';
 import useDebounce from '@/hooks/useDebounce';
 import exploreStore from '@/stores/exploreStore';
 import AdjustmentsIcon from '@/icons/AdjustmentsIcon';
@@ -30,13 +30,13 @@ function ExploreScreen() {
   }));
 
   return (
-    <SafeAreaView edges={['top']} style={{ flex: 1, backgroundColor: Colors.white }}>
+    <SafeAreaView edges={['top']} style={{ flex: 1, backgroundColor: COLORS.white }}>
       <View
         style={[
           styles.container,
           searchTarget === 'hashtag' && selectedHashtag === ''
-            ? { backgroundColor: Colors.white }
-            : { backgroundColor: Colors.background },
+            ? { backgroundColor: COLORS.white }
+            : { backgroundColor: COLORS.background },
         ]}
       >
         {/* 상단 검색창 영역 */}
@@ -46,7 +46,7 @@ function ExploreScreen() {
             value={keyword}
             onChangeText={setKeyword}
             onFocus={() => setSelectedHashtag('')}
-            placeholderTextColor={Colors.gray2}
+            placeholderTextColor={COLORS.gray2}
             style={styles.searchInput}
           />
 
@@ -63,7 +63,7 @@ function ExploreScreen() {
                   styles.tabButton,
                   {
                     width: tab.width,
-                    borderBottomColor: searchTarget === tab.value ? Colors.primary : Colors.white,
+                    borderBottomColor: searchTarget === tab.value ? COLORS.primary : COLORS.white,
                   },
                 ]}
                 onPress={() => {
@@ -77,7 +77,7 @@ function ExploreScreen() {
                   style={[
                     styles.tabText,
                     {
-                      color: searchTarget === tab.value ? Colors.black : Colors.gray2,
+                      color: searchTarget === tab.value ? COLORS.black : COLORS.gray2,
                     },
                   ]}
                 >
@@ -121,7 +121,7 @@ const styles = StyleSheet.create({
     overflow: 'hidden',
   },
   header: {
-    backgroundColor: Colors.white,
+    backgroundColor: COLORS.white,
     paddingHorizontal: 20,
     paddingTop: 19,
   },
@@ -135,11 +135,11 @@ const styles = StyleSheet.create({
   searchInput: {
     height: 39,
     borderRadius: 10,
-    backgroundColor: Colors.gray0,
+    backgroundColor: COLORS.gray0,
     paddingHorizontal: 12,
     fontSize: 16,
     fontFamily: 'PretendardRegular',
-    color: Colors.black,
+    color: COLORS.black,
   },
   tabRow: {
     flexDirection: 'row',
@@ -164,7 +164,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
-    backgroundColor: Colors.white,
+    backgroundColor: COLORS.white,
     paddingBottom: 12,
     borderBottomLeftRadius: 16,
     borderBottomRightRadius: 16,

@@ -2,7 +2,7 @@ import React from 'react';
 import { View, Image, TouchableOpacity, StyleSheet } from 'react-native';
 import { router } from 'expo-router';
 
-import Colors from '@/constants/colors';
+import COLORS from '@/constants/colors';
 import LikesIcon from '@/icons/LikesIcon';
 import formatKoreanDate from '@/utils/formatKoreanDate';
 import { FeedType } from '@/types/FeedType';
@@ -65,7 +65,7 @@ const styles = StyleSheet.create({
     height: 20,
     borderRadius: 5,
     borderWidth: 1,
-    borderColor: Colors.background,
+    borderColor: COLORS.background,
   },
   imageWrapper: {
     width: '100%',
@@ -77,7 +77,7 @@ const styles = StyleSheet.create({
     height: '100%',
     borderRadius: 8,
     borderWidth: 1,
-    borderColor: Colors.background,
+    borderColor: COLORS.background,
   },
   infoContainer: {
     width: '100%',

@@ -6,7 +6,7 @@ import { useLocalSearchParams, router } from 'expo-router';
 import BoldText from '@/components/common/SemiBoldText';
 import CustomWebView from '@/components/common/CustomWebView';
 import CustomBottomSheet from '@/components/common/CustomBottomSheet';
-import Colors from '@/constants/colors';
+import COLORS from '@/constants/colors';
 import TaggedClubModal from '@/components/feed/modal/TaggedClubModal';
 import TaggedUserModal from '@/components/feed/modal/TaggedUserModal';
 import SettingModal from '@/components/feed/modal/SettingModal';
@@ -20,6 +20,7 @@ function FeedScreen() {
   const [isTaggedClubModalOpen, setIsTaggedClubModalOpen] = useState(false);
   const [isInteractModalOpen, setIsInteractModalOpen] = useState(false);
   const [isSettingModalOpen, setIsSettingModalOpen] = useState(false);
+  // const [isLogin]
 
   // TODO: 추후에 사용될 수 있는 상태 변수
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -38,33 +39,37 @@ function FeedScreen() {
   };
 
   return (
-    <SafeAreaView edges={['top']} style={{ flex: 1, backgroundColor: Colors.white }}>
+    <SafeAreaView edges={['top']} style={{ flex: 1, backgroundColor: COLORS.white }}>
       <CustomWebView
         source={{ uri: `${process.env.EXPO_PUBLIC_WEB_URL}/feed/${clubType}` }}
         onMessage={(event) => {
-          const { type, payload } = JSON.parse(event.nativeEvent.data);
-          if (type === 'open navigation') {
-            setIsNavigationOpen(true);
-          } else if (type === 'tagged club click') {
-            setTaggedClubs(payload);
-            setIsTaggedClubModalOpen(true);
-          } else if (type === 'setting click') {
-            const { feedId, authorId } = payload;
-            setSelectedFeedId(feedId);
-            setSelectedAuthorId(authorId);
-            setIsSettingModalOpen(true);
-          } else if (type === 'interact click') {
-            setSelectedFeedId(payload);
-            setIsInteractModalOpen(true);
-          } else if (type === 'tagged user click') {
-            setTaggedUsers(payload);
-            setIsTaggedUserModalOpen(true);
-          } else if (type === 'hashtag click') {
-            const hashtag = payload.trim();
-            setSearchTarget('hashtag');
-            setKeyword(hashtag);
-            setSelectedHashtag(hashtag);
-            router.push(`/explore`);
+          const { type, action, payload } = JSON.parse(event.nativeEvent.data);
+          if (type === 'event') {
+            if (action === 'open navigation') {
+              setIsNavigationOpen(true);
+            } else if (action === 'tagged club click') {
+              setTaggedClubs(payload);
+              setIsTaggedClubModalOpen(true);
+            } else if (action === 'setting click') {
+              const { feedId, authorId } = payload;
+              setSelectedFeedId(feedId);
+              setSelectedAuthorId(authorId);
+              setIsSettingModalOpen(true);
+            } else if (action === 'interact click') {
+              setSelectedFeedId(payload);
+              setIsInteractModalOpen(true);
+            } else if (action === 'tagged user click') {
+              setTaggedUsers(payload);
+              setIsTaggedUserModalOpen(true);
+            } else if (action === 'hashtag click') {
+              const hashtag = payload.trim();
+              setSearchTarget('hashtag');
+              setKeyword(hashtag);
+              setSelectedHashtag(hashtag);
+              router.push(`/explore`);
+            } else if (action === 'go to login page') {
+              router.push('/login');
+            }
           }
         }}
       />
@@ -126,7 +131,7 @@ const styles = StyleSheet.create({
     marginHorizontal: 20,
     justifyContent: 'center',
     borderBottomWidth: 1,
-    borderBottomColor: Colors.gray0,
+    borderBottomColor: COLORS.gray0,
   },
 });
 

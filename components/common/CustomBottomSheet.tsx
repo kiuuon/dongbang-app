@@ -9,7 +9,7 @@ import {
   BottomSheetBackdropProps,
 } from '@gorhom/bottom-sheet';
 
-import Colors from '@/constants/colors';
+import COLORS from '@/constants/colors';
 import BoldText from './SemiBoldText';
 
 function CustomBottomSheet({
@@ -22,7 +22,7 @@ function CustomBottomSheet({
   sheetRef,
   title,
   indicator = true,
-  backgroundColor = Colors.white,
+  backgroundColor = COLORS.white,
 }: {
   isOpen: boolean;
   onClose: () => void;
@@ -86,7 +86,7 @@ function CustomBottomSheet({
               {title}
             </BoldText>
           )}
-          <SafeAreaView edges={['bottom']} style={{ width: '100%', backgroundColor: Colors.white }}>
+          <SafeAreaView edges={['bottom']} style={{ width: '100%', backgroundColor: COLORS.white }}>
             {children}
           </SafeAreaView>
         </BottomSheetView>
@@ -99,10 +99,10 @@ const styles = StyleSheet.create({
   sheetBackground: {
     borderTopLeftRadius: 24,
     borderTopRightRadius: 24,
-    backgroundColor: Colors.white,
+    backgroundColor: COLORS.white,
   },
   handleIndicator: {
-    backgroundColor: Colors.gray1,
+    backgroundColor: COLORS.gray1,
     width: 37,
     height: 4,
     alignSelf: 'center',

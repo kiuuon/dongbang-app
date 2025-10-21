@@ -1,6 +1,6 @@
 import { View, StyleSheet, TouchableOpacity, Image } from 'react-native';
 
-import Colors from '@/constants/colors';
+import COLORS from '@/constants/colors';
 import BoldText from '@/components/common/SemiBoldText';
 
 function TaggedClubModal({ taggedClubs }: { taggedClubs: { club: { name: string; logo: string } }[] }) {
@@ -34,7 +34,7 @@ const styles = StyleSheet.create({
     width: 40,
     height: 40,
     borderWidth: 1,
-    borderColor: Colors.background,
+    borderColor: COLORS.background,
     borderRadius: 5,
   },
 });

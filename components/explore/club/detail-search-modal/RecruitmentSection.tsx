@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { View, TouchableOpacity, StyleSheet, ScrollView } from 'react-native';
-import Colors from '@/constants/colors';
+import COLORS from '@/constants/colors';
 import filtersStore from '@/stores/filterStore';
 import BottomArrowIcon from '@/icons/BottomArrowIcon';
 import RegularText from '@/components/common/RegularText';
@@ -176,11 +176,11 @@ const styles = StyleSheet.create({
     height: 32,
     width: 162,
     borderWidth: 1,
-    borderColor: Colors.gray0,
+    borderColor: COLORS.gray0,
     borderRadius: 8,
     paddingLeft: 8,
     paddingRight: 14,
-    backgroundColor: Colors.white,
+    backgroundColor: COLORS.white,
   },
   dropdown: {
     position: 'absolute',
@@ -189,9 +189,9 @@ const styles = StyleSheet.create({
     maxHeight: 240,
     width: 162,
     borderWidth: 1,
-    borderColor: Colors.gray0,
+    borderColor: COLORS.gray0,
     borderRadius: 8,
-    backgroundColor: Colors.white,
+    backgroundColor: COLORS.white,
   },
   dropdownItem: {
     paddingVertical: 8,

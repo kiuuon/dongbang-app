@@ -2,7 +2,7 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import { router } from 'expo-router';
 
 import CustomWebView from '@/components/common/CustomWebView';
-import Colors from '@/constants/colors';
+import COLORS from '@/constants/colors';
 import termsStore from '@/stores/termsStore';
 
 function TermsScreen() {
@@ -12,7 +12,7 @@ function TermsScreen() {
   const setMarketing = termsStore((state) => state.setMarketing);
 
   return (
-    <SafeAreaView style={{ flex: 1, backgroundColor: Colors.white }}>
+    <SafeAreaView style={{ flex: 1, backgroundColor: COLORS.white }}>
       <CustomWebView
         source={{ uri: `${process.env.EXPO_PUBLIC_WEB_URL}/sign-up/terms` }}
         onMessage={(event) => {

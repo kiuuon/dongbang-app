@@ -8,7 +8,7 @@ import { fetchMyClubs } from '@/apis/club';
 import BoldText from '@/components/common/SemiBoldText';
 import CustomWebView from '@/components/common/CustomWebView';
 import CustomBottomSheet from '@/components/common/CustomBottomSheet';
-import Colors from '@/constants/colors';
+import COLORS from '@/constants/colors';
 
 function ClubScreen() {
   const { clubId } = useLocalSearchParams();
@@ -28,7 +28,7 @@ function ClubScreen() {
   };
 
   return (
-    <SafeAreaView style={{ flex: 1, backgroundColor: Colors.white }}>
+    <SafeAreaView style={{ flex: 1, backgroundColor: COLORS.white }}>
       <CustomWebView
         source={{ uri: `${process.env.EXPO_PUBLIC_WEB_URL}/club/${clubId}` }}
         onMessage={(event) => {
@@ -57,7 +57,7 @@ function ClubScreen() {
                   styles.modalButton,
                   myClubs.length - 1 > index && {
                     borderBottomWidth: 1,
-                    borderBottomColor: Colors.gray0,
+                    borderBottomColor: COLORS.gray0,
                   },
                 ]}
                 onPress={() => goToSelectedClub(club.id)}
@@ -85,7 +85,7 @@ const styles = StyleSheet.create({
     width: 50,
     height: 50,
     borderWidth: 1,
-    borderColor: Colors.background,
+    borderColor: COLORS.background,
     borderRadius: 25,
   },
 });

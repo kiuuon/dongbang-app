@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { View, TouchableOpacity, StyleSheet, Alert } from 'react-native';
 import { useQuery } from '@tanstack/react-query';
 
-import Colors from '@/constants/colors';
+import COLORS from '@/constants/colors';
 import filtersStore from '@/stores/filterStore';
 import { fetchUniversityList } from '@/apis/user';
 import BoldText from '@/components/common/SemiBoldText';
@@ -42,10 +42,10 @@ export default function DetailSearchModal({ setIsDetailSearchModalOpen }: Detail
             onPress={() => setTab('소속')}
             style={[
               styles.tabButton,
-              tab === '소속' ? { backgroundColor: Colors.white } : { backgroundColor: Colors.background },
+              tab === '소속' ? { backgroundColor: COLORS.white } : { backgroundColor: COLORS.background },
             ]}
           >
-            <BoldText fontSize={16} style={{ marginLeft: 32, color: tab === '소속' ? Colors.black : Colors.gray2 }}>
+            <BoldText fontSize={16} style={{ marginLeft: 32, color: tab === '소속' ? COLORS.black : COLORS.gray2 }}>
               소속
             </BoldText>
           </TouchableOpacity>
@@ -53,10 +53,10 @@ export default function DetailSearchModal({ setIsDetailSearchModalOpen }: Detail
             onPress={() => setTab('분야')}
             style={[
               styles.tabButton,
-              tab === '분야' ? { backgroundColor: Colors.white } : { backgroundColor: Colors.background },
+              tab === '분야' ? { backgroundColor: COLORS.white } : { backgroundColor: COLORS.background },
             ]}
           >
-            <BoldText fontSize={16} style={{ marginLeft: 32, color: tab === '분야' ? Colors.black : Colors.gray2 }}>
+            <BoldText fontSize={16} style={{ marginLeft: 32, color: tab === '분야' ? COLORS.black : COLORS.gray2 }}>
               분야
             </BoldText>
           </TouchableOpacity>
@@ -64,12 +64,12 @@ export default function DetailSearchModal({ setIsDetailSearchModalOpen }: Detail
             onPress={() => setTab('모집 설정')}
             style={[
               styles.tabButton,
-              tab === '모집 설정' ? { backgroundColor: Colors.white } : { backgroundColor: Colors.background },
+              tab === '모집 설정' ? { backgroundColor: COLORS.white } : { backgroundColor: COLORS.background },
             ]}
           >
             <BoldText
               fontSize={16}
-              style={{ marginLeft: 32, color: tab === '모집 설정' ? Colors.black : Colors.gray2 }}
+              style={{ marginLeft: 32, color: tab === '모집 설정' ? COLORS.black : COLORS.gray2 }}
             >
               모집 설정
             </BoldText>
@@ -96,7 +96,7 @@ export default function DetailSearchModal({ setIsDetailSearchModalOpen }: Detail
           }}
           style={styles.applyButton}
         >
-          <BoldText fontSize={16} style={{ color: Colors.white }}>
+          <BoldText fontSize={16} style={{ color: COLORS.white }}>
             적용하기
           </BoldText>
         </TouchableOpacity>
@@ -109,19 +109,19 @@ const styles = StyleSheet.create({
   container: {
     flexDirection: 'column',
     alignItems: 'center',
-    backgroundColor: Colors.background,
+    backgroundColor: COLORS.background,
   },
   mainContainer: {
     width: '100%',
     flexDirection: 'row',
-    backgroundColor: Colors.white,
+    backgroundColor: COLORS.white,
     height: 500,
   },
   tabs: {
     flexDirection: 'column',
     width: 118,
     height: '100%',
-    backgroundColor: Colors.background,
+    backgroundColor: COLORS.background,
   },
   tabButton: {
     justifyContent: 'center',
@@ -134,7 +134,7 @@ const styles = StyleSheet.create({
     gap: 48,
     width: '100%',
     height: 94,
-    backgroundColor: Colors.white,
+    backgroundColor: COLORS.white,
   },
   resetButton: {
     width: 101,
@@ -147,7 +147,7 @@ const styles = StyleSheet.create({
     height: 45,
     justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor: Colors.primary,
+    backgroundColor: COLORS.primary,
     borderRadius: 15,
   },
 });

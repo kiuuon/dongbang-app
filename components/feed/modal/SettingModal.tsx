@@ -2,7 +2,7 @@ import { View, StyleSheet, TouchableOpacity, Alert } from 'react-native';
 import { useQuery } from '@tanstack/react-query';
 
 import { fetchUserId } from '@/apis/user';
-import Colors from '@/constants/colors';
+import COLORS from '@/constants/colors';
 import EditIcon from '@/icons/EditIcon';
 import DeleteIcon from '@/icons/DeleteIcon';
 import ShareIcon from '@/icons/ShareIcon';
@@ -61,7 +61,7 @@ const styles = StyleSheet.create({
   container: { marginTop: 10, paddingHorizontal: 20 },
   buttonContainer: {
     flexDirection: 'column',
-    backgroundColor: Colors.background,
+    backgroundColor: COLORS.background,
     borderRadius: 8,
   },
   button: {
@@ -72,7 +72,7 @@ const styles = StyleSheet.create({
   },
   bottomBorder: {
     borderBottomWidth: 1,
-    borderBottomColor: Colors.gray0,
+    borderBottomColor: COLORS.gray0,
   },
 });
 

@@ -3,7 +3,7 @@ import { View, Text, TouchableOpacity, Image, StyleSheet } from 'react-native';
 import Animated, { useSharedValue, useAnimatedStyle, withTiming, Easing } from 'react-native-reanimated';
 
 import LockIcon from '@/icons/LockIcon';
-import Colors from '@/constants/colors';
+import COLORS from '@/constants/colors';
 import { ClubType } from '@/types/ClubType';
 import BoldText from '@/components/common/SemiBoldText';
 import RegularText from '@/components/common/RegularText';
@@ -19,9 +19,9 @@ interface ClubCardProps {
 export default function ClubCard({ club, openClubCardId, setOpenClubCardId }: ClubCardProps) {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const statusClasses: Record<RecruitmentStatus, any> = {
-    open: { color: Colors.primary, fontFamily: 'PretendardBold', fontSize: 12 },
-    always: { color: Colors.black, fontFamily: 'PretendardRegular', fontSize: 12 },
-    closed: { color: Colors.gray1, fontFamily: 'PretendardRegular', fontSize: 12 },
+    open: { color: COLORS.primary, fontFamily: 'PretendardBold', fontSize: 12 },
+    always: { color: COLORS.black, fontFamily: 'PretendardRegular', fontSize: 12 },
+    closed: { color: COLORS.gray1, fontFamily: 'PretendardRegular', fontSize: 12 },
   };
 
   const getDiffInDays = (endDate: string | Date): number => {
@@ -80,7 +80,7 @@ export default function ClubCard({ club, openClubCardId, setOpenClubCardId }: Cl
                 <BoldText fontSize={14} style={{ marginBottom: 6 }}>
                   {club.name}
                 </BoldText>
-                <RegularText fontSize={12} style={{ color: Colors.gray2 }}>
+                <RegularText fontSize={12} style={{ color: COLORS.gray2 }}>
                   {club.description}
                 </RegularText>
               </View>
@@ -90,7 +90,7 @@ export default function ClubCard({ club, openClubCardId, setOpenClubCardId }: Cl
             <View style={styles.tagContainer}>
               {club.tags.slice(0, 3).map((tag) => (
                 <View key={tag} style={styles.tag}>
-                  <RegularText fontSize={12} style={{ color: Colors.gray2 }}>
+                  <RegularText fontSize={12} style={{ color: COLORS.gray2 }}>
                     {tag}
                   </RegularText>
                 </View>
@@ -102,7 +102,7 @@ export default function ClubCard({ club, openClubCardId, setOpenClubCardId }: Cl
 
       <View style={styles.rightButtons}>
         <TouchableOpacity activeOpacity={0.7} style={[styles.rightButton, isOpen && styles.activeButton]}>
-          <RegularText fontSize={12} style={{ color: Colors.primary }}>
+          <RegularText fontSize={12} style={{ color: COLORS.primary }}>
             소개
           </RegularText>
         </TouchableOpacity>
@@ -111,7 +111,7 @@ export default function ClubCard({ club, openClubCardId, setOpenClubCardId }: Cl
           {club.recruitment?.[0].recruitment_status === 'closed' ? (
             <LockIcon />
           ) : (
-            <RegularText fontSize={12} style={{ color: Colors.primary }}>
+            <RegularText fontSize={12} style={{ color: COLORS.primary }}>
               모집 공고
             </RegularText>
           )}
@@ -128,12 +128,12 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   card: {
-    backgroundColor: Colors.white,
+    backgroundColor: COLORS.white,
     borderRadius: 8,
     paddingHorizontal: 10,
     paddingTop: 20,
     paddingBottom: 9,
-    shadowColor: Colors.black,
+    shadowColor: COLORS.black,
     shadowOffset: { width: 0, height: 0 },
     shadowOpacity: 0.08,
     shadowRadius: 12,
@@ -146,7 +146,7 @@ const styles = StyleSheet.create({
     height: 60,
     borderRadius: 5,
     borderWidth: 1,
-    borderColor: Colors.background,
+    borderColor: COLORS.background,
     marginRight: 20,
   },
   infoContainer: {
@@ -167,7 +167,7 @@ const styles = StyleSheet.create({
     gap: 4,
   },
   tag: {
-    backgroundColor: Colors.gray0,
+    backgroundColor: COLORS.gray0,
     borderRadius: 8,
     paddingHorizontal: 5,
     paddingVertical: 2,
@@ -185,10 +185,10 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     paddingLeft: 14,
-    backgroundColor: Colors.white,
+    backgroundColor: COLORS.white,
   },
   activeButton: {
-    shadowColor: Colors.black,
+    shadowColor: COLORS.black,
     shadowOpacity: 0.18,
     shadowOffset: { width: 0, height: 1 },
     shadowRadius: 4,

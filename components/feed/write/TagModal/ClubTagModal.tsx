@@ -4,7 +4,7 @@ import { useInfiniteQuery } from '@tanstack/react-query';
 import { BottomSheetTextInput, BottomSheetModal } from '@gorhom/bottom-sheet';
 
 import { fetchClubs } from '@/apis/club';
-import Colors from '@/constants/colors';
+import COLORS from '@/constants/colors';
 import BoldText from '@/components/common/SemiBoldText';
 
 function ClubTagModal({
@@ -56,7 +56,7 @@ function ClubTagModal({
       <BottomSheetTextInput
         style={styles.searchInput}
         placeholder="검색"
-        placeholderTextColor={Colors.gray2}
+        placeholderTextColor={COLORS.gray2}
         value={searchText}
         onChangeText={setSearchText}
         onBlur={() => {
@@ -109,7 +109,7 @@ const styles = StyleSheet.create({
     height: 40,
     width: '100%',
     borderRadius: 10,
-    backgroundColor: Colors.gray0,
+    backgroundColor: COLORS.gray0,
     paddingHorizontal: 13,
     fontFamily: 'PretendardRegular',
     fontStyle: 'normal',
@@ -145,12 +145,12 @@ const styles = StyleSheet.create({
     borderRadius: '100%',
   },
   selected: {
-    backgroundColor: Colors.primary,
+    backgroundColor: COLORS.primary,
   },
   notSelected: {
-    backgroundColor: Colors.white,
+    backgroundColor: COLORS.white,
     borderWidth: 1,
-    borderColor: Colors.gray2,
+    borderColor: COLORS.gray2,
   },
 });
 

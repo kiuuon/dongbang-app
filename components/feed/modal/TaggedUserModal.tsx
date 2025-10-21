@@ -1,6 +1,6 @@
 import { View, StyleSheet, TouchableOpacity, Image } from 'react-native';
 
-import Colors from '@/constants/colors';
+import COLORS from '@/constants/colors';
 import BoldText from '@/components/common/SemiBoldText';
 
 function TaggedUserModal({ taggedUsers }: { taggedUsers: { user: { name: string; avatar: string } }[] }) {
@@ -38,14 +38,14 @@ const styles = StyleSheet.create({
     width: 40,
     height: 40,
     borderWidth: 1,
-    borderColor: Colors.background,
+    borderColor: COLORS.background,
     borderRadius: 25,
   },
   noneImage: {
     width: 40,
     height: 40,
     borderRadius: 25,
-    backgroundColor: Colors.black,
+    backgroundColor: COLORS.black,
   },
 });
 

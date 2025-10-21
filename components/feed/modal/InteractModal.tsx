@@ -1,6 +1,6 @@
 import { View, StyleSheet, TouchableOpacity } from 'react-native';
 
-import Colors from '@/constants/colors';
+import COLORS from '@/constants/colors';
 import LockIcon from '@/icons/LockIcon';
 import InteractIcon2 from '@/icons/InteractIcon2';
 import BoldText from '@/components/common/SemiBoldText';
@@ -14,7 +14,7 @@ function InteractModal() {
       </TouchableOpacity>
       <View style={[styles.button, styles.bottomBorder]}>
         <LockIcon />
-        <BoldText fontSize={16} style={{ color: Colors.gray1 }}>
+        <BoldText fontSize={16} style={{ color: COLORS.gray1 }}>
           지원하기
         </BoldText>
       </View>
@@ -35,7 +35,7 @@ const styles = StyleSheet.create({
   },
   bottomBorder: {
     borderBottomWidth: 1,
-    borderBottomColor: Colors.gray0,
+    borderBottomColor: COLORS.gray0,
   },
 });
 

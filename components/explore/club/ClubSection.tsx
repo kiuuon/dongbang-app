@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { View, StyleSheet, FlatList, ActivityIndicator, Alert, Platform, KeyboardAvoidingView } from 'react-native';
 import { useInfiniteQuery, useQuery } from '@tanstack/react-query';
 
-import Colors from '@/constants/colors';
+import COLORS from '@/constants/colors';
 import { fetchClubs, fetchClubsCount } from '@/apis/club';
 import filtersStore from '@/stores/filterStore';
 import CustomBottomSheet from '@/components/common/CustomBottomSheet';
@@ -79,7 +79,7 @@ function ClubSection({
           ListFooterComponent={
             isFetchingNextPage ? (
               <View style={styles.loaderContainer}>
-                <ActivityIndicator size="small" color={Colors.primary} />
+                <ActivityIndicator size="small" color={COLORS.primary} />
               </View>
             ) : null
           }
@@ -87,7 +87,7 @@ function ClubSection({
 
         <CustomBottomSheet
           indicator={false}
-          backgroundColor={Colors.background}
+          backgroundColor={COLORS.background}
           isOpen={isDetailSearchModalOpen}
           onClose={() => setIsDetailSearchModalOpen(false)}
         >
@@ -106,7 +106,7 @@ const styles = StyleSheet.create({
     marginLeft: 20,
     marginBottom: 10,
     paddingTop: 15,
-    color: Colors.gray2,
+    color: COLORS.gray2,
   },
   listContainer: {
     paddingHorizontal: 10,

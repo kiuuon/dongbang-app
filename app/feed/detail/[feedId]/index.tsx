@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useLocalSearchParams, router } from 'expo-router';
 
-import Colors from '@/constants/colors';
+import COLORS from '@/constants/colors';
 import CustomWebView from '@/components/common/CustomWebView';
 import CustomBottomSheet from '@/components/common/CustomBottomSheet';
 import TaggedClubModal from '@/components/feed/modal/TaggedClubModal';
@@ -27,7 +27,7 @@ function FeedDetailScreen() {
   const setSelectedHashtag = exploreStore((state) => state.setSelectedHashtag);
 
   return (
-    <SafeAreaView edges={['top']} style={{ flex: 1, backgroundColor: Colors.white }}>
+    <SafeAreaView edges={['top']} style={{ flex: 1, backgroundColor: COLORS.white }}>
       <CustomWebView
         source={{ uri: `${process.env.EXPO_PUBLIC_WEB_URL}/feed/detail/${feedId}` }}
         onMessage={(event) => {

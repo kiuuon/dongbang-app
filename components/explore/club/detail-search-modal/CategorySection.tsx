@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { View, TouchableOpacity, StyleSheet, Text } from 'react-native';
 
-import Colors from '@/constants/colors';
+import COLORS from '@/constants/colors';
 import {
   SPORTS_CATEGORIES,
   ART_CATEGORIES,
@@ -58,7 +58,7 @@ export default function CategorySection() {
         {['운동', '예술', '취미'].map((item) => (
           <TouchableOpacity
             key={item}
-            style={[styles.topButton, { backgroundColor: selectedTopCategory === item ? Colors.white : Colors.gray0 }]}
+            style={[styles.topButton, { backgroundColor: selectedTopCategory === item ? COLORS.white : COLORS.gray0 }]}
             onPress={() => setSelectedTopCategory(selectedTopCategory === item ? '' : item)}
           >
             <RegularText fontSize={14} style={styles.grayText}>
@@ -77,7 +77,7 @@ export default function CategorySection() {
         {['사회', '학술'].map((item) => (
           <TouchableOpacity
             key={item}
-            style={[styles.topButton, { backgroundColor: selectedTopCategory === item ? Colors.white : Colors.gray0 }]}
+            style={[styles.topButton, { backgroundColor: selectedTopCategory === item ? COLORS.white : COLORS.gray0 }]}
             onPress={() => setSelectedTopCategory(selectedTopCategory === item ? '' : item)}
           >
             <RegularText fontSize={14} style={styles.grayText}>
@@ -130,7 +130,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
   grayText: {
-    color: Colors.gray2,
+    color: COLORS.gray2,
   },
   categoryButton: {
     height: 31,
@@ -140,18 +140,18 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
   categoryButtonSelected: {
-    backgroundColor: Colors.primary,
+    backgroundColor: COLORS.primary,
   },
   categoryButtonUnselected: {
-    backgroundColor: Colors.white,
+    backgroundColor: COLORS.white,
   },
   categoryTextSelected: {
-    color: Colors.white,
+    color: COLORS.white,
     fontFamily: 'PretendardBold',
     fontSize: 14,
   },
   categoryTextUnselected: {
-    color: Colors.gray2,
+    color: COLORS.gray2,
     fontFamily: 'PretendardRegular',
     fontSize: 14,
   },

@@ -1,4 +1,4 @@
-const Colors = {
+const COLORS = {
   primary: '#F9A825',
   primary_dark: '#C8BBA3',
   secondary: '#FFE6A1',
@@ -18,4 +18,4 @@ const Colors = {
   kakao: '#FFEB3B',
 };
 
-export default Colors;
+export default COLORS;

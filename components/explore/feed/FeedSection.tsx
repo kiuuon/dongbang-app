@@ -2,7 +2,7 @@ import React from 'react';
 import { View, ActivityIndicator, FlatList, StyleSheet, Alert, KeyboardAvoidingView, Platform } from 'react-native';
 import { useInfiniteQuery } from '@tanstack/react-query';
 
-import Colors from '@/constants/colors';
+import COLORS from '@/constants/colors';
 import { FeedType } from '@/types/FeedType';
 import { searchFeeds } from '@/apis/feed';
 import FeedCard from './FeedCard';
@@ -25,7 +25,7 @@ function FeedSection({ keyword }: { keyword: string }) {
   if (isPending) {
     return (
       <View style={styles.loaderContainer}>
-        <ActivityIndicator size="large" color={Colors.primary} />
+        <ActivityIndicator size="large" color={COLORS.primary} />
       </View>
     );
   }
@@ -53,7 +53,7 @@ function FeedSection({ keyword }: { keyword: string }) {
         ListFooterComponent={
           isFetchingNextPage ? (
             <View style={styles.footerLoader}>
-              <ActivityIndicator size="small" color={Colors.primary} />
+              <ActivityIndicator size="small" color={COLORS.primary} />
             </View>
           ) : null
         }

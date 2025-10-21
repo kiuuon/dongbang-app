@@ -3,11 +3,11 @@ import { router } from 'expo-router';
 
 import { logout } from '@/apis/auth';
 import CustomWebView from '@/components/common/CustomWebView';
-import Colors from '@/constants/colors';
+import COLORS from '@/constants/colors';
 
 function MyScreen() {
   return (
-    <SafeAreaView edges={['top']} style={{ flex: 1, backgroundColor: Colors.white }}>
+    <SafeAreaView edges={['top']} style={{ flex: 1, backgroundColor: COLORS.white }}>
       <CustomWebView
         source={{ uri: `${process.env.EXPO_PUBLIC_WEB_URL}/mypage` }}
         onMessage={async () => {

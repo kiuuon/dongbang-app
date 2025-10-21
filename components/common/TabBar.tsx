@@ -3,7 +3,7 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import type { NavigationState, Route, ParamListBase, NavigationHelpers } from '@react-navigation/native';
 import type { BottomTabNavigationEventMap } from '@react-navigation/bottom-tabs';
 
-import Colors from '@/constants/colors';
+import COLORS from '@/constants/colors';
 import RegularText from '@/components/common/RegularText';
 import HomeIcon from '@/icons/home-icon';
 import SearchIcon from '@/icons/search-icon';
@@ -67,7 +67,7 @@ function TabBar({
               onPress={onPress}
               onLongPress={onLongPress}
             >
-              {icons[route.name] && icons[route.name]({ color: isFocused ? Colors.primary : Colors.gray2 })}
+              {icons[route.name] && icons[route.name]({ color: isFocused ? COLORS.primary : COLORS.gray2 })}
               {titles[route.name] && <RegularText fontSize={12}>{titles[route.name]}</RegularText>}
             </TouchableOpacity>
           );
@@ -81,17 +81,17 @@ export default TabBar;
 
 const styles = StyleSheet.create({
   safeArea: {
-    backgroundColor: Colors.white,
+    backgroundColor: COLORS.white,
   },
   tabbar: {
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
-    backgroundColor: Colors.white,
+    backgroundColor: COLORS.white,
     height: 70,
     paddingHorizontal: 34,
     borderTopWidth: 1,
-    borderTopColor: Colors.background,
+    borderTopColor: COLORS.background,
   },
   item: {
     flexDirection: 'column',
