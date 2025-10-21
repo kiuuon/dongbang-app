@@ -57,15 +57,20 @@ function InfoScreen() {
       <CustomWebView
         source={{ uri: `${process.env.EXPO_PUBLIC_WEB_URL}/sign-up/info` }}
         onMessage={(data) => {
-          const body = {
-            ...data,
-            term_of_use: termOfUse,
-            privacy_policy: privacyPolicy,
-            third_party_consent: thirdPartyConsent,
-            marketing,
-          };
+          const { type, action, payload } = data;
+          if (type === 'event') {
+            if (action === 'sign up') {
+              const body = {
+                ...payload,
+                term_of_use: termOfUse,
+                privacy_policy: privacyPolicy,
+                third_party_consent: thirdPartyConsent,
+                marketing,
+              };
 
-          signUpMutation(body);
+              signUpMutation(body);
+            }
+          }
         }}
       />
     </SafeAreaView>

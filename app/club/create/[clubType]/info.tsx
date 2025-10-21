@@ -19,14 +19,19 @@ function ClubInfoScreen() {
       <CustomWebView
         source={{ uri: `${process.env.EXPO_PUBLIC_WEB_URL}/club/create/${clubType}/info` }}
         onMessage={(data) => {
-          const { campusClubType, name, category, location, description, tags } = data;
-          setClubCampusType(campusClubType);
-          setName(name);
-          setCategory(category);
-          setLocation(location);
-          setDescription(description);
-          setTags(tags);
-          router.push(`/club/create/${clubType}/detail`);
+          const { type, action, payload } = data;
+          if (type === 'event') {
+            if (action === 'complete info form') {
+              const { campusClubType, name, category, location, description, tags } = payload;
+              setClubCampusType(campusClubType);
+              setName(name);
+              setCategory(category);
+              setLocation(location);
+              setDescription(description);
+              setTags(tags);
+              router.push(`/club/create/${clubType}/detail`);
+            }
+          }
         }}
       />
     </SafeAreaView>

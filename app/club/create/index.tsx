@@ -10,10 +10,16 @@ function ClubCreateScreen() {
       <CustomWebView
         source={{ uri: `${process.env.EXPO_PUBLIC_WEB_URL}/club/create` }}
         onMessage={(data) => {
-          if (data === 'campus') {
-            router.push('/club/create/campus/info');
-          } else if (data === 'union') {
-            router.push('/club/create/union/info');
+          const { type, action, payload } = data;
+          if (type === 'event') {
+            if (action === 'select club type') {
+              const { clubType } = payload;
+              if (clubType === 'campus') {
+                router.push('/club/create/campus/info');
+              } else if (clubType === 'union') {
+                router.push('/club/create/union/info');
+              }
+            }
           }
         }}
       />

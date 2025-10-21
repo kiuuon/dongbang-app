@@ -16,13 +16,18 @@ function TermsScreen() {
       <CustomWebView
         source={{ uri: `${process.env.EXPO_PUBLIC_WEB_URL}/sign-up/terms` }}
         onMessage={(data) => {
-          const { termOfUse, privacyPolicy, thirdPartyConsent, marketing } = data;
-          setTermOfUse(termOfUse);
-          setPrivacyPolicy(privacyPolicy);
-          setThirdPartyConsent(thirdPartyConsent);
-          setMarketing(marketing);
+          const { type, action, payload } = data;
+          if (type === 'event') {
+            if (action === 'click next button') {
+              const { termOfUse, privacyPolicy, thirdPartyConsent, marketing } = payload;
+              setTermOfUse(termOfUse);
+              setPrivacyPolicy(privacyPolicy);
+              setThirdPartyConsent(thirdPartyConsent);
+              setMarketing(marketing);
 
-          router.push('/sign-up/info');
+              router.push('/sign-up/info');
+            }
+          }
         }}
       />
     </SafeAreaView>

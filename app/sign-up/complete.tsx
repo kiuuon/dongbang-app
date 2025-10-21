@@ -10,8 +10,13 @@ function CompleteScreen() {
     <SafeAreaView style={{ flex: 1, backgroundColor: COLORS.white }}>
       <CustomWebView
         source={{ uri: `${process.env.EXPO_PUBLIC_WEB_URL}/sign-up/complete` }}
-        onMessage={() => {
-          router.push('/feed/my');
+        onMessage={(data) => {
+          const { type, action } = data;
+          if (type === 'event') {
+            if (action === 'sign up complete') {
+              router.push('/feed/my');
+            }
+          }
         }}
       />
     </SafeAreaView>

@@ -31,25 +31,27 @@ function FeedDetailScreen() {
       <CustomWebView
         source={{ uri: `${process.env.EXPO_PUBLIC_WEB_URL}/feed/detail/${feedId}` }}
         onMessage={(data) => {
-          const { type, payload } = data;
-          if (type === 'tagged club click') {
-            setTaggedClubs(payload);
-            setIsTaggedClubModalOpen(true);
-          } else if (type === 'setting click') {
-            const { authorId } = payload;
-            setSelectedAuthorId(authorId);
-            setIsSettingModalOpen(true);
-          } else if (type === 'interact click') {
-            setIsInteractModalOpen(true);
-          } else if (type === 'tagged user click') {
-            setTaggedUsers(payload);
-            setIsTaggedUserModalOpen(true);
-          } else if (type === 'hashtag click') {
-            const hashtag = payload.trim();
-            setSearchTarget('hashtag');
-            setKeyword(hashtag);
-            setSelectedHashtag(hashtag);
-            router.push(`/explore`);
+          const { type, action, payload } = data;
+          if (type === 'event') {
+            if (action === 'tagged club click') {
+              setTaggedClubs(payload);
+              setIsTaggedClubModalOpen(true);
+            } else if (action === 'setting click') {
+              const { authorId } = payload;
+              setSelectedAuthorId(authorId);
+              setIsSettingModalOpen(true);
+            } else if (action === 'interact click') {
+              setIsInteractModalOpen(true);
+            } else if (action === 'tagged user click') {
+              setTaggedUsers(payload);
+              setIsTaggedUserModalOpen(true);
+            } else if (action === 'hashtag click') {
+              const hashtag = payload.trim();
+              setSearchTarget('hashtag');
+              setKeyword(hashtag);
+              setSelectedHashtag(hashtag);
+              router.push(`/explore`);
+            }
           }
         }}
       />

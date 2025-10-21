@@ -35,17 +35,23 @@ function ClubDetailScreen() {
       <CustomWebView
         source={{ uri: `${process.env.EXPO_PUBLIC_WEB_URL}/club/create/${clubType}/detail` }}
         onMessage={async (data) => {
-          const body = {
-            ...data,
-            detail_type: clubCampusType,
-            name,
-            category,
-            location,
-            description,
-            tags,
-          };
+          const { type, action, payload } = data;
 
-          createClubMutation(body);
+          if (type === 'event') {
+            if (action === 'create club') {
+              const body = {
+                ...payload,
+                detail_type: clubCampusType,
+                name,
+                category,
+                location,
+                description,
+                tags,
+              };
+
+              createClubMutation(body);
+            }
+          }
         }}
       />
     </SafeAreaView>

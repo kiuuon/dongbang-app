@@ -32,12 +32,17 @@ function ClubScreen() {
       <CustomWebView
         source={{ uri: `${process.env.EXPO_PUBLIC_WEB_URL}/club/${clubId}` }}
         onMessage={(data) => {
-          if (data === 'openNavigation') {
-            setIsNavigationOpen(true);
-          } else if (data === 'comingSoon') {
-            router.push('/coming-soon');
-          } else if (data === 'go to write feed page') {
-            router.push(`/feed/write/${clubId}`);
+          const { type, action } = data;
+          if (type === 'event') {
+            if (action === 'open navigation') {
+              setIsNavigationOpen(true);
+            } else if (action === 'go to coming soon page') {
+              router.push('/coming-soon');
+            } else if (action === 'go to write feed page') {
+              router.push(`/feed/write/${clubId}`);
+            } else if (action === 'go to recruit page') {
+              router.push(`/club/${clubId}/recruit`);
+            }
           }
         }}
       />

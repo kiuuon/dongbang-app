@@ -95,24 +95,27 @@ function FeedWriteScreen() {
     <SafeAreaView style={{ flex: 1, backgroundColor: COLORS.white }}>
       <CustomWebView
         source={{ uri: `${process.env.EXPO_PUBLIC_WEB_URL}/feed/write/${clubId}` }}
-        onMessage={async (data) => {
-          if (data === 'open tag modal') {
-            setIsTagModalOpen(true);
-          } else {
-            const { photos, title, content, clubType, isNicknameVisible, isPrivate } = JSON.parse(data);
-            const body = {
-              photos,
-              title: title || '',
-              content: content || '',
-              isNicknameVisible,
-              isPrivate,
-              clubId: clubId as string,
-              clubType,
-              selectedMembers: isClub ? draftSelectedMembers : [],
-              selectedClubs: isClub ? [] : draftSelectedClubs,
-            };
+        onMessage={(data) => {
+          const { type, action, payload } = data;
+          if (type === 'event') {
+            if (action === 'open tag modal') {
+              setIsTagModalOpen(true);
+            } else if (action === 'write feed') {
+              const { photos, title, content, clubType, isNicknameVisible, isPrivate } = payload;
+              const body = {
+                photos,
+                title: title || '',
+                content: content || '',
+                isNicknameVisible,
+                isPrivate,
+                clubId: clubId as string,
+                clubType,
+                selectedMembers: draftSelectedMembers,
+                selectedClubs: draftSelectedClubs,
+              };
 
-            writeFeedMutation(body);
+              writeFeedMutation(body);
+            }
           }
         }}
       />
