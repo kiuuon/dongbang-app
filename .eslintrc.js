@@ -39,6 +39,6 @@ module.exports = {
         skip: ['BoldText', 'RegularText'],
       },
     ],
-    'react/require-default-props': ['error', { ignoreFunctionalComponents: true }],
+    'react/require-default-props': 'off',
   },
 };

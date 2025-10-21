@@ -13,9 +13,10 @@ type CustomWebViewProps = {
   source: { uri: string };
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   onMessage: (event: any) => void;
+  setKey?: React.Dispatch<React.SetStateAction<number>>;
 };
 
-const CustomWebView = forwardRef<WebViewType, CustomWebViewProps>(({ source, onMessage }, ref) => {
+const CustomWebView = forwardRef<WebViewType, CustomWebViewProps>(({ source, onMessage, setKey = () => {} }, ref) => {
   const navigation = useNavigation();
   const webViewRef = useRef<WebViewType | null>(null);
   const { show } = useTabVisibility();
@@ -62,6 +63,7 @@ const CustomWebView = forwardRef<WebViewType, CustomWebViewProps>(({ source, onM
         if (type === 'event') {
           if (action === 'login success') {
             show();
+            setKey((prev) => prev + 1); // 웹뷰 리로드
             await login(payload.accessToken, payload.refreshToken);
             const user = await fetchUser();
             if (user) {
