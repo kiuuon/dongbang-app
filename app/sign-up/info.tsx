@@ -56,9 +56,9 @@ function InfoScreen() {
     <SafeAreaView style={{ flex: 1, backgroundColor: COLORS.white }}>
       <CustomWebView
         source={{ uri: `${process.env.EXPO_PUBLIC_WEB_URL}/sign-up/info` }}
-        onMessage={(event) => {
+        onMessage={(data) => {
           const body = {
-            ...JSON.parse(event.nativeEvent.data),
+            ...data,
             term_of_use: termOfUse,
             privacy_policy: privacyPolicy,
             third_party_consent: thirdPartyConsent,

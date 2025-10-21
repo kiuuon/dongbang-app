@@ -1,22 +1,24 @@
-import { useRef } from 'react';
+import { forwardRef, useImperativeHandle, useRef } from 'react';
 import { Alert } from 'react-native';
 import { WebView } from 'react-native-webview';
-import type { WebView as WebViewType, WebViewMessageEvent } from 'react-native-webview';
+import type { WebView as WebViewType } from 'react-native-webview';
 import { useNavigation, router } from 'expo-router';
 import { useQuery } from '@tanstack/react-query';
 
 import { fetchSession, login } from '@/apis/auth';
 import { fetchUser } from '@/apis/user';
+import useTabVisibility from '@/stores/useTabVisibility';
 
-function CustomWebView({
-  source,
-  onMessage,
-}: {
+type CustomWebViewProps = {
   source: { uri: string };
-  onMessage: (event: WebViewMessageEvent) => void;
-}) {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  onMessage: (event: any) => void;
+};
+
+const CustomWebView = forwardRef<WebViewType, CustomWebViewProps>(({ source, onMessage }, ref) => {
   const navigation = useNavigation();
   const webViewRef = useRef<WebViewType | null>(null);
+  const { show } = useTabVisibility();
   const { data: session } = useQuery({
     queryKey: ['session'],
     queryFn: fetchSession,
@@ -26,14 +28,19 @@ function CustomWebView({
     },
   });
 
+  useImperativeHandle(ref, () => webViewRef.current as WebViewType, []);
+
   const sendTokenToWeb = async () => {
     if (!session) return;
     const { access_token: accessToken, refresh_token: refreshToken } = session;
-    const jsCode = `
-      window.postMessage(${JSON.stringify({ accessToken, refreshToken })}, "*");
-      true;
-    `;
-    webViewRef.current?.injectJavaScript(jsCode);
+
+    const message = {
+      type: 'event',
+      action: 'set session request',
+      payload: { accessToken, refreshToken },
+    };
+
+    webViewRef.current?.postMessage(JSON.stringify(message));
   };
 
   return (
@@ -54,6 +61,7 @@ function CustomWebView({
 
         if (type === 'event') {
           if (action === 'login success') {
+            show();
             await login(payload.accessToken, payload.refreshToken);
             const user = await fetchUser();
             if (user) {
@@ -71,13 +79,13 @@ function CustomWebView({
           return;
         }
 
-        onMessage(event);
+        onMessage(data);
       }}
       javaScriptEnabled
       originWhitelist={['*']}
       userAgent="rn-webview"
     />
   );
-}
+});
 
 export default CustomWebView;

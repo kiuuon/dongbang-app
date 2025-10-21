@@ -4,8 +4,15 @@ import { Tabs } from 'expo-router';
 import type { BottomTabBarProps } from '@react-navigation/bottom-tabs';
 
 import TabBar from '@/components/common/TabBar';
+import useTabVisibility from '@/stores/useTabVisibility';
 
-function customTabBar({ state, navigation }: BottomTabBarProps) {
+function CustomTabBar({ state, navigation }: BottomTabBarProps) {
+  const { hidden } = useTabVisibility();
+
+  if (hidden) {
+    return null;
+  }
+
   return <TabBar key={state.key} state={state} navigation={navigation} />;
 }
 
@@ -20,11 +27,13 @@ export default function TabLayout() {
 
   return (
     <Tabs
-      tabBar={customTabBar}
+      // eslint-disable-next-line react/no-unstable-nested-components
+      tabBar={(props) => <CustomTabBar {...props} />}
       screenOptions={() => ({
         headerShown: false,
         title: '',
         gestureEnabled: false,
+        tabBarStyle: { display: 'none' },
       })}
     >
       <Tabs.Screen name="feed/[clubType]/index" />

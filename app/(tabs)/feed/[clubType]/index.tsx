@@ -1,8 +1,10 @@
-import { useState } from 'react';
-import { TouchableOpacity, StyleSheet } from 'react-native';
+import { useRef, useState } from 'react';
+import { TouchableOpacity, StyleSheet, Alert } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useLocalSearchParams, router } from 'expo-router';
+import { useQuery } from '@tanstack/react-query';
 
+import { fetchSession } from '@/apis/auth';
 import BoldText from '@/components/common/SemiBoldText';
 import CustomWebView from '@/components/common/CustomWebView';
 import CustomBottomSheet from '@/components/common/CustomBottomSheet';
@@ -12,6 +14,7 @@ import TaggedUserModal from '@/components/feed/modal/TaggedUserModal';
 import SettingModal from '@/components/feed/modal/SettingModal';
 import InteractModal from '@/components/feed/modal/InteractModal';
 import exploreStore from '@/stores/exploreStore';
+import LoginModal from '@/components/common/LoginModal';
 
 function FeedScreen() {
   const { clubType } = useLocalSearchParams();
@@ -20,7 +23,7 @@ function FeedScreen() {
   const [isTaggedClubModalOpen, setIsTaggedClubModalOpen] = useState(false);
   const [isInteractModalOpen, setIsInteractModalOpen] = useState(false);
   const [isSettingModalOpen, setIsSettingModalOpen] = useState(false);
-  // const [isLogin]
+  const [isLoginModalOpen, setIsLoginModalOpen] = useState(false);
 
   // TODO: 추후에 사용될 수 있는 상태 변수
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -33,6 +36,17 @@ function FeedScreen() {
   const setKeyword = exploreStore((state) => state.setKeyword);
   const setSelectedHashtag = exploreStore((state) => state.setSelectedHashtag);
 
+  const webViewRef = useRef(null);
+
+  const { data: session } = useQuery({
+    queryKey: ['session'],
+    queryFn: fetchSession,
+    throwOnError: (error) => {
+      Alert.alert('세션 정보를 불러오는 데 실패했습니다. 다시 시도해주세요.', error.message);
+      return false;
+    },
+  });
+
   const goToSelectedClubType = (selectedClubType: string) => {
     router.replace(`/feed/${selectedClubType}`);
     setIsNavigationOpen(false);
@@ -41,9 +55,10 @@ function FeedScreen() {
   return (
     <SafeAreaView edges={['top']} style={{ flex: 1, backgroundColor: COLORS.white }}>
       <CustomWebView
+        ref={webViewRef}
         source={{ uri: `${process.env.EXPO_PUBLIC_WEB_URL}/feed/${clubType}` }}
-        onMessage={(event) => {
-          const { type, action, payload } = JSON.parse(event.nativeEvent.data);
+        onMessage={(data) => {
+          const { type, action, payload } = data;
           if (type === 'event') {
             if (action === 'open navigation') {
               setIsNavigationOpen(true);
@@ -73,14 +88,37 @@ function FeedScreen() {
           }
         }}
       />
+
+      <LoginModal visible={isLoginModalOpen} onClose={() => setIsLoginModalOpen(false)} webViewRef={webViewRef} />
+
       <CustomBottomSheet isOpen={isNavigationOpen} onClose={() => setIsNavigationOpen(false)}>
         {clubType !== 'my' && (
-          <TouchableOpacity style={styles.modalButton} onPress={() => goToSelectedClubType('my')}>
+          <TouchableOpacity
+            style={styles.modalButton}
+            onPress={() => {
+              if (session?.user) {
+                goToSelectedClubType('my');
+              } else {
+                setIsNavigationOpen(false);
+                setIsLoginModalOpen(true);
+              }
+            }}
+          >
             <BoldText fontSize={16}>내 동아리</BoldText>
           </TouchableOpacity>
         )}
         {clubType !== 'campus' && (
-          <TouchableOpacity style={styles.modalButton} onPress={() => goToSelectedClubType('campus')}>
+          <TouchableOpacity
+            style={styles.modalButton}
+            onPress={() => {
+              if (session?.user) {
+                goToSelectedClubType('campus');
+              } else {
+                setIsNavigationOpen(false);
+                setIsLoginModalOpen(true);
+              }
+            }}
+          >
             <BoldText fontSize={16}>교내 동아리</BoldText>
           </TouchableOpacity>
         )}

@@ -31,12 +31,12 @@ function ClubScreen() {
     <SafeAreaView style={{ flex: 1, backgroundColor: COLORS.white }}>
       <CustomWebView
         source={{ uri: `${process.env.EXPO_PUBLIC_WEB_URL}/club/${clubId}` }}
-        onMessage={(event) => {
-          if (event.nativeEvent.data === 'openNavigation') {
+        onMessage={(data) => {
+          if (data === 'openNavigation') {
             setIsNavigationOpen(true);
-          } else if (event.nativeEvent.data === 'comingSoon') {
+          } else if (data === 'comingSoon') {
             router.push('/coming-soon');
-          } else if (event.nativeEvent.data === 'go to write feed page') {
+          } else if (data === 'go to write feed page') {
             router.push(`/feed/write/${clubId}`);
           }
         }}

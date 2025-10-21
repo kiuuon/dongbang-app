@@ -15,8 +15,8 @@ function TermsScreen() {
     <SafeAreaView style={{ flex: 1, backgroundColor: COLORS.white }}>
       <CustomWebView
         source={{ uri: `${process.env.EXPO_PUBLIC_WEB_URL}/sign-up/terms` }}
-        onMessage={(event) => {
-          const { termOfUse, privacyPolicy, thirdPartyConsent, marketing } = JSON.parse(event.nativeEvent.data);
+        onMessage={(data) => {
+          const { termOfUse, privacyPolicy, thirdPartyConsent, marketing } = data;
           setTermOfUse(termOfUse);
           setPrivacyPolicy(privacyPolicy);
           setThirdPartyConsent(thirdPartyConsent);

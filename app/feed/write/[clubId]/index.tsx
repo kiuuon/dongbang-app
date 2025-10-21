@@ -95,13 +95,11 @@ function FeedWriteScreen() {
     <SafeAreaView style={{ flex: 1, backgroundColor: COLORS.white }}>
       <CustomWebView
         source={{ uri: `${process.env.EXPO_PUBLIC_WEB_URL}/feed/write/${clubId}` }}
-        onMessage={async (event) => {
-          if (event.nativeEvent.data === 'open tag modal') {
+        onMessage={async (data) => {
+          if (data === 'open tag modal') {
             setIsTagModalOpen(true);
           } else {
-            const { photos, title, content, clubType, isNicknameVisible, isPrivate } = JSON.parse(
-              event.nativeEvent.data,
-            );
+            const { photos, title, content, clubType, isNicknameVisible, isPrivate } = JSON.parse(data);
             const body = {
               photos,
               title: title || '',

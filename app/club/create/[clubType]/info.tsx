@@ -18,8 +18,8 @@ function ClubInfoScreen() {
     <SafeAreaView style={{ flex: 1, backgroundColor: COLORS.white }}>
       <CustomWebView
         source={{ uri: `${process.env.EXPO_PUBLIC_WEB_URL}/club/create/${clubType}/info` }}
-        onMessage={(event) => {
-          const { campusClubType, name, category, location, description, tags } = JSON.parse(event.nativeEvent.data);
+        onMessage={(data) => {
+          const { campusClubType, name, category, location, description, tags } = data;
           setClubCampusType(campusClubType);
           setName(name);
           setCategory(category);

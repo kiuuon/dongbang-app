@@ -30,8 +30,8 @@ function FeedDetailScreen() {
     <SafeAreaView edges={['top']} style={{ flex: 1, backgroundColor: COLORS.white }}>
       <CustomWebView
         source={{ uri: `${process.env.EXPO_PUBLIC_WEB_URL}/feed/detail/${feedId}` }}
-        onMessage={(event) => {
-          const { type, payload } = JSON.parse(event.nativeEvent.data);
+        onMessage={(data) => {
+          const { type, payload } = data;
           if (type === 'tagged club click') {
             setTaggedClubs(payload);
             setIsTaggedClubModalOpen(true);

@@ -9,10 +9,10 @@ function ClubCreateScreen() {
     <SafeAreaView style={{ flex: 1, backgroundColor: COLORS.white }}>
       <CustomWebView
         source={{ uri: `${process.env.EXPO_PUBLIC_WEB_URL}/club/create` }}
-        onMessage={(event) => {
-          if (event.nativeEvent.data === 'campus') {
+        onMessage={(data) => {
+          if (data === 'campus') {
             router.push('/club/create/campus/info');
-          } else if (event.nativeEvent.data === 'union') {
+          } else if (data === 'union') {
             router.push('/club/create/union/info');
           }
         }}

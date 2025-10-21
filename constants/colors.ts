@@ -16,6 +16,7 @@ const COLORS = {
   gray4: '#3C3C3C',
   error: '#F40707',
   kakao: '#FFEB3B',
+  modalBackdrop: 'rgba(0, 0, 0, 0.6)',
 };
 
 export default COLORS;
