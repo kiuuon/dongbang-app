@@ -5,7 +5,7 @@ import { router, useLocalSearchParams } from 'expo-router';
 import { BottomSheetModal } from '@gorhom/bottom-sheet';
 import { useMutation } from '@tanstack/react-query';
 
-import { writeFeed } from '@/apis/feed';
+import { writeFeed } from '@/apis/feed/feed';
 import COLORS from '@/constants/colors';
 import CustomWebView from '@/components/common/CustomWebView';
 import BoldText from '@/components/common/SemiBoldText';

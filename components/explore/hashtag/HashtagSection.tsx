@@ -11,7 +11,7 @@ import {
 import { useInfiniteQuery } from '@tanstack/react-query';
 
 import COLORS from '@/constants/colors';
-import { fetchHashtags } from '@/apis/feed';
+import { fetchHashtags } from '@/apis/feed/feed';
 import exploreStore from '@/stores/exploreStore';
 import RegularText from '@/components/common/RegularText';
 import FeedSection from '../feed/FeedSection';

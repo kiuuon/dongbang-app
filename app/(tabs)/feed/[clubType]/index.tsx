@@ -1,5 +1,5 @@
 import { useRef, useState, useCallback } from 'react';
-import { TouchableOpacity, StyleSheet, Alert } from 'react-native';
+import { TouchableOpacity, StyleSheet, Alert, Dimensions } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useFocusEffect } from '@react-navigation/native';
 import { useLocalSearchParams, router } from 'expo-router';
@@ -16,6 +16,9 @@ import SettingModal from '@/components/feed/modal/SettingModal';
 import InteractModal from '@/components/feed/modal/InteractModal';
 import exploreStore from '@/stores/exploreStore';
 import LoginModal from '@/components/common/LoginModal';
+import LikesModal from '@/components/feed/modal/LikesModal';
+
+const { height } = Dimensions.get('window');
 
 function FeedScreen() {
   const { clubType } = useLocalSearchParams();
@@ -24,12 +27,11 @@ function FeedScreen() {
   const [isTaggedClubModalOpen, setIsTaggedClubModalOpen] = useState(false);
   const [isInteractModalOpen, setIsInteractModalOpen] = useState(false);
   const [isSettingModalOpen, setIsSettingModalOpen] = useState(false);
+  const [isLikesModalOpen, setIsLikesModalOpen] = useState(false);
   const [isLoginModalOpen, setIsLoginModalOpen] = useState(false);
   const [key, setKey] = useState(0);
 
-  // TODO: 추후에 사용될 수 있는 상태 변수
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const [selectedFeedId, setSelectedFeedId] = useState<string | null>(null);
+  const [selectedFeedId, setSelectedFeedId] = useState<string>('');
   const [selectedAuthorId, setSelectedAuthorId] = useState<string | null>(null);
   const [taggedUsers, setTaggedUsers] = useState<{ user: { name: string; avatar: string } }[]>([]);
   const [taggedClubs, setTaggedClubs] = useState<{ club: { name: string; logo: string } }[]>([]);
@@ -106,6 +108,9 @@ function FeedScreen() {
               router.push('/login');
             } else if (action === 'open login modal') {
               setIsLoginModalOpen(true);
+            } else if (action === 'open likes modal') {
+              setSelectedFeedId(payload);
+              setIsLikesModalOpen(true);
             }
           }
         }}
@@ -149,6 +154,16 @@ function FeedScreen() {
             <BoldText fontSize={16}>연합 동아리</BoldText>
           </TouchableOpacity>
         )}
+      </CustomBottomSheet>
+
+      <CustomBottomSheet
+        isOpen={isLikesModalOpen}
+        onClose={() => setIsLikesModalOpen(false)}
+        scrollable
+        height={height * 0.66}
+        title="좋아요"
+      >
+        <LikesModal feedId={selectedFeedId} />
       </CustomBottomSheet>
 
       <CustomBottomSheet

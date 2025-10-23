@@ -1,33 +1,17 @@
-import Svg, { Path, Defs, LinearGradient, Stop } from 'react-native-svg';
-import React from 'react';
+import * as React from 'react';
+import Svg, { Path } from 'react-native-svg';
 
-export default function LikesIcon2() {
+export default function LikesIcon() {
   return (
-    <Svg width="15" height="17" viewBox="0 0 15 17" fill="none">
+    <Svg width={16} height={16} viewBox="0 0 16 16" fill="none">
       <Path
-        d="M12.0962 14.0474C9.55779 16.6509 5.44221 16.6509 2.90381 14.0474C1.6346 12.7456 1 11.0395 1 9.33334C0.999997 7.62719 1.6346 5.92103 2.90381 4.61928C2.90381 4.61928 3.43754 5.99997 5.06254 6.8333C5.06254 5.16663 5.46879 2.66663 7.48853 1C9.125 2.66667 10.8241 3.31454 12.0962 4.61928C13.3654 5.92103 14 7.62719 14 9.33334C14 11.0395 13.3654 12.7456 12.0962 14.0474Z"
-        stroke="url(#paint0_linear)"
-        strokeWidth="1.5"
+        d="M12.6666 9.33333C13.6599 8.36 14.6666 7.19333 14.6666 5.66667C14.6666 4.69421 14.2803 3.76158 13.5926 3.07394C12.905 2.38631 11.9724 2 10.9999 2C9.82658 2 8.99992 2.33333 7.99992 3.33333C6.99992 2.33333 6.17325 2 4.99992 2C4.02746 2 3.09483 2.38631 2.40719 3.07394C1.71956 3.76158 1.33325 4.69421 1.33325 5.66667C1.33325 7.2 2.33325 8.36667 3.33325 9.33333L7.99992 14L12.6666 9.33333Z"
+        fill="#F40707"
+        stroke="#F40707"
+        strokeWidth={1.66667}
         strokeLinecap="round"
         strokeLinejoin="round"
       />
-      <Path
-        d="M5.77643 11.9344C6.72833 12.9107 8.27167 12.9107 9.22357 11.9344C9.69952 11.4463 9.93749 10.8065 9.9375 10.1667C9.93751 9.52685 9.69953 8.88703 9.22357 8.39887C8.75063 7.9138 8.13169 7.66973 7.51183 7.66666L6.68746 10.1666L5.0625 10.1667C5.06251 10.8065 5.30048 11.4463 5.77643 11.9344Z"
-        stroke="url(#paint1_linear)"
-        strokeWidth="1.5"
-        strokeLinecap="round"
-        strokeLinejoin="round"
-      />
-      <Defs>
-        <LinearGradient id="paint0_linear" x1="7.5" y1="1" x2="7.5" y2="16" gradientUnits="userSpaceOnUse">
-          <Stop stopColor="#FF512F" />
-          <Stop offset="1" stopColor="#FFFA00" />
-        </LinearGradient>
-        <LinearGradient id="paint1_linear" x1="7.5" y1="1" x2="7.5" y2="16" gradientUnits="userSpaceOnUse">
-          <Stop stopColor="#FF512F" />
-          <Stop offset="1" stopColor="#FFFA00" />
-        </LinearGradient>
-      </Defs>
     </Svg>
   );
 }

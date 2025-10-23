@@ -1,5 +1,5 @@
-import { supabase } from './supabaseClient';
-import { fetchUserId } from './user';
+import { supabase } from '../supabaseClient';
+import { fetchUserId } from '../user';
 
 export async function writeFeed(
   photos: string[],

@@ -11,13 +11,18 @@ import SettingModal from '@/components/feed/modal/SettingModal';
 import InteractModal from '@/components/feed/modal/InteractModal';
 import exploreStore from '@/stores/exploreStore';
 import LoginModal from '@/components/common/LoginModal';
+import LikesModal from '@/components/feed/modal/LikesModal';
+import { Dimensions } from 'react-native';
+
+const { height } = Dimensions.get('window');
 
 function FeedDetailScreen() {
-  const { feedId } = useLocalSearchParams();
+  const { feedId } = useLocalSearchParams() as { feedId: string };
   const [isTaggedUserModalOpen, setIsTaggedUserModalOpen] = useState(false);
   const [isTaggedClubModalOpen, setIsTaggedClubModalOpen] = useState(false);
   const [isInteractModalOpen, setIsInteractModalOpen] = useState(false);
   const [isSettingModalOpen, setIsSettingModalOpen] = useState(false);
+  const [isLikesModalOpen, setIsLikesModalOpen] = useState(false);
   const [isLoginModalOpen, setIsLoginModalOpen] = useState(false);
 
   const [selectedAuthorId, setSelectedAuthorId] = useState<string | null>(null);
@@ -62,12 +67,24 @@ function FeedDetailScreen() {
               router.push(`/explore`);
             } else if (action === 'open login modal') {
               setIsLoginModalOpen(true);
+            } else if (action === 'open likes modal') {
+              setIsLikesModalOpen(true);
             }
           }
         }}
       />
 
       <LoginModal visible={isLoginModalOpen} onClose={() => setIsLoginModalOpen(false)} webViewRef={webViewRef} />
+
+      <CustomBottomSheet
+        isOpen={isLikesModalOpen}
+        onClose={() => setIsLikesModalOpen(false)}
+        scrollable
+        height={height * 0.66}
+        title="좋아요"
+      >
+        <LikesModal feedId={feedId} />
+      </CustomBottomSheet>
 
       <CustomBottomSheet
         isOpen={isTaggedClubModalOpen}

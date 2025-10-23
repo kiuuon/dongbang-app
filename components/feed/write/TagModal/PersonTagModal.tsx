@@ -73,7 +73,8 @@ function PersonTagModal({
             {member.avatar ? (
               <Image source={{ uri: member.avatar }} style={styles.memberImage} />
             ) : (
-              <View style={styles.tempImage} />
+              // eslint-disable-next-line global-require, @typescript-eslint/no-require-imports
+              <Image source={require('@/assets/images/none_avatar.png')} style={styles.memberImage} />
             )}
             <TouchableOpacity style={styles.selectButtonContainer} onPress={() => selectMember(member.userId)}>
               <BoldText fontSize={12}>{member.name}</BoldText>
@@ -121,13 +122,6 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     marginBottom: 20,
-  },
-  tempImage: {
-    width: 40,
-    height: 40,
-    borderRadius: '100%',
-    backgroundColor: COLORS.black,
-    marginRight: 29,
   },
   memberImage: {
     width: 40,

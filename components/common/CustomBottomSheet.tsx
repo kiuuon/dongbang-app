@@ -104,8 +104,9 @@ const styles = StyleSheet.create({
   handleIndicator: {
     backgroundColor: COLORS.gray1,
     width: 37,
-    height: 4,
+    height: 2,
     alignSelf: 'center',
+    marginVertical: 6,
   },
 });
 

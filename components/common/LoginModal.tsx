@@ -110,7 +110,7 @@ const styles = StyleSheet.create({
     textAlign: 'center',
   },
   skipText: {
-    marginTop: 45,
+    marginTop: 20,
     color: COLORS.gray3,
   },
 });

@@ -1,12 +1,23 @@
-import { View, StyleSheet, TouchableOpacity, Image } from 'react-native';
+import { View, StyleSheet, TouchableOpacity, Image, Alert } from 'react-native';
+import { useQuery } from '@tanstack/react-query';
 
+import { fetchFeedLikedUsers } from '@/apis/feed/like';
 import COLORS from '@/constants/colors';
 import BoldText from '@/components/common/SemiBoldText';
 
-function TaggedUserModal({ taggedUsers }: { taggedUsers: { user: { name: string; avatar: string } }[] }) {
+function LikesModal({ feedId }: { feedId: string }) {
+  const { data: feedLikedUsers } = useQuery({
+    queryKey: ['feedLikedUsers', feedId],
+    queryFn: () => fetchFeedLikedUsers(feedId),
+    throwOnError: (error) => {
+      Alert.alert('좋아요 유저 리스트를 불러오는 데 실패했습니다. 다시 시도해주세요.', error.message);
+      return false;
+    },
+  });
+
   return (
     <View style={styles.container}>
-      {taggedUsers.map(({ user }) => (
+      {feedLikedUsers?.map((user) => (
         <TouchableOpacity key={user.name} style={styles.button}>
           {user.avatar ? (
             <Image source={{ uri: user.avatar }} style={styles.userImage} />
@@ -28,6 +39,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     gap: 10,
     paddingHorizontal: 20,
+    marginBottom: 60,
   },
   button: {
     width: '100%',
@@ -44,4 +56,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default TaggedUserModal;
+export default LikesModal;

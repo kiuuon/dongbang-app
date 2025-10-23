@@ -4,7 +4,7 @@ import { useInfiniteQuery } from '@tanstack/react-query';
 
 import COLORS from '@/constants/colors';
 import { FeedType } from '@/types/FeedType';
-import { searchFeeds } from '@/apis/feed';
+import { searchFeeds } from '@/apis/feed/feed';
 import FeedCard from './FeedCard';
 
 function FeedSection({ keyword }: { keyword: string }) {
