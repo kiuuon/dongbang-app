@@ -5,7 +5,6 @@ import COLORS from '@/constants/colors';
 import useTabVisibility from '@/stores/useTabVisibility';
 import DongbangIcon from '@/icons/DongBangIcon';
 import KakaoIcon from '@/icons/KakaoIcon';
-import GoogleIcon from '@/icons/GoogleIcon';
 import BoldText from './SemiBoldText';
 import RegularText from './RegularText';
 
@@ -45,21 +44,12 @@ export default function LoginModal({ visible, onClose, webViewRef }: LoginModalP
             더 많은 동아리 정보와 편리한 교류 기능을{'\n'}이용하려면 로그인이 필요해요.
           </RegularText>
 
-          <View style={styles.buttonContainer}>
-            <TouchableOpacity style={[styles.loginButton, styles.kakao]} onPress={() => handleLogin('kakao')}>
-              <KakaoIcon />
-              <RegularText fontSize={16} style={styles.kakaoText}>
-                카카오톡 계정으로 시작하기
-              </RegularText>
-            </TouchableOpacity>
-
-            <TouchableOpacity style={[styles.loginButton, styles.google]} onPress={() => handleLogin('google')}>
-              <GoogleIcon />
-              <RegularText fontSize={16} style={styles.googleText}>
-                구글 계정으로 시작하기
-              </RegularText>
-            </TouchableOpacity>
-          </View>
+          <TouchableOpacity style={[styles.loginButton, styles.kakao]} onPress={() => handleLogin('kakao')}>
+            <KakaoIcon />
+            <RegularText fontSize={16} style={styles.kakaoText}>
+              카카오톡 계정으로 시작하기
+            </RegularText>
+          </TouchableOpacity>
 
           <TouchableOpacity onPress={onClose}>
             <RegularText fontSize={16} style={styles.skipText}>
@@ -102,10 +92,7 @@ const styles = StyleSheet.create({
   subText: {
     textAlign: 'center',
     color: COLORS.gray3,
-    marginBottom: 47,
-  },
-  buttonContainer: {
-    gap: 12,
+    marginBottom: 40,
   },
   loginButton: {
     flexDirection: 'row',
@@ -118,20 +105,12 @@ const styles = StyleSheet.create({
   kakao: {
     backgroundColor: COLORS.kakao,
   },
-  google: {
-    borderWidth: 1,
-    borderColor: COLORS.gray0,
-  },
   kakaoText: {
     flex: 1,
     textAlign: 'center',
   },
-  googleText: {
-    flex: 1,
-    textAlign: 'center',
-  },
   skipText: {
-    marginTop: 19,
+    marginTop: 45,
     color: COLORS.gray3,
   },
 });
