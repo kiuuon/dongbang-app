@@ -1,6 +1,7 @@
-import { useRef, useState } from 'react';
+import { useRef, useState, useCallback } from 'react';
 import { TouchableOpacity, StyleSheet, Alert } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
+import { useFocusEffect } from '@react-navigation/native';
 import { useLocalSearchParams, router } from 'expo-router';
 import { useQuery } from '@tanstack/react-query';
 
@@ -24,6 +25,7 @@ function FeedScreen() {
   const [isInteractModalOpen, setIsInteractModalOpen] = useState(false);
   const [isSettingModalOpen, setIsSettingModalOpen] = useState(false);
   const [isLoginModalOpen, setIsLoginModalOpen] = useState(false);
+  const [key, setKey] = useState(0);
 
   // TODO: 추후에 사용될 수 있는 상태 변수
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -47,6 +49,22 @@ function FeedScreen() {
     },
   });
 
+  useFocusEffect(
+    useCallback(() => {
+      (async () => {
+        try {
+          const ss = await fetchSession();
+
+          if (!ss && clubType !== 'union') {
+            router.push('/feed/union');
+          }
+        } catch (error) {
+          Alert.alert('세션 정보를 불러오는 데 실패했습니다. 다시 시도해주세요.', (error as Error).message);
+        }
+      })();
+    }, [clubType]),
+  );
+
   const goToSelectedClubType = (selectedClubType: string) => {
     router.replace(`/feed/${selectedClubType}`);
     setIsNavigationOpen(false);
@@ -55,6 +73,8 @@ function FeedScreen() {
   return (
     <SafeAreaView edges={['top']} style={{ flex: 1, backgroundColor: COLORS.white }}>
       <CustomWebView
+        key={key}
+        setKey={setKey}
         ref={webViewRef}
         source={{ uri: `${process.env.EXPO_PUBLIC_WEB_URL}/feed/${clubType}` }}
         onMessage={(data) => {
@@ -96,7 +116,7 @@ function FeedScreen() {
           <TouchableOpacity
             style={styles.modalButton}
             onPress={() => {
-              if (session?.user) {
+              if (session) {
                 goToSelectedClubType('my');
               } else {
                 setIsNavigationOpen(false);
@@ -111,7 +131,7 @@ function FeedScreen() {
           <TouchableOpacity
             style={styles.modalButton}
             onPress={() => {
-              if (session?.user) {
+              if (session) {
                 goToSelectedClubType('campus');
               } else {
                 setIsNavigationOpen(false);

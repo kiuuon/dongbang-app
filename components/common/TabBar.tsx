@@ -14,7 +14,7 @@ import ProfileIcon from '@/icons/profile-icon';
 const titles: Record<string, string> = {
   'feed/[clubType]/index': '홈',
   'explore/index': '검색',
-  'club/index': '동아리',
+  club: '동아리',
   'interact/index': '교류',
   'my/index': '프로필',
 };
@@ -22,7 +22,7 @@ const titles: Record<string, string> = {
 const icons: Record<string, (props: { color: string }) => JSX.Element> = {
   'feed/[clubType]/index': ({ color }) => <HomeIcon color={color} />,
   'explore/index': ({ color }) => <SearchIcon color={color} />,
-  'club/index': ({ color }) => <ClubIcon color={color} />,
+  club: ({ color }) => <ClubIcon color={color} />,
   'interact/index': ({ color }) => <InteractIcon color={color} />,
   'my/index': ({ color }) => <ProfileIcon color={color} />,
 };

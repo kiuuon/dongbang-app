@@ -3,7 +3,6 @@ export interface UserType {
   name: string;
   birth: string;
   gender: string;
-  email: string;
   nickname: string;
   university_id: number;
   major: string;

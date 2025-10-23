@@ -33,12 +33,11 @@ export default function TabLayout() {
         headerShown: false,
         title: '',
         gestureEnabled: false,
-        tabBarStyle: { display: 'none' },
       })}
     >
       <Tabs.Screen name="feed/[clubType]/index" />
       <Tabs.Screen name="explore/index" />
-      <Tabs.Screen name="club/index" />
+      <Tabs.Screen name="club" />
       <Tabs.Screen name="interact/index" />
       <Tabs.Screen name="my/index" />
     </Tabs>

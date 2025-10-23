@@ -63,8 +63,8 @@ const CustomWebView = forwardRef<WebViewType, CustomWebViewProps>(({ source, onM
         if (type === 'event') {
           if (action === 'login success') {
             show();
-            setKey((prev) => prev + 1); // 웹뷰 리로드
             await login(payload.accessToken, payload.refreshToken);
+            setKey((prev) => prev + 1); // 웹뷰 리로드
             const user = await fetchUser();
             if (user) {
               router.replace('/feed/my');
