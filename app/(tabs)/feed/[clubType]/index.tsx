@@ -104,6 +104,8 @@ function FeedScreen() {
               router.push(`/explore`);
             } else if (action === 'go to login page') {
               router.push('/login');
+            } else if (action === 'open login modal') {
+              setIsLoginModalOpen(true);
             }
           }
         }}

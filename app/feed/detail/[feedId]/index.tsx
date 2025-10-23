@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useRef, useState } from 'react';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useLocalSearchParams, router } from 'expo-router';
 
@@ -10,6 +10,7 @@ import TaggedUserModal from '@/components/feed/modal/TaggedUserModal';
 import SettingModal from '@/components/feed/modal/SettingModal';
 import InteractModal from '@/components/feed/modal/InteractModal';
 import exploreStore from '@/stores/exploreStore';
+import LoginModal from '@/components/common/LoginModal';
 
 function FeedDetailScreen() {
   const { feedId } = useLocalSearchParams();
@@ -17,6 +18,7 @@ function FeedDetailScreen() {
   const [isTaggedClubModalOpen, setIsTaggedClubModalOpen] = useState(false);
   const [isInteractModalOpen, setIsInteractModalOpen] = useState(false);
   const [isSettingModalOpen, setIsSettingModalOpen] = useState(false);
+  const [isLoginModalOpen, setIsLoginModalOpen] = useState(false);
 
   const [selectedAuthorId, setSelectedAuthorId] = useState<string | null>(null);
   const [taggedUsers, setTaggedUsers] = useState<{ user: { name: string; avatar: string } }[]>([]);
@@ -26,9 +28,16 @@ function FeedDetailScreen() {
   const setKeyword = exploreStore((state) => state.setKeyword);
   const setSelectedHashtag = exploreStore((state) => state.setSelectedHashtag);
 
+  const [key, setKey] = useState(0);
+
+  const webViewRef = useRef(null);
+
   return (
     <SafeAreaView edges={['top']} style={{ flex: 1, backgroundColor: COLORS.white }}>
       <CustomWebView
+        key={key}
+        setKey={setKey}
+        ref={webViewRef}
         source={{ uri: `${process.env.EXPO_PUBLIC_WEB_URL}/feed/detail/${feedId}` }}
         onMessage={(data) => {
           const { type, action, payload } = data;
@@ -51,10 +60,14 @@ function FeedDetailScreen() {
               setKeyword(hashtag);
               setSelectedHashtag(hashtag);
               router.push(`/explore`);
+            } else if (action === 'open login modal') {
+              setIsLoginModalOpen(true);
             }
           }
         }}
       />
+
+      <LoginModal visible={isLoginModalOpen} onClose={() => setIsLoginModalOpen(false)} webViewRef={webViewRef} />
 
       <CustomBottomSheet
         isOpen={isTaggedClubModalOpen}
