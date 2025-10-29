@@ -60,6 +60,11 @@ function SettingModal({
     },
   });
 
+  const clickEditButton = () => {
+    router.push(`/feed/edit/${feedId}`);
+    onClose();
+  };
+
   const clickDeleteButton = () => {
     handleDeleteFeed();
   };
@@ -68,7 +73,7 @@ function SettingModal({
     <View style={styles.container}>
       {authorId === userId ? (
         <View style={styles.buttonContainer}>
-          <TouchableOpacity style={[styles.button, styles.bottomBorder]}>
+          <TouchableOpacity style={[styles.button, styles.bottomBorder]} onPress={clickEditButton}>
             <EditIcon />
             <BoldText fontSize={16}>수정</BoldText>
           </TouchableOpacity>
