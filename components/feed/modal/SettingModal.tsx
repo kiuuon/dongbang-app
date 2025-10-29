@@ -2,6 +2,8 @@ import { View, StyleSheet, TouchableOpacity, Alert } from 'react-native';
 import { router } from 'expo-router';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import type { WebView as WebViewType } from 'react-native-webview';
+import * as Clipboard from 'expo-clipboard';
+import Toast from 'react-native-toast-message';
 
 import { deleteFeed } from '@/apis/feed/feed';
 import { fetchUserId } from '@/apis/user';
@@ -9,7 +11,6 @@ import COLORS from '@/constants/colors';
 import EditIcon from '@/icons/EditIcon';
 import DeleteIcon from '@/icons/DeleteIcon';
 import ShareIcon from '@/icons/ShareIcon';
-import HideIcon from '@/icons/HideIcon';
 import ReportIcon from '@/icons/ReportIcon';
 import BoldText from '@/components/common/SemiBoldText';
 
@@ -69,6 +70,27 @@ function SettingModal({
     handleDeleteFeed();
   };
 
+  const clickShareButton = async () => {
+    try {
+      const url = `${process.env.EXPO_PUBLIC_WEB_URL}/feed/detail/${feedId}`;
+      await Clipboard.setStringAsync(url);
+      Toast.show({
+        type: 'success',
+        text1: '복사 완료!',
+        text2: '피드 링크가 클립보드에 복사되었습니다!',
+      });
+      onClose();
+    } catch (error) {
+      // eslint-disable-next-line no-console
+      console.error(error);
+      Toast.show({
+        type: 'error',
+        text1: '복사 실패!',
+        text2: '피드 링크 복사에 실패했습니다. 다시 시도해주세요.',
+      });
+    }
+  };
+
   return (
     <View style={styles.container}>
       {authorId === userId ? (
@@ -81,7 +103,7 @@ function SettingModal({
             <DeleteIcon />
             <BoldText fontSize={16}>삭제</BoldText>
           </TouchableOpacity>
-          <TouchableOpacity style={styles.button}>
+          <TouchableOpacity style={styles.button} onPress={clickShareButton}>
             <ShareIcon />
             <BoldText fontSize={16}>공유</BoldText>
           </TouchableOpacity>
@@ -89,16 +111,12 @@ function SettingModal({
       ) : (
         <View style={styles.buttonContainer}>
           <TouchableOpacity style={[styles.button, styles.bottomBorder]}>
-            <ShareIcon />
-            <BoldText fontSize={16}>공유</BoldText>
-          </TouchableOpacity>
-          <TouchableOpacity style={[styles.button, styles.bottomBorder]}>
-            <HideIcon />
-            <BoldText fontSize={16}>이 글 숨기기</BoldText>
-          </TouchableOpacity>
-          <TouchableOpacity style={styles.button}>
             <ReportIcon />
             <BoldText fontSize={16}>신고</BoldText>
+          </TouchableOpacity>
+          <TouchableOpacity style={styles.button} onPress={clickShareButton}>
+            <ShareIcon />
+            <BoldText fontSize={16}>공유</BoldText>
           </TouchableOpacity>
         </View>
       )}

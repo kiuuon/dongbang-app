@@ -8,6 +8,8 @@ export async function fetchUserId() {
     throw error;
   }
 
+  if (!data?.user) return '';
+
   return data?.user?.id;
 }
 
