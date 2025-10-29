@@ -1,6 +1,9 @@
 import { View, StyleSheet, TouchableOpacity, Alert } from 'react-native';
-import { useQuery } from '@tanstack/react-query';
+import { router } from 'expo-router';
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
+import type { WebView as WebViewType } from 'react-native-webview';
 
+import { deleteFeed } from '@/apis/feed/feed';
 import { fetchUserId } from '@/apis/user';
 import COLORS from '@/constants/colors';
 import EditIcon from '@/icons/EditIcon';
@@ -10,7 +13,21 @@ import HideIcon from '@/icons/HideIcon';
 import ReportIcon from '@/icons/ReportIcon';
 import BoldText from '@/components/common/SemiBoldText';
 
-function SettingModal({ authorId }: { authorId: string }) {
+function SettingModal({
+  authorId,
+  feedId,
+  onClose,
+  isFeedDetail,
+  webViewRef,
+}: {
+  authorId: string;
+  feedId: string;
+  onClose: () => void;
+  isFeedDetail: boolean;
+  webViewRef: React.RefObject<WebViewType | null>;
+}) {
+  const queryClient = useQueryClient();
+
   const { data: userId } = useQuery({
     queryKey: ['userId'],
     queryFn: fetchUserId,
@@ -20,6 +37,33 @@ function SettingModal({ authorId }: { authorId: string }) {
     },
   });
 
+  const { mutate: handleDeleteFeed } = useMutation({
+    mutationFn: () => deleteFeed(feedId),
+    onSuccess: () => {
+      queryClient.invalidateQueries({
+        predicate: (query) => query.queryKey[0] === 'feeds',
+      });
+
+      onClose();
+
+      const message = {
+        type: 'event',
+        action: 'delete feed',
+      };
+
+      webViewRef.current?.postMessage(JSON.stringify(message));
+
+      if (isFeedDetail) router.back();
+    },
+    onError: (error) => {
+      Alert.alert('피드 삭제에 실패했습니다. 다시 시도해주세요.', error.message);
+    },
+  });
+
+  const clickDeleteButton = () => {
+    handleDeleteFeed();
+  };
+
   return (
     <View style={styles.container}>
       {authorId === userId ? (
@@ -28,7 +72,7 @@ function SettingModal({ authorId }: { authorId: string }) {
             <EditIcon />
             <BoldText fontSize={16}>수정</BoldText>
           </TouchableOpacity>
-          <TouchableOpacity style={[styles.button, styles.bottomBorder]}>
+          <TouchableOpacity style={[styles.button, styles.bottomBorder]} onPress={clickDeleteButton}>
             <DeleteIcon />
             <BoldText fontSize={16}>삭제</BoldText>
           </TouchableOpacity>

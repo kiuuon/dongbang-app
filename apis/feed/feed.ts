@@ -32,6 +32,36 @@ export async function writeFeed(
   }
 }
 
+export async function editFeed(
+  feedId: string,
+  photos: string[],
+  title: string,
+  content: string,
+  isNicknameVisible: boolean,
+  isPrivate: boolean,
+  selectedMembers: string[],
+  selectedClubs: string[],
+) {
+  const { error } = await supabase.rpc('edit_feed_transaction', {
+    p_feed_id: feedId,
+    p_photos: photos,
+    p_title: title,
+    p_content: content,
+    p_is_nickname_visible: isNicknameVisible,
+    p_is_private: isPrivate,
+    p_selected_members: selectedMembers,
+    p_selected_clubs: selectedClubs,
+  });
+
+  if (error) throw error;
+}
+
+export async function deleteFeed(feedId: string) {
+  const { error } = await supabase.from('Feed').delete().eq('id', feedId);
+
+  if (error) throw error;
+}
+
 export async function searchFeeds(keyword: string, page: number) {
   const PAGE_SIZE = 10;
 

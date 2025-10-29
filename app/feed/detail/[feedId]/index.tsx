@@ -38,7 +38,7 @@ function FeedDetailScreen() {
   const webViewRef = useRef(null);
 
   return (
-    <SafeAreaView edges={['top']} style={{ flex: 1, backgroundColor: COLORS.white }}>
+    <SafeAreaView style={{ flex: 1, backgroundColor: COLORS.white }}>
       <CustomWebView
         key={key}
         setKey={setKey}
@@ -69,6 +69,8 @@ function FeedDetailScreen() {
               setIsLoginModalOpen(true);
             } else if (action === 'open likes modal') {
               setIsLikesModalOpen(true);
+            } else if (action === 'go to comment likes page') {
+              router.push(`/feed/detail/${feedId}/comment/${payload}/likes`);
             }
           }
         }}
@@ -109,7 +111,13 @@ function FeedDetailScreen() {
       </CustomBottomSheet>
 
       <CustomBottomSheet isOpen={isSettingModalOpen} onClose={() => setIsSettingModalOpen(false)}>
-        <SettingModal authorId={selectedAuthorId as string} />
+        <SettingModal
+          authorId={selectedAuthorId as string}
+          feedId={feedId}
+          onClose={() => setIsSettingModalOpen(false)}
+          isFeedDetail
+          webViewRef={webViewRef}
+        />
       </CustomBottomSheet>
 
       <CustomBottomSheet isOpen={isInteractModalOpen} onClose={() => setIsInteractModalOpen(false)}>

@@ -111,6 +111,8 @@ function FeedScreen() {
             } else if (action === 'open likes modal') {
               setSelectedFeedId(payload);
               setIsLikesModalOpen(true);
+            } else if (action === 'open comments bottom sheet') {
+              // TODO: 댓글 바텀시트 열기
             }
           }
         }}
@@ -189,7 +191,13 @@ function FeedScreen() {
       </CustomBottomSheet>
 
       <CustomBottomSheet isOpen={isSettingModalOpen} onClose={() => setIsSettingModalOpen(false)}>
-        <SettingModal authorId={selectedAuthorId as string} />
+        <SettingModal
+          authorId={selectedAuthorId as string}
+          feedId={selectedFeedId}
+          onClose={() => setIsSettingModalOpen(false)}
+          isFeedDetail={false}
+          webViewRef={webViewRef}
+        />
       </CustomBottomSheet>
 
       <CustomBottomSheet isOpen={isInteractModalOpen} onClose={() => setIsInteractModalOpen(false)}>
