@@ -3,7 +3,7 @@ import { router } from 'expo-router';
 import { useQuery } from '@tanstack/react-query';
 
 import { fetchFeedLikeCount } from '@/apis/feed/like';
-import formatKoreanDate from '@/utils/formatKoreanDate';
+
 import COLORS from '@/constants/colors';
 import { ERROR_MESSAGE } from '@/constants/error';
 import { FeedType } from '@/types/FeedType';
@@ -39,20 +39,17 @@ function FeedCard({ feed }: { feed: FeedType }) {
       </View>
 
       {/* 피드 정보 */}
-      <View style={styles.infoContainer}>
+      <View style={styles.bottomRow}>
         {(feed.title || feed.content) && (
-          <View style={{ paddingRight: 20 }}>
+          <View style={{ paddingRight: 8, flexShrink: 1 }}>
             <BoldText fontSize={14} numberOfLines={1}>
               {feed.title ? feed.title : feed.content}
             </BoldText>
           </View>
         )}
-        <View style={styles.bottomRow}>
-          <RegularText fontSize={12}>{formatKoreanDate(feed.created_at)}</RegularText>
-          <View style={styles.likeRow}>
-            <LikesIcon />
-            <RegularText fontSize={12}>{likeCount}</RegularText>
-          </View>
+        <View style={styles.likeRow}>
+          <LikesIcon />
+          <RegularText fontSize={12}>{likeCount}</RegularText>
         </View>
       </View>
     </TouchableOpacity>
@@ -80,7 +77,7 @@ const styles = StyleSheet.create({
   },
   imageWrapper: {
     width: '100%',
-    aspectRatio: 170 / 227,
+    aspectRatio: 1,
     marginVertical: 4,
   },
   feedImage: {
@@ -90,15 +87,12 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderColor: COLORS.background,
   },
-  infoContainer: {
-    width: '100%',
-    gap: 3,
-  },
   bottomRow: {
+    width: 'auto',
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
-    paddingRight: 4,
+    paddingHorizontal: 4,
   },
   likeRow: {
     flexDirection: 'row',
