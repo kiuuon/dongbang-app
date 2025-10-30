@@ -9,14 +9,13 @@ import filtersStore from '@/stores/filterStore';
 import BoldText from '@/components/common/SemiBoldText';
 import AffiliationSection from './AffiliationSection';
 import CategorySection from './CategorySection';
-import RecruitmentSection from './RecruitmentSection';
 
 interface DetailSearchModalProps {
   setIsDetailSearchModalOpen: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
 export default function DetailSearchModal({ setIsDetailSearchModalOpen }: DetailSearchModalProps) {
-  const [tab, setTab] = useState<'소속' | '분야' | '모집 설정'>('소속');
+  const [tab, setTab] = useState<'소속' | '분야'>('소속');
   const { reset, apply, discard, draftFilters } = filtersStore();
 
   const { data: universityList } = useQuery({
@@ -61,25 +60,10 @@ export default function DetailSearchModal({ setIsDetailSearchModalOpen }: Detail
               분야
             </BoldText>
           </TouchableOpacity>
-          <TouchableOpacity
-            onPress={() => setTab('모집 설정')}
-            style={[
-              styles.tabButton,
-              tab === '모집 설정' ? { backgroundColor: COLORS.white } : { backgroundColor: COLORS.background },
-            ]}
-          >
-            <BoldText
-              fontSize={16}
-              style={{ marginLeft: 32, color: tab === '모집 설정' ? COLORS.black : COLORS.gray2 }}
-            >
-              모집 설정
-            </BoldText>
-          </TouchableOpacity>
         </View>
         <View>
           {tab === '소속' && <AffiliationSection />}
           {tab === '분야' && <CategorySection />}
-          {tab === '모집 설정' && <RecruitmentSection />}
         </View>
       </View>
 

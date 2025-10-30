@@ -2,10 +2,7 @@
 
 import { create } from 'zustand';
 
-type RecruitmentStatus = 'open' | 'closed' | 'always';
 type ClubType = 'campus' | 'union';
-type EndDateOption = 'D-Day' | '7일 이내' | '15일 이내' | '30일 이내' | '장기 모집' | null;
-type DuesOption = '0원 ~ 5만원' | '5만원 ~ 10만원' | '10만원 이상' | null;
 
 export type FilterType = {
   keyword?: string;
@@ -14,10 +11,6 @@ export type FilterType = {
   detailTypes?: string[];
   location?: string | null;
   categories?: string[];
-  recruitmentStatuses?: RecruitmentStatus[];
-  endDateOption?: EndDateOption;
-  duesOption?: DuesOption;
-  meeting?: string | null;
 };
 
 const DEFAULT_FILTERS: FilterType = {
@@ -26,10 +19,6 @@ const DEFAULT_FILTERS: FilterType = {
   detailTypes: [],
   location: null,
   categories: [],
-  recruitmentStatuses: [],
-  endDateOption: null,
-  meeting: null,
-  duesOption: null,
 };
 
 type FiltersStore = {

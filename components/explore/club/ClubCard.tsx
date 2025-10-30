@@ -1,77 +1,19 @@
-import React, { useEffect } from 'react';
-import { View, Text, TouchableOpacity, Image, StyleSheet } from 'react-native';
-import Animated, { useSharedValue, useAnimatedStyle, withTiming, Easing } from 'react-native-reanimated';
+import { View, TouchableOpacity, Image, StyleSheet } from 'react-native';
 
-import LockIcon from '@/icons/LockIcon';
 import COLORS from '@/constants/colors';
 import { ClubType } from '@/types/ClubType';
 import BoldText from '@/components/common/SemiBoldText';
 import RegularText from '@/components/common/RegularText';
 
-type RecruitmentStatus = 'open' | 'always' | 'closed';
-
 interface ClubCardProps {
   club: ClubType;
-  openClubCardId: string | null;
-  setOpenClubCardId: React.Dispatch<React.SetStateAction<string | null>>;
 }
 
-export default function ClubCard({ club, openClubCardId, setOpenClubCardId }: ClubCardProps) {
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const statusClasses: Record<RecruitmentStatus, any> = {
-    open: { color: COLORS.primary, fontFamily: 'PretendardBold', fontSize: 12 },
-    always: { color: COLORS.black, fontFamily: 'PretendardRegular', fontSize: 12 },
-    closed: { color: COLORS.gray1, fontFamily: 'PretendardRegular', fontSize: 12 },
-  };
-
-  const getDiffInDays = (endDate: string | Date): number => {
-    const today = new Date();
-    const end = new Date(endDate);
-
-    today.setHours(0, 0, 0, 0);
-    end.setHours(0, 0, 0, 0);
-
-    const diffTime = end.getTime() - today.getTime();
-    return Math.floor(diffTime / (1000 * 60 * 60 * 24));
-  };
-
-  let text: string;
-
-  if (club.recruitment?.[0].recruitment_status === 'open' && club.recruitment?.[0].end_date) {
-    const diff = getDiffInDays(club.recruitment?.[0].end_date);
-    text = diff >= 0 ? `D - ${diff}` : '모집 종료';
-  } else if (club.recruitment?.[0].recruitment_status === 'always') {
-    text = '상시 모집';
-  } else {
-    text = '모집 종료';
-  }
-
-  const isOpen = openClubCardId === club.id;
-
-  // ✅ 애니메이션 값
-  const marginRight = useSharedValue(0);
-
-  // ✅ 상태 변경 시 애니메이션 실행
-  useEffect(() => {
-    marginRight.value = withTiming(isOpen ? 56 : 0, {
-      duration: 250,
-      easing: Easing.out(Easing.quad),
-    });
-  }, [isOpen, marginRight]);
-
-  // ✅ Animated Style
-  const animatedCardStyle = useAnimatedStyle(() => ({
-    marginRight: marginRight.value,
-  }));
-
+export default function ClubCard({ club }: ClubCardProps) {
   return (
     <View style={styles.container}>
-      <Animated.View style={[styles.card, animatedCardStyle]}>
-        <TouchableOpacity
-          activeOpacity={0.8}
-          style={{ flexDirection: 'row', alignItems: 'center' }}
-          onPress={() => setOpenClubCardId(isOpen ? null : club.id)}
-        >
+      <View style={styles.card}>
+        <TouchableOpacity activeOpacity={0.8} style={{ flexDirection: 'row', alignItems: 'center' }} onPress={() => {}}>
           <Image source={{ uri: club.logo }} style={styles.logo} />
 
           <View style={styles.infoContainer}>
@@ -84,7 +26,6 @@ export default function ClubCard({ club, openClubCardId, setOpenClubCardId }: Cl
                   {club.description}
                 </RegularText>
               </View>
-              <Text style={statusClasses[club.recruitment?.[0].recruitment_status as RecruitmentStatus]}>{text}</Text>
             </View>
 
             <View style={styles.tagContainer}>
@@ -97,24 +38,6 @@ export default function ClubCard({ club, openClubCardId, setOpenClubCardId }: Cl
               ))}
             </View>
           </View>
-        </TouchableOpacity>
-      </Animated.View>
-
-      <View style={styles.rightButtons}>
-        <TouchableOpacity activeOpacity={0.7} style={[styles.rightButton, isOpen && styles.activeButton]}>
-          <RegularText fontSize={12} style={{ color: COLORS.primary }}>
-            소개
-          </RegularText>
-        </TouchableOpacity>
-
-        <TouchableOpacity activeOpacity={0.7} style={[styles.rightButton, isOpen && styles.activeButton]}>
-          {club.recruitment?.[0].recruitment_status === 'closed' ? (
-            <LockIcon />
-          ) : (
-            <RegularText fontSize={12} style={{ color: COLORS.primary }}>
-              모집 공고
-            </RegularText>
-          )}
         </TouchableOpacity>
       </View>
     </View>
@@ -171,26 +94,5 @@ const styles = StyleSheet.create({
     borderRadius: 8,
     paddingHorizontal: 5,
     paddingVertical: 2,
-  },
-
-  rightButtons: {
-    position: 'absolute',
-    right: 0,
-    flexDirection: 'column',
-    gap: 7,
-    width: 72,
-  },
-  rightButton: {
-    height: 44,
-    justifyContent: 'center',
-    alignItems: 'center',
-    paddingLeft: 14,
-    backgroundColor: COLORS.white,
-  },
-  activeButton: {
-    shadowColor: COLORS.black,
-    shadowOpacity: 0.18,
-    shadowOffset: { width: 0, height: 1 },
-    shadowRadius: 4,
   },
 });

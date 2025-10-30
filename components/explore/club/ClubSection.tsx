@@ -1,4 +1,3 @@
-import React, { useState } from 'react';
 import { View, StyleSheet, FlatList, ActivityIndicator, Alert, Platform, KeyboardAvoidingView } from 'react-native';
 import { useInfiniteQuery, useQuery } from '@tanstack/react-query';
 
@@ -21,9 +20,7 @@ function ClubSection({
   setIsDetailSearchModalOpen: React.Dispatch<React.SetStateAction<boolean>>;
 }) {
   const { filters } = filtersStore();
-  const [openClubCardId, setOpenClubCardId] = useState<string | null>(null);
 
-  // 동아리 개수
   const { data: clubCount } = useQuery({
     queryKey: ['clubCount', keyword, filters],
     queryFn: () => fetchClubsCount(keyword, filters),
@@ -33,7 +30,6 @@ function ClubSection({
     },
   });
 
-  // 동아리 리스트 (무한스크롤)
   const { data, fetchNextPage, hasNextPage, isFetchingNextPage, isPending } = useInfiniteQuery({
     initialPageParam: 0,
     queryKey: ['clubs', keyword, filters],
@@ -57,9 +53,7 @@ function ClubSection({
         <FlatList
           data={clubs}
           keyExtractor={(item) => item.id}
-          renderItem={({ item }) => (
-            <ClubCard club={item} openClubCardId={openClubCardId} setOpenClubCardId={setOpenClubCardId} />
-          )}
+          renderItem={({ item }) => <ClubCard club={item} />}
           contentContainerStyle={styles.listContainer}
           showsVerticalScrollIndicator={false}
           onEndReached={() => {
@@ -103,8 +97,7 @@ const styles = StyleSheet.create({
   },
   countText: {
     marginLeft: 20,
-    marginBottom: 10,
-    paddingTop: 15,
+    marginBottom: 4,
     color: COLORS.gray2,
   },
   listContainer: {
