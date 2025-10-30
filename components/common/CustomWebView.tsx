@@ -7,6 +7,7 @@ import { useQuery } from '@tanstack/react-query';
 
 import { fetchSession, login } from '@/apis/auth';
 import { fetchUser } from '@/apis/user';
+import { ERROR_MESSAGE } from '@/constants/error';
 import useTabVisibility from '@/stores/useTabVisibility';
 
 type CustomWebViewProps = {
@@ -24,7 +25,7 @@ const CustomWebView = forwardRef<WebViewType, CustomWebViewProps>(({ source, onM
     queryKey: ['session'],
     queryFn: fetchSession,
     throwOnError: (error) => {
-      Alert.alert('세션 정보를 불러오는 데 실패했습니다. 다시 시도해주세요.', error.message);
+      Alert.alert(ERROR_MESSAGE.SESSION.FETCH_FAILED, error.message);
       return false;
     },
   });

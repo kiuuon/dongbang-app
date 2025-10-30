@@ -3,11 +3,12 @@ import { Alert } from 'react-native';
 import { router, useLocalSearchParams } from 'expo-router';
 import { useMutation } from '@tanstack/react-query';
 
-import CustomWebView from '@/components/common/CustomWebView';
-import { ClubType } from '@/types/ClubType';
-import COLORS from '@/constants/colors';
-import clubInfoStore from '@/stores/clubInfoStore';
 import { createClub } from '@/apis/club';
+import COLORS from '@/constants/colors';
+import { ERROR_MESSAGE } from '@/constants/error';
+import { ClubType } from '@/types/ClubType';
+import clubInfoStore from '@/stores/clubInfoStore';
+import CustomWebView from '@/components/common/CustomWebView';
 
 function ClubDetailScreen() {
   const { clubType } = useLocalSearchParams();
@@ -25,7 +26,7 @@ function ClubDetailScreen() {
       router.push('/club');
     },
     onError: (error) => {
-      Alert.alert('동아리 개설에 실패했습니다. 다시 시도해주세요.', error.message);
+      Alert.alert(ERROR_MESSAGE.CLUB.CREATE_FAILED, error.message);
       router.back();
     },
   });

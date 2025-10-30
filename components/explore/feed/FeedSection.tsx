@@ -2,9 +2,10 @@ import React from 'react';
 import { View, ActivityIndicator, FlatList, StyleSheet, Alert, KeyboardAvoidingView, Platform } from 'react-native';
 import { useInfiniteQuery } from '@tanstack/react-query';
 
-import COLORS from '@/constants/colors';
-import { FeedType } from '@/types/FeedType';
 import { searchFeeds } from '@/apis/feed/feed';
+import COLORS from '@/constants/colors';
+import { ERROR_MESSAGE } from '@/constants/error';
+import { FeedType } from '@/types/FeedType';
 import FeedCard from './FeedCard';
 
 function FeedSection({ keyword }: { keyword: string }) {
@@ -15,7 +16,7 @@ function FeedSection({ keyword }: { keyword: string }) {
     getNextPageParam: (lastPage, allPages) => (lastPage?.length ? allPages.length : undefined),
     placeholderData: (prev) => prev,
     throwOnError: (error) => {
-      Alert.alert('피드를 불러오는 데 실패했습니다.', error.message);
+      Alert.alert(ERROR_MESSAGE.FEED.LIST_FETCH_FAILED, error.message);
       return false;
     },
   });

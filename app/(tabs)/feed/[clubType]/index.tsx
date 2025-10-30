@@ -6,15 +6,16 @@ import { useLocalSearchParams, router } from 'expo-router';
 import { useQuery } from '@tanstack/react-query';
 
 import { fetchSession } from '@/apis/auth';
+import COLORS from '@/constants/colors';
+import { ERROR_MESSAGE } from '@/constants/error';
+import exploreStore from '@/stores/exploreStore';
 import BoldText from '@/components/common/SemiBoldText';
 import CustomWebView from '@/components/common/CustomWebView';
 import CustomBottomSheet from '@/components/common/CustomBottomSheet';
-import COLORS from '@/constants/colors';
 import TaggedClubModal from '@/components/feed/modal/TaggedClubModal';
 import TaggedUserModal from '@/components/feed/modal/TaggedUserModal';
 import SettingModal from '@/components/feed/modal/SettingModal';
 import InteractModal from '@/components/feed/modal/InteractModal';
-import exploreStore from '@/stores/exploreStore';
 import LoginModal from '@/components/common/LoginModal';
 import LikesModal from '@/components/feed/modal/LikesModal';
 
@@ -46,7 +47,7 @@ function FeedScreen() {
     queryKey: ['session'],
     queryFn: fetchSession,
     throwOnError: (error) => {
-      Alert.alert('세션 정보를 불러오는 데 실패했습니다. 다시 시도해주세요.', error.message);
+      Alert.alert(ERROR_MESSAGE.SESSION.FETCH_FAILED, error.message);
       return false;
     },
   });
@@ -61,7 +62,7 @@ function FeedScreen() {
             router.push('/feed/union');
           }
         } catch (error) {
-          Alert.alert('세션 정보를 불러오는 데 실패했습니다. 다시 시도해주세요.', (error as Error).message);
+          Alert.alert(ERROR_MESSAGE.SESSION.FETCH_FAILED, (error as Error).message);
         }
       })();
     }, [clubType]),

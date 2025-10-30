@@ -5,11 +5,12 @@ import { useMutation } from '@tanstack/react-query';
 import { useNavigation } from '@react-navigation/native';
 import type { NativeStackNavigationProp } from '@react-navigation/native-stack';
 
-import CustomWebView from '@/components/common/CustomWebView';
-import COLORS from '@/constants/colors';
-import termsStore from '@/stores/termsStore';
 import { signUp } from '@/apis/user';
+import COLORS from '@/constants/colors';
+import { ERROR_MESSAGE } from '@/constants/error';
 import { UserType } from '@/types/UserType';
+import termsStore from '@/stores/termsStore';
+import CustomWebView from '@/components/common/CustomWebView';
 
 type RootStackParamList = {
   'sign-up/terms': undefined;
@@ -35,7 +36,7 @@ function InfoScreen() {
       });
     },
     onError: (error) => {
-      Alert.alert('회원가입에 실패했습니다. 다시 시도해주세요.', error.message);
+      Alert.alert(ERROR_MESSAGE.USER.SIGN_UP_FAILED, error.message);
       navigation.reset({
         index: 0,
         routes: [{ name: 'sign-up/terms' }],

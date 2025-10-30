@@ -2,10 +2,11 @@ import React, { useState } from 'react';
 import { View, Text, TextInput, TouchableOpacity, ScrollView, StyleSheet, Alert } from 'react-native';
 import { useQuery } from '@tanstack/react-query';
 
+import { fetchUniversityList } from '@/apis/user';
 import COLORS from '@/constants/colors';
+import { ERROR_MESSAGE } from '@/constants/error';
 import filtersStore from '@/stores/filterStore';
 import BottomArrowIcon from '@/icons/BottomArrowIcon';
-import { fetchUniversityList } from '@/apis/user';
 import RegularText from '@/components/common/RegularText';
 
 const LOCATIONS = [
@@ -38,7 +39,7 @@ export default function AffiliationSection() {
     queryKey: ['universityList'],
     queryFn: fetchUniversityList,
     throwOnError: (error) => {
-      Alert.alert('대학 목록을 불러오는 데 실패했습니다.', error.message);
+      Alert.alert(ERROR_MESSAGE.UNIVERSITY.LIST_FETCH_FAILED, error.message);
       return false;
     },
   });

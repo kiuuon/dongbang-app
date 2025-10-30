@@ -3,6 +3,7 @@ import { useQuery } from '@tanstack/react-query';
 
 import { fetchFeedLikedUsers } from '@/apis/feed/like';
 import COLORS from '@/constants/colors';
+import { ERROR_MESSAGE } from '@/constants/error';
 import BoldText from '@/components/common/SemiBoldText';
 
 function LikesModal({ feedId }: { feedId: string }) {
@@ -10,7 +11,7 @@ function LikesModal({ feedId }: { feedId: string }) {
     queryKey: ['feedLikedUsers', feedId],
     queryFn: () => fetchFeedLikedUsers(feedId),
     throwOnError: (error) => {
-      Alert.alert('좋아요 유저 리스트를 불러오는 데 실패했습니다. 다시 시도해주세요.', error.message);
+      Alert.alert(ERROR_MESSAGE.LIKE.USERS_FETCH_FAILED, error.message);
       return false;
     },
   });

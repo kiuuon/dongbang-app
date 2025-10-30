@@ -10,8 +10,9 @@ import {
 } from 'react-native';
 import { useInfiniteQuery } from '@tanstack/react-query';
 
-import COLORS from '@/constants/colors';
 import { fetchHashtags } from '@/apis/feed/feed';
+import COLORS from '@/constants/colors';
+import { ERROR_MESSAGE } from '@/constants/error';
 import exploreStore from '@/stores/exploreStore';
 import RegularText from '@/components/common/RegularText';
 import FeedSection from '../feed/FeedSection';
@@ -27,7 +28,7 @@ function HashtagSection({ keyword }: { keyword: string }) {
     getNextPageParam: (lastPage, allPages) => (lastPage?.length ? allPages.length : undefined),
     placeholderData: (prev) => prev,
     throwOnError: (error) => {
-      Alert.alert('해시태그를 불러오는 데 실패했습니다.', error.message);
+      Alert.alert(ERROR_MESSAGE.HASHTAG.FETCH_FAILED, error.message);
       return false;
     },
   });

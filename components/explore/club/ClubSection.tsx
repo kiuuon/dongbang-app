@@ -2,15 +2,14 @@ import React, { useState } from 'react';
 import { View, StyleSheet, FlatList, ActivityIndicator, Alert, Platform, KeyboardAvoidingView } from 'react-native';
 import { useInfiniteQuery, useQuery } from '@tanstack/react-query';
 
-import COLORS from '@/constants/colors';
 import { fetchClubs, fetchClubsCount } from '@/apis/club';
+import COLORS from '@/constants/colors';
+import { ERROR_MESSAGE } from '@/constants/error';
 import filtersStore from '@/stores/filterStore';
 import CustomBottomSheet from '@/components/common/CustomBottomSheet';
 import RegularText from '@/components/common/RegularText';
 import ClubCard from './ClubCard';
 import DetailSearchModal from './detail-search-modal/DetailSearchModal';
-// import DetailSearchModal from './detail-search-modal';
-// import BottomSheet from '@/components/common/bottom-sheet';
 
 function ClubSection({
   keyword,
@@ -29,7 +28,7 @@ function ClubSection({
     queryKey: ['clubCount', keyword, filters],
     queryFn: () => fetchClubsCount(keyword, filters),
     throwOnError: (error) => {
-      Alert.alert('동아리 수를 불러오는 데 실패했습니다.', error.message);
+      Alert.alert(ERROR_MESSAGE.CLUB.COUNT_FETCH_FAILED, error.message);
       return false;
     },
   });
@@ -41,7 +40,7 @@ function ClubSection({
     queryFn: ({ pageParam }) => fetchClubs(keyword, filters, pageParam),
     getNextPageParam: (lastPage, allPages) => (lastPage?.length ? allPages.length : undefined),
     throwOnError: (error) => {
-      Alert.alert('동아리를 불러오는 데 실패했습니다.', error.message);
+      Alert.alert(ERROR_MESSAGE.CLUB.LIST_FETCH_FAILED, error.message);
       return false;
     },
   });

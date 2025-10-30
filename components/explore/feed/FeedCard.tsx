@@ -3,10 +3,11 @@ import { router } from 'expo-router';
 import { useQuery } from '@tanstack/react-query';
 
 import { fetchFeedLikeCount } from '@/apis/feed/like';
-import COLORS from '@/constants/colors';
-import LikesIcon from '@/icons/LikesIcon';
 import formatKoreanDate from '@/utils/formatKoreanDate';
+import COLORS from '@/constants/colors';
+import { ERROR_MESSAGE } from '@/constants/error';
 import { FeedType } from '@/types/FeedType';
+import LikesIcon from '@/icons/LikesIcon';
 import RegularText from '@/components/common/RegularText';
 import BoldText from '@/components/common/SemiBoldText';
 
@@ -19,7 +20,7 @@ function FeedCard({ feed }: { feed: FeedType }) {
     queryKey: ['likeCount', feed.id],
     queryFn: () => fetchFeedLikeCount(feed.id),
     throwOnError: (error) => {
-      Alert.alert('좋아요 수를 불러오는 데 실패했습니다. 다시 시도해주세요.', (error as Error).message);
+      Alert.alert(ERROR_MESSAGE.LIKE.COUNT_FETCH_FAILED, (error as Error).message);
       return false;
     },
   });

@@ -7,6 +7,7 @@ import { useMutation } from '@tanstack/react-query';
 
 import { writeFeed } from '@/apis/feed/feed';
 import COLORS from '@/constants/colors';
+import { ERROR_MESSAGE } from '@/constants/error';
 import CustomWebView from '@/components/common/CustomWebView';
 import BoldText from '@/components/common/SemiBoldText';
 import RegularText from '@/components/common/RegularText';
@@ -52,7 +53,7 @@ function FeedWriteScreen() {
       router.back();
     },
     onError: (error) => {
-      Alert.alert('피드를 작성하는데 실패했습니다. 다시 시도해주세요.', error.message);
+      Alert.alert(ERROR_MESSAGE.FEED.WRITE_FAILED, error.message);
       router.back();
     },
   });

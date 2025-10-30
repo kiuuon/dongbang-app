@@ -8,6 +8,7 @@ import Toast from 'react-native-toast-message';
 import { deleteFeed } from '@/apis/feed/feed';
 import { fetchUserId } from '@/apis/user';
 import COLORS from '@/constants/colors';
+import { ERROR_MESSAGE } from '@/constants/error';
 import EditIcon from '@/icons/EditIcon';
 import DeleteIcon from '@/icons/DeleteIcon';
 import ShareIcon from '@/icons/ShareIcon';
@@ -33,7 +34,7 @@ function SettingModal({
     queryKey: ['userId'],
     queryFn: fetchUserId,
     throwOnError: (error) => {
-      Alert.alert('사용자 ID를 불러오는 데 실패했습니다. 다시 시도해주세요.', error.message);
+      Alert.alert(ERROR_MESSAGE.USER.ID_FETCH_FAILED, error.message);
       return false;
     },
   });
@@ -57,7 +58,7 @@ function SettingModal({
       if (isFeedDetail) router.back();
     },
     onError: (error) => {
-      Alert.alert('피드 삭제에 실패했습니다. 다시 시도해주세요.', error.message);
+      Alert.alert(ERROR_MESSAGE.FEED.DELETE_FAILED, error.message);
     },
   });
 

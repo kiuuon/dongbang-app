@@ -2,9 +2,10 @@ import React, { useEffect, useState } from 'react';
 import { View, TouchableOpacity, StyleSheet, Alert } from 'react-native';
 import { useQuery } from '@tanstack/react-query';
 
-import COLORS from '@/constants/colors';
-import filtersStore from '@/stores/filterStore';
 import { fetchUniversityList } from '@/apis/user';
+import COLORS from '@/constants/colors';
+import { ERROR_MESSAGE } from '@/constants/error';
+import filtersStore from '@/stores/filterStore';
 import BoldText from '@/components/common/SemiBoldText';
 import AffiliationSection from './AffiliationSection';
 import CategorySection from './CategorySection';
@@ -22,7 +23,7 @@ export default function DetailSearchModal({ setIsDetailSearchModalOpen }: Detail
     queryKey: ['universityList'],
     queryFn: fetchUniversityList,
     throwOnError: (error) => {
-      Alert.alert('대학 목록을 불러오는 데 실패했습니다.', error.message);
+      Alert.alert(ERROR_MESSAGE.UNIVERSITY.LIST_FETCH_FAILED, error.message);
       return false;
     },
   });

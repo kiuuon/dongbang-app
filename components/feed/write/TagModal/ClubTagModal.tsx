@@ -5,6 +5,7 @@ import { BottomSheetTextInput, BottomSheetModal } from '@gorhom/bottom-sheet';
 
 import { fetchClubs } from '@/apis/club';
 import COLORS from '@/constants/colors';
+import { ERROR_MESSAGE } from '@/constants/error';
 import BoldText from '@/components/common/SemiBoldText';
 
 function ClubTagModal({
@@ -38,7 +39,7 @@ function ClubTagModal({
     queryFn: ({ pageParam }) => fetchClubs(searchText, filters, pageParam),
     getNextPageParam: (lastPage, allPages) => (lastPage?.length ? allPages.length : undefined),
     throwOnError: (error) => {
-      Alert.alert('동아리 목록을 불러오는 데 실패했습니다. 다시 시도해주세요.', error.message);
+      Alert.alert(ERROR_MESSAGE.CLUB.LIST_FETCH_FAILED, error.message);
       return false;
     },
   });

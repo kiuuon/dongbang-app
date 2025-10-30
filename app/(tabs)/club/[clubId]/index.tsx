@@ -5,10 +5,11 @@ import { router, useLocalSearchParams } from 'expo-router';
 import { useQuery } from '@tanstack/react-query';
 
 import { fetchMyClubs } from '@/apis/club';
+import COLORS from '@/constants/colors';
+import { ERROR_MESSAGE } from '@/constants/error';
 import BoldText from '@/components/common/SemiBoldText';
 import CustomWebView from '@/components/common/CustomWebView';
 import CustomBottomSheet from '@/components/common/CustomBottomSheet';
-import COLORS from '@/constants/colors';
 
 function ClubScreen() {
   const { clubId } = useLocalSearchParams();
@@ -17,7 +18,7 @@ function ClubScreen() {
     queryKey: ['myClubs'],
     queryFn: fetchMyClubs,
     throwOnError: (error) => {
-      Alert.alert('동아리 목록을 불러오는 데 실패했습니다. 다시 시도해주세요.', error.message);
+      Alert.alert(ERROR_MESSAGE.CLUB.LIST_FETCH_FAILED, error.message);
       return false;
     },
   });

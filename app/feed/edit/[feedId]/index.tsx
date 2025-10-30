@@ -8,6 +8,7 @@ import { useMutation, useQuery } from '@tanstack/react-query';
 
 import { editFeed, fetchFeedDetail } from '@/apis/feed/feed';
 import COLORS from '@/constants/colors';
+import { ERROR_MESSAGE } from '@/constants/error';
 import CustomWebView from '@/components/common/CustomWebView';
 import BoldText from '@/components/common/SemiBoldText';
 import RegularText from '@/components/common/RegularText';
@@ -30,7 +31,7 @@ function FeedEditScreen() {
     queryKey: ['feedDetail', feedId],
     queryFn: () => fetchFeedDetail(feedId as string),
     throwOnError: (error) => {
-      Alert.alert('피드 정보를 불러오는 데 실패했습니다. 다시 시도해주세요.', error.message);
+      Alert.alert(ERROR_MESSAGE.FEED.DELETE_FAILED, error.message);
       return false;
     },
   });
@@ -70,7 +71,7 @@ function FeedEditScreen() {
       router.back();
     },
     onError: (error) => {
-      Alert.alert('피드를 작성하는데 실패했습니다. 다시 시도해주세요.', error.message);
+      Alert.alert(ERROR_MESSAGE.FEED.EDIT_FAILED, error.message);
       router.back();
     },
   });

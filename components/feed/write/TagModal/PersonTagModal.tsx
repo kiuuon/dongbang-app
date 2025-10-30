@@ -5,8 +5,9 @@ import { BottomSheetTextInput, BottomSheetModal } from '@gorhom/bottom-sheet';
 
 import { fetchClubMembers } from '@/apis/club';
 import COLORS from '@/constants/colors';
-import BoldText from '@/components/common/SemiBoldText';
+import { ERROR_MESSAGE } from '@/constants/error';
 import ToggleIcon2 from '@/icons/toggle-icon';
+import BoldText from '@/components/common/SemiBoldText';
 
 function PersonTagModal({
   clubId,
@@ -25,7 +26,7 @@ function PersonTagModal({
     queryKey: ['clubMembers', clubId],
     queryFn: () => fetchClubMembers(clubId as string),
     throwOnError: (error) => {
-      Alert.alert('동아리 멤버 목록을 불러오는 데 실패했습니다. 다시 시도해주세요.', error.message);
+      Alert.alert(ERROR_MESSAGE.CLUB.MEMBERS_FETCH_FAILED, error.message);
       return false;
     },
   });
