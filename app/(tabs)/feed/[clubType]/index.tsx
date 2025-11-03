@@ -57,8 +57,8 @@ function FeedScreen() {
       (async () => {
         try {
           const ss = await fetchSession();
-          if (!ss && clubType !== 'union') {
-            router.push('/feed/union');
+          if (!ss && clubType !== 'all' && clubType !== 'union') {
+            router.push('/feed/all');
           }
         } catch (error) {
           Alert.alert(ERROR_MESSAGE.SESSION.FETCH_FAILED, (error as Error).message);
@@ -154,6 +154,11 @@ function FeedScreen() {
         {clubType !== 'union' && (
           <TouchableOpacity style={styles.modalButton} onPress={() => goToSelectedClubType('union')}>
             <BoldText fontSize={16}>연합 동아리</BoldText>
+          </TouchableOpacity>
+        )}
+        {clubType !== 'all' && (
+          <TouchableOpacity style={styles.modalButton} onPress={() => goToSelectedClubType('all')}>
+            <BoldText fontSize={16}>모든 동아리</BoldText>
           </TouchableOpacity>
         )}
       </CustomBottomSheet>

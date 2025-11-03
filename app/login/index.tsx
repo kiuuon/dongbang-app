@@ -14,7 +14,7 @@ function LoginScreen() {
 
           if (type === 'event') {
             if (action === 'look around') {
-              router.push('/feed/union');
+              router.push('/feed/all');
             }
           }
         }}
