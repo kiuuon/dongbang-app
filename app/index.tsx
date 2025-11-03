@@ -18,7 +18,7 @@ function Screen() {
             router.replace('/sign-up/terms');
           }
         } else {
-          router.replace('/feed/union');
+          router.replace('/login');
         }
       } catch (error) {
         Alert.alert('로그인 상태를 확인하는 데 실패했습니다. 다시 시도해주세요.', (error as Error).message);

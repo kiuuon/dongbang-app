@@ -45,7 +45,7 @@ function InfoScreen() {
   });
 
   useEffect(() => {
-    if (!termOfUse || !privacyPolicy || !thirdPartyConsent) {
+    if (!termOfUse || !privacyPolicy) {
       navigation.reset({
         index: 0,
         routes: [{ name: 'sign-up/terms' }],

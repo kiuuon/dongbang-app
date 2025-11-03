@@ -57,7 +57,6 @@ function FeedScreen() {
       (async () => {
         try {
           const ss = await fetchSession();
-
           if (!ss && clubType !== 'union') {
             router.push('/feed/union');
           }

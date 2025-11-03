@@ -33,24 +33,6 @@ export default function FilterList() {
       {filters.categories?.map((category) => (
         <FilterItem key={category} label={category} onRemove={() => toggle('categories', category)} />
       ))}
-
-      {(filters.recruitmentStatuses?.length as number) > 0 && (
-        <FilterItem
-          label={filters.recruitmentStatuses?.includes('closed') ? '모집 완료' : '모집중'}
-          onRemove={() => {
-            toggle('recruitmentStatuses', '__CLEAR__');
-            patch('endDateOption', null);
-          }}
-        />
-      )}
-
-      {filters.endDateOption && (
-        <FilterItem label={filters.endDateOption} onRemove={() => patch('endDateOption', null)} />
-      )}
-
-      {filters.meeting && <FilterItem label={filters.meeting} onRemove={() => patch('meeting', null)} />}
-
-      {filters.duesOption && <FilterItem label={filters.duesOption} onRemove={() => patch('duesOption', null)} />}
     </ScrollView>
   );
 }
