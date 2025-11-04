@@ -15,7 +15,7 @@ function AccountSettingScreen() {
     mutationFn: logout,
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['session'] });
-      router.back();
+      router.replace('/login');
     },
     onError: (error) => Alert.alert(ERROR_MESSAGE.AUTH.LOGOUT_FAILED, error.message),
   });
