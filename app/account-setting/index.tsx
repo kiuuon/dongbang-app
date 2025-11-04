@@ -31,6 +31,8 @@ function AccountSettingScreen() {
             if (action === 'logout') {
               mutate();
               router.back();
+            } else if (action === 'click edit profile button') {
+              router.push('/profile/edit');
             }
           }
         }}
