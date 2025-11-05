@@ -9,6 +9,8 @@ interface ClubInfoStoreType {
   setCategory: (category: string) => void;
   location: string | undefined;
   setLocation: (location: string | undefined) => void;
+  bio: string;
+  setBio: (bio: string) => void;
   description: string;
   setDescription: (description: string) => void;
   tags: string[];
@@ -24,6 +26,8 @@ const clubInfoStore = create<ClubInfoStoreType>((set) => ({
   setCategory: (category) => set({ category }),
   location: '',
   setLocation: (location) => set({ location }),
+  bio: '',
+  setBio: (bio) => set({ bio }),
   description: '',
   setDescription: (description) => set({ description }),
   tags: [],

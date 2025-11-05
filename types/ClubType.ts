@@ -7,8 +7,8 @@ export interface ClubType {
   description: string;
   tags: string[];
   logo: string;
-  activity_photos: string[];
-  detail_description: string;
+  background?: string | null;
+  bio: string;
   detail_type: string | null;
   recruitment?: {
     recruitment_status: string;

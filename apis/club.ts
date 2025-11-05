@@ -58,19 +58,21 @@ export async function createClub(body: ClubType) {
     universityId = data?.university_id;
   }
 
-  const { error } = await supabase.rpc('create_club_transaction', {
-    name: body.name,
-    type: body.type, // 'campus' | 'union'
-    description: body.description,
-    detail_description: body.detail_description,
-    detail_type: body.detail_type,
-    location: body.location,
-    logo: body.logo,
-    activity_photos: body.activity_photos,
-    tags: body.tags,
-    category: body.category,
-    university_id: universityId,
-    creator_id: userId,
+  const { error } = await supabase.rpc('create_club_with_recruitment_transaction', {
+    club: {
+      name: body.name,
+      type: body.type, // 'campus' | 'union'
+      description: body.description,
+      bio: body.bio,
+      detail_type: body.detail_type,
+      location: body.location,
+      logo: body.logo,
+      background: body.background,
+      tags: body.tags,
+      category: body.category,
+      university_id: universityId,
+      creator_id: userId,
+    },
   });
 
   if (error) {

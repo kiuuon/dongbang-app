@@ -12,6 +12,7 @@ function ClubInfoScreen() {
   const setCategory = clubInfoStore((state) => state.setCategory);
   const setLocation = clubInfoStore((state) => state.setLocation);
   const setDescription = clubInfoStore((state) => state.setDescription);
+  const setBio = clubInfoStore((state) => state.setBio);
   const setTags = clubInfoStore((state) => state.setTags);
 
   return (
@@ -22,13 +23,15 @@ function ClubInfoScreen() {
           const { type, action, payload } = data;
           if (type === 'event') {
             if (action === 'complete info form') {
-              const { campusClubType, name, category, location, description, tags } = payload;
+              const { campusClubType, name, category, location, bio, description, tags } = payload;
               setClubCampusType(campusClubType);
               setName(name);
               setCategory(category);
               setLocation(location);
+              setBio(bio);
               setDescription(description);
               setTags(tags);
+
               router.push(`/club/create/${clubType}/detail`);
             }
           }

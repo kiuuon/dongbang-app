@@ -1,7 +1,9 @@
+import { useRef } from 'react';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { Alert } from 'react-native';
 import { router, useLocalSearchParams } from 'expo-router';
 import { useMutation } from '@tanstack/react-query';
+import type { WebView as WebViewType } from 'react-native-webview';
 
 import { createClub } from '@/apis/club';
 import COLORS from '@/constants/colors';
@@ -17,8 +19,11 @@ function ClubDetailScreen() {
   const name = clubInfoStore((state) => state.name);
   const category = clubInfoStore((state) => state.category);
   const location = clubInfoStore((state) => state.location);
+  const bio = clubInfoStore((state) => state.bio);
   const description = clubInfoStore((state) => state.description);
   const tags = clubInfoStore((state) => state.tags);
+
+  const webViewRef = useRef<WebViewType | null>(null);
 
   const { mutate: createClubMutation } = useMutation({
     mutationFn: (body: ClubType) => createClub(body),
@@ -31,10 +36,22 @@ function ClubDetailScreen() {
     },
   });
 
+  const handleLoadEnd = () => {
+    webViewRef.current?.postMessage(
+      JSON.stringify({
+        type: 'event',
+        action: 'set club detail in create club page',
+        payload: { clubCampusType, name, category, location, bio, description, tags },
+      }),
+    );
+  };
+
   return (
     <SafeAreaView style={{ flex: 1, backgroundColor: COLORS.white }}>
       <CustomWebView
+        ref={webViewRef}
         source={{ uri: `${process.env.EXPO_PUBLIC_WEB_URL}/club/create/${clubType}/detail` }}
+        onLoadEnd={handleLoadEnd}
         onMessage={async (data) => {
           const { type, action, payload } = data;
 
@@ -46,8 +63,8 @@ function ClubDetailScreen() {
                 name,
                 category,
                 location,
+                bio,
                 description,
-                tags,
               };
 
               createClubMutation(body);
