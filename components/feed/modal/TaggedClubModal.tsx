@@ -1,13 +1,33 @@
+import { router } from 'expo-router';
 import { View, StyleSheet, TouchableOpacity, Image } from 'react-native';
 
 import COLORS from '@/constants/colors';
 import BoldText from '@/components/common/SemiBoldText';
 
-function TaggedClubModal({ taggedClubs }: { taggedClubs: { club: { name: string; logo: string } }[] }) {
+function TaggedClubModal({
+  taggedClubs,
+  onClose,
+  currentPath,
+}: {
+  taggedClubs: { club: { id: string; name: string; logo: string } }[];
+  onClose: () => void;
+  currentPath: '/feed/detail' | '/my' | '/feed' | '/explore' | '/interact' | '';
+}) {
   return (
     <View style={styles.container}>
       {taggedClubs.map(({ club }) => (
-        <TouchableOpacity key={club.logo} style={styles.button}>
+        <TouchableOpacity
+          key={club.logo}
+          style={styles.button}
+          onPress={() => {
+            if (currentPath === '/feed/detail') {
+              router.push(`/club/detail/${club.id}`);
+            } else {
+              router.push(`${currentPath}/club/${club.id}`);
+            }
+            onClose();
+          }}
+        >
           <Image source={{ uri: club.logo }} style={styles.clubImage} />
           <BoldText fontSize={12}>{club.name}</BoldText>
         </TouchableOpacity>

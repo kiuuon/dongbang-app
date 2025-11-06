@@ -35,11 +35,11 @@ export default function TabLayout() {
         gestureEnabled: false,
       })}
     >
-      <Tabs.Screen name="feed/[clubType]/index" />
-      <Tabs.Screen name="explore/index" />
+      <Tabs.Screen name="feed" />
+      <Tabs.Screen name="explore" />
       <Tabs.Screen name="club" />
-      <Tabs.Screen name="interact/index" />
-      <Tabs.Screen name="my/index" />
+      <Tabs.Screen name="interact" />
+      <Tabs.Screen name="my" />
     </Tabs>
   );
 }

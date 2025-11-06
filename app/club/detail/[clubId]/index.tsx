@@ -25,8 +25,8 @@ function ClubScreen() {
   const [isLikesModalOpen, setIsLikesModalOpen] = useState(false);
   const [selectedFeedId, setSelectedFeedId] = useState<string>('');
   const [selectedAuthorId, setSelectedAuthorId] = useState<string | null>(null);
-  const [taggedUsers, setTaggedUsers] = useState<{ user: { id: string; name: string; avatar: string } }[]>([]);
-  const [taggedClubs, setTaggedClubs] = useState<{ club: { id: string; name: string; logo: string } }[]>([]);
+  const [taggedUsers, setTaggedUsers] = useState<{ user: { name: string; avatar: string } }[]>([]);
+  const [taggedClubs, setTaggedClubs] = useState<{ club: { name: string; logo: string } }[]>([]);
 
   const [isWriteModalOpen, setIsWriteModalOpen] = useState(false);
   const [isMembersModalOpen, setIsMembersModalOpen] = useState(false);
@@ -107,7 +107,7 @@ function ClubScreen() {
         scrollViewHeight={(taggedClubs.length as number) > 4 ? 190 : '100%'}
         title="피드에 태그된 동아리"
       >
-        <TaggedClubModal taggedClubs={taggedClubs} onClose={() => setIsTaggedClubModalOpen(false)} currentPath="" />
+        <TaggedClubModal taggedClubs={taggedClubs} />
       </CustomBottomSheet>
 
       <CustomBottomSheet

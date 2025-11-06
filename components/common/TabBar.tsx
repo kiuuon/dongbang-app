@@ -12,19 +12,21 @@ import InteractIcon from '@/icons/interact-icon';
 import ProfileIcon from '@/icons/profile-icon';
 
 const titles: Record<string, string> = {
-  'feed/[clubType]/index': '홈',
-  'explore/index': '검색',
+  feed: '홈',
+  // feed: '홈',
+  explore: '검색',
   club: '동아리',
-  'interact/index': '교류',
-  'my/index': '프로필',
+  interact: '교류',
+  my: '프로필',
 };
 
 const icons: Record<string, (props: { color: string }) => JSX.Element> = {
-  'feed/[clubType]/index': ({ color }) => <HomeIcon color={color} />,
-  'explore/index': ({ color }) => <SearchIcon color={color} />,
+  feed: ({ color }) => <HomeIcon color={color} />,
+  // feed: ({ color }) => <HomeIcon color={color} />,
+  explore: ({ color }) => <SearchIcon color={color} />,
   club: ({ color }) => <ClubIcon color={color} />,
-  'interact/index': ({ color }) => <InteractIcon color={color} />,
-  'my/index': ({ color }) => <ProfileIcon color={color} />,
+  interact: ({ color }) => <InteractIcon color={color} />,
+  my: ({ color }) => <ProfileIcon color={color} />,
 };
 
 function TabBar({

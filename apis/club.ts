@@ -105,12 +105,12 @@ export async function fetchMyClubs() {
 export async function fetchClubMembers(clubId: string) {
   const { data, error } = (await supabase
     .from('Club_User')
-    .select('user_id, User(name, avatar), role')
+    .select('user_id, User(name, avatar, nickname), role')
     .eq('club_id', clubId)) as unknown as {
     data: {
       user_id: string;
       role: string;
-      User: { name: string; avatar: string } | null;
+      User: { name: string; avatar: string; nickname: string } | null;
     }[];
     error: Error | null;
   };
@@ -122,6 +122,7 @@ export async function fetchClubMembers(clubId: string) {
   return data?.map((member) => ({
     userId: member.user_id,
     name: member.User?.name,
+    nickname: member.User?.nickname,
     avatar: member.User?.avatar,
     role: member.role,
   }));

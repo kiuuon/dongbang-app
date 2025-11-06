@@ -27,7 +27,7 @@ function FeedDetailScreen() {
 
   const [selectedAuthorId, setSelectedAuthorId] = useState<string | null>(null);
   const [taggedUsers, setTaggedUsers] = useState<{ user: { name: string; avatar: string } }[]>([]);
-  const [taggedClubs, setTaggedClubs] = useState<{ club: { name: string; logo: string } }[]>([]);
+  const [taggedClubs, setTaggedClubs] = useState<{ club: { id: string; name: string; logo: string } }[]>([]);
 
   const setSearchTarget = exploreStore((state) => state.setSearchTarget);
   const setKeyword = exploreStore((state) => state.setKeyword);
@@ -71,6 +71,8 @@ function FeedDetailScreen() {
               setIsLikesModalOpen(true);
             } else if (action === 'go to comment likes page') {
               router.push(`/feed/detail/${feedId}/comment/${payload}/likes`);
+            } else if (action === 'go to club page') {
+              router.push(`/club/detail/${payload}`);
             }
           }
         }}
@@ -96,7 +98,11 @@ function FeedDetailScreen() {
         scrollViewHeight={(taggedClubs.length as number) > 4 ? 190 : '100%'}
         title="피드에 태그된 동아리"
       >
-        <TaggedClubModal taggedClubs={taggedClubs} />
+        <TaggedClubModal
+          taggedClubs={taggedClubs}
+          onClose={() => setIsTaggedClubModalOpen(false)}
+          currentPath="/feed/detail"
+        />
       </CustomBottomSheet>
 
       <CustomBottomSheet

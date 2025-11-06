@@ -34,8 +34,8 @@ function FeedScreen() {
 
   const [selectedFeedId, setSelectedFeedId] = useState<string>('');
   const [selectedAuthorId, setSelectedAuthorId] = useState<string | null>(null);
-  const [taggedUsers, setTaggedUsers] = useState<{ user: { name: string; avatar: string } }[]>([]);
-  const [taggedClubs, setTaggedClubs] = useState<{ club: { name: string; logo: string } }[]>([]);
+  const [taggedUsers, setTaggedUsers] = useState<{ user: { id: string; name: string; avatar: string } }[]>([]);
+  const [taggedClubs, setTaggedClubs] = useState<{ club: { id: string; name: string; logo: string } }[]>([]);
 
   const setSearchTarget = exploreStore((state) => state.setSearchTarget);
   const setKeyword = exploreStore((state) => state.setKeyword);
@@ -113,6 +113,8 @@ function FeedScreen() {
               setIsLikesModalOpen(true);
             } else if (action === 'open comments bottom sheet') {
               // TODO: 댓글 바텀시트 열기
+            } else if (action === 'go to club page') {
+              router.push(`/feed/club/${payload}`);
             }
           }
         }}
@@ -181,7 +183,11 @@ function FeedScreen() {
         scrollViewHeight={(taggedClubs.length as number) > 4 ? 190 : '100%'}
         title="피드에 태그된 동아리"
       >
-        <TaggedClubModal taggedClubs={taggedClubs} />
+        <TaggedClubModal
+          taggedClubs={taggedClubs}
+          onClose={() => setIsTaggedClubModalOpen(false)}
+          currentPath="/feed"
+        />
       </CustomBottomSheet>
 
       <CustomBottomSheet

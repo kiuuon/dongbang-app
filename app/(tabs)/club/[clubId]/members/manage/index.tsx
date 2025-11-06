@@ -10,7 +10,7 @@ function RecruitScreen() {
   return (
     <SafeAreaView style={{ flex: 1, backgroundColor: COLORS.white }}>
       <CustomWebView
-        source={{ uri: `${process.env.EXPO_PUBLIC_WEB_URL}/club/${clubId}/recruit` }}
+        source={{ uri: `${process.env.EXPO_PUBLIC_WEB_URL}/club/${clubId}/members/manage` }}
         onMessage={() => {}}
       />
     </SafeAreaView>

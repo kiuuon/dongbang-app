@@ -13,6 +13,7 @@ import TaggedUserModal from '@/components/feed/modal/TaggedUserModal';
 import SettingModal from '@/components/feed/modal/SettingModal';
 import WriteModal from '@/components/club/write-modal';
 import MembersModal from '@/components/club/members-modal';
+import LoginModal from '@/components/common/LoginModal';
 
 const { height } = Dimensions.get('window');
 
@@ -30,6 +31,7 @@ function ClubScreen() {
 
   const [isWriteModalOpen, setIsWriteModalOpen] = useState(false);
   const [isMembersModalOpen, setIsMembersModalOpen] = useState(false);
+  const [isLoginModalOpen, setIsLoginModalOpen] = useState(false);
 
   const setSearchTarget = exploreStore((state) => state.setSearchTarget);
   const setKeyword = exploreStore((state) => state.setKeyword);
@@ -37,10 +39,14 @@ function ClubScreen() {
 
   const webViewRef = useRef(null);
 
+  const [key, setKey] = useState(0);
+
   return (
     <SafeAreaView edges={['top']} style={{ flex: 1, backgroundColor: COLORS.white }}>
       <CustomWebView
         ref={webViewRef}
+        key={key}
+        setKey={setKey}
         source={{ uri: `${process.env.EXPO_PUBLIC_WEB_URL}/club/${clubId}` }}
         onMessage={(data) => {
           const { type, action, payload } = data;
@@ -76,10 +82,18 @@ function ClubScreen() {
               router.push(`/feed/detail/${payload}`);
             } else if (action === 'open members modal') {
               setIsMembersModalOpen(true);
+            } else if (action === 'open login modal') {
+              setIsLoginModalOpen(true);
+            } else if (action === 'application for club') {
+              // TODO: 가입 로직
+            } else if (action === 'go to club page') {
+              router.push(`/explore/club/${payload}`);
             }
           }
         }}
       />
+
+      <LoginModal visible={isLoginModalOpen} onClose={() => setIsLoginModalOpen(false)} webViewRef={webViewRef} />
 
       <WriteModal visible={isWriteModalOpen} onClose={() => setIsWriteModalOpen(false)} clubId={clubId as string} />
 
@@ -107,7 +121,11 @@ function ClubScreen() {
         scrollViewHeight={(taggedClubs.length as number) > 4 ? 190 : '100%'}
         title="피드에 태그된 동아리"
       >
-        <TaggedClubModal taggedClubs={taggedClubs} onClose={() => setIsTaggedClubModalOpen(false)} currentPath="" />
+        <TaggedClubModal
+          taggedClubs={taggedClubs}
+          onClose={() => setIsTaggedClubModalOpen(false)}
+          currentPath="/explore"
+        />
       </CustomBottomSheet>
 
       <CustomBottomSheet

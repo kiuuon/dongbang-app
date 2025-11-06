@@ -4,6 +4,7 @@ import COLORS from '@/constants/colors';
 import { ClubType } from '@/types/ClubType';
 import BoldText from '@/components/common/SemiBoldText';
 import RegularText from '@/components/common/RegularText';
+import { router } from 'expo-router';
 
 interface ClubCardProps {
   club: ClubType;
@@ -13,7 +14,13 @@ export default function ClubCard({ club }: ClubCardProps) {
   return (
     <View style={styles.container}>
       <View style={styles.card}>
-        <TouchableOpacity activeOpacity={0.8} style={{ flexDirection: 'row', alignItems: 'center' }} onPress={() => {}}>
+        <TouchableOpacity
+          activeOpacity={0.8}
+          style={{ flexDirection: 'row', alignItems: 'center' }}
+          onPress={() => {
+            router.push(`/explore/club/${club.id}`);
+          }}
+        >
           <Image source={{ uri: club.logo }} style={styles.logo} />
 
           <View style={styles.infoContainer}>
@@ -23,7 +30,7 @@ export default function ClubCard({ club }: ClubCardProps) {
                   {club.name}
                 </BoldText>
                 <RegularText fontSize={12} style={{ color: COLORS.gray2 }}>
-                  {club.description}
+                  {club.bio}
                 </RegularText>
               </View>
             </View>
