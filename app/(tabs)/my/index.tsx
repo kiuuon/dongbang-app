@@ -85,7 +85,7 @@ function MyScreen() {
         height={height * 0.66}
         title="좋아요"
       >
-        <LikesModal feedId={selectedFeedId} />
+        <LikesModal feedId={selectedFeedId} onClose={() => setIsLikesModalOpen(false)} currentPath="/my" />
       </CustomBottomSheet>
 
       <CustomBottomSheet
@@ -107,7 +107,7 @@ function MyScreen() {
         scrollViewHeight={(taggedUsers.length as number) > 4 ? 190 : '100%'}
         title="피드에 태그된 사람"
       >
-        <TaggedUserModal taggedUsers={taggedUsers} />
+        <TaggedUserModal taggedUsers={taggedUsers} onClose={() => setIsTaggedUserModalOpen(false)} currentPath="/my" />
       </CustomBottomSheet>
 
       <CustomBottomSheet isOpen={isSettingModalOpen} onClose={() => setIsSettingModalOpen(false)}>

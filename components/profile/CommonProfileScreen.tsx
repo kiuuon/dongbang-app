@@ -1,30 +1,32 @@
 import { useRef, useState } from 'react';
+import { Dimensions } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { useLocalSearchParams, router } from 'expo-router';
+import { router, useLocalSearchParams } from 'expo-router';
 
 import COLORS from '@/constants/colors';
+import exploreStore from '@/stores/exploreStore';
 import CustomWebView from '@/components/common/CustomWebView';
 import CustomBottomSheet from '@/components/common/CustomBottomSheet';
+import LikesModal from '@/components/feed/modal/LikesModal';
 import TaggedClubModal from '@/components/feed/modal/TaggedClubModal';
 import TaggedUserModal from '@/components/feed/modal/TaggedUserModal';
 import SettingModal from '@/components/feed/modal/SettingModal';
-import InteractModal from '@/components/feed/modal/InteractModal';
-import exploreStore from '@/stores/exploreStore';
-import LoginModal from '@/components/common/LoginModal';
-import LikesModal from '@/components/feed/modal/LikesModal';
-import { Dimensions } from 'react-native';
 
 const { height } = Dimensions.get('window');
 
-function FeedDetailScreen() {
-  const { feedId } = useLocalSearchParams() as { feedId: string };
+function CommonProfileScreen({
+  currentPath,
+}: {
+  currentPath: '/my' | '/feed' | '/explore' | '/interact' | '/club' | '/feed/detail';
+}) {
+  const { userId } = useLocalSearchParams() as { userId: string };
+
+  const [key, setKey] = useState(0);
   const [isTaggedUserModalOpen, setIsTaggedUserModalOpen] = useState(false);
   const [isTaggedClubModalOpen, setIsTaggedClubModalOpen] = useState(false);
-  const [isInteractModalOpen, setIsInteractModalOpen] = useState(false);
   const [isSettingModalOpen, setIsSettingModalOpen] = useState(false);
   const [isLikesModalOpen, setIsLikesModalOpen] = useState(false);
-  const [isLoginModalOpen, setIsLoginModalOpen] = useState(false);
-
+  const [selectedFeedId, setSelectedFeedId] = useState<string>('');
   const [selectedAuthorId, setSelectedAuthorId] = useState<string | null>(null);
   const [taggedUsers, setTaggedUsers] = useState<{ user: { id: string; name: string; avatar: string } }[]>([]);
   const [taggedClubs, setTaggedClubs] = useState<{ club: { id: string; name: string; logo: string } }[]>([]);
@@ -33,29 +35,31 @@ function FeedDetailScreen() {
   const setKeyword = exploreStore((state) => state.setKeyword);
   const setSelectedHashtag = exploreStore((state) => state.setSelectedHashtag);
 
-  const [key, setKey] = useState(0);
-
   const webViewRef = useRef(null);
 
   return (
     <SafeAreaView style={{ flex: 1, backgroundColor: COLORS.white }}>
       <CustomWebView
+        ref={webViewRef}
         key={key}
         setKey={setKey}
-        ref={webViewRef}
-        source={{ uri: `${process.env.EXPO_PUBLIC_WEB_URL}/feed/detail/${feedId}` }}
+        source={{ uri: `${process.env.EXPO_PUBLIC_WEB_URL}/profile/${userId}` }}
         onMessage={(data) => {
           const { type, action, payload } = data;
+
           if (type === 'event') {
-            if (action === 'tagged club click') {
+            if (action === 'go to login page') {
+              router.push('/login');
+            } else if (action === 'go to account setting page') {
+              router.push('/account-setting');
+            } else if (action === 'tagged club click') {
               setTaggedClubs(payload);
               setIsTaggedClubModalOpen(true);
             } else if (action === 'setting click') {
-              const { authorId } = payload;
+              const { feedId, authorId } = payload;
+              setSelectedFeedId(feedId);
               setSelectedAuthorId(authorId);
               setIsSettingModalOpen(true);
-            } else if (action === 'interact click') {
-              setIsInteractModalOpen(true);
             } else if (action === 'tagged user click') {
               setTaggedUsers(payload);
               setIsTaggedUserModalOpen(true);
@@ -65,22 +69,26 @@ function FeedDetailScreen() {
               setKeyword(hashtag);
               setSelectedHashtag(hashtag);
               router.push(`/explore`);
-            } else if (action === 'open login modal') {
-              setIsLoginModalOpen(true);
             } else if (action === 'open likes modal') {
+              setSelectedFeedId(payload);
               setIsLikesModalOpen(true);
-            } else if (action === 'go to comment likes page') {
-              router.push(`/feed/detail/${feedId}/comment/${payload}/likes`);
+            } else if (action === 'open comments bottom sheet') {
+              // TODO: 댓글 바텀시트 열기
+            } else if (action === 'go to feed detail page') {
+              setSelectedFeedId(payload);
+              router.push(`/feed/detail/${payload}`);
             } else if (action === 'go to club page') {
-              router.push(`/club/detail/${payload}`);
-            } else if (action === 'go to profile page') {
-              router.push(`/profile/${payload}`);
+              if (currentPath === '/club') {
+                router.push(`/club/${payload}`);
+              } else if (currentPath === '/feed/detail') {
+                router.push(`/club/detail/${payload}`);
+              } else {
+                router.push(`${currentPath}/club/${payload}`);
+              }
             }
           }
         }}
       />
-
-      <LoginModal visible={isLoginModalOpen} onClose={() => setIsLoginModalOpen(false)} webViewRef={webViewRef} />
 
       <CustomBottomSheet
         isOpen={isLikesModalOpen}
@@ -89,7 +97,11 @@ function FeedDetailScreen() {
         height={height * 0.66}
         title="좋아요"
       >
-        <LikesModal feedId={feedId} onClose={() => setIsLikesModalOpen(false)} currentPath="" />
+        <LikesModal
+          feedId={selectedFeedId}
+          onClose={() => setIsLikesModalOpen(false)}
+          currentPath={currentPath === '/feed/detail' ? '' : currentPath}
+        />
       </CustomBottomSheet>
 
       <CustomBottomSheet
@@ -103,7 +115,7 @@ function FeedDetailScreen() {
         <TaggedClubModal
           taggedClubs={taggedClubs}
           onClose={() => setIsTaggedClubModalOpen(false)}
-          currentPath="/feed/detail"
+          currentPath={currentPath === '/club' ? '' : currentPath}
         />
       </CustomBottomSheet>
 
@@ -115,24 +127,24 @@ function FeedDetailScreen() {
         scrollViewHeight={(taggedUsers.length as number) > 4 ? 190 : '100%'}
         title="피드에 태그된 사람"
       >
-        <TaggedUserModal taggedUsers={taggedUsers} onClose={() => setIsTaggedUserModalOpen(false)} currentPath="" />
+        <TaggedUserModal
+          taggedUsers={taggedUsers}
+          onClose={() => setIsTaggedUserModalOpen(false)}
+          currentPath={currentPath === '/feed/detail' ? '' : currentPath}
+        />
       </CustomBottomSheet>
 
       <CustomBottomSheet isOpen={isSettingModalOpen} onClose={() => setIsSettingModalOpen(false)}>
         <SettingModal
           authorId={selectedAuthorId as string}
-          feedId={feedId}
+          feedId={selectedFeedId}
           onClose={() => setIsSettingModalOpen(false)}
-          isFeedDetail
+          isFeedDetail={false}
           webViewRef={webViewRef}
         />
-      </CustomBottomSheet>
-
-      <CustomBottomSheet isOpen={isInteractModalOpen} onClose={() => setIsInteractModalOpen(false)}>
-        <InteractModal />
       </CustomBottomSheet>
     </SafeAreaView>
   );
 }
 
-export default FeedDetailScreen;
+export default CommonProfileScreen;

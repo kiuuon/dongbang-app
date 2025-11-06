@@ -1,13 +1,29 @@
 import { View, StyleSheet, TouchableOpacity, Image } from 'react-native';
+import { router } from 'expo-router';
 
 import COLORS from '@/constants/colors';
 import BoldText from '@/components/common/SemiBoldText';
 
-function TaggedUserModal({ taggedUsers }: { taggedUsers: { user: { name: string; avatar: string } }[] }) {
+function TaggedUserModal({
+  taggedUsers,
+  onClose,
+  currentPath,
+}: {
+  taggedUsers: { user: { id: string; name: string; avatar: string } }[];
+  onClose: () => void;
+  currentPath: '' | '/my' | '/feed' | '/explore' | '/interact' | '/club' | '/feed/detail';
+}) {
   return (
     <View style={styles.container}>
       {taggedUsers.map(({ user }) => (
-        <TouchableOpacity key={user.name} style={styles.button}>
+        <TouchableOpacity
+          key={user.name}
+          style={styles.button}
+          onPress={() => {
+            onClose();
+            router.push(`${currentPath}/profile/${user.id}`);
+          }}
+        >
           {user.avatar ? (
             <Image source={{ uri: user.avatar }} style={styles.userImage} />
           ) : (

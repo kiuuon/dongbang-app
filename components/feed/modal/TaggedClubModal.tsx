@@ -11,7 +11,7 @@ function TaggedClubModal({
 }: {
   taggedClubs: { club: { id: string; name: string; logo: string } }[];
   onClose: () => void;
-  currentPath: '/feed/detail' | '/my' | '/feed' | '/explore' | '/interact' | '';
+  currentPath: '' | '/my' | '/feed' | '/explore' | '/interact' | '/club' | '/feed/detail';
 }) {
   return (
     <View style={styles.container}>
@@ -20,12 +20,12 @@ function TaggedClubModal({
           key={club.logo}
           style={styles.button}
           onPress={() => {
+            onClose();
             if (currentPath === '/feed/detail') {
               router.push(`/club/detail/${club.id}`);
             } else {
               router.push(`${currentPath}/club/${club.id}`);
             }
-            onClose();
           }}
         >
           <Image source={{ uri: club.logo }} style={styles.clubImage} />

@@ -22,7 +22,7 @@ export default function WriteModal({ visible, onClose, clubId }: WriteModalProps
             <TouchableOpacity
               style={styles.button}
               onPress={() => {
-                router.push(`/club/${clubId}/members/manage`);
+                router.push(`/club/detail/${clubId}/members/manage`);
                 onClose();
               }}
             >

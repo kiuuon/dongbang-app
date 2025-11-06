@@ -1,4 +1,5 @@
 import { View, StyleSheet, TouchableOpacity, Image, Alert } from 'react-native';
+import { router } from 'expo-router';
 import { useQuery } from '@tanstack/react-query';
 
 import { fetchFeedLikedUsers } from '@/apis/feed/like';
@@ -6,7 +7,15 @@ import COLORS from '@/constants/colors';
 import { ERROR_MESSAGE } from '@/constants/error';
 import BoldText from '@/components/common/SemiBoldText';
 
-function LikesModal({ feedId }: { feedId: string }) {
+function LikesModal({
+  feedId,
+  onClose,
+  currentPath,
+}: {
+  feedId: string;
+  onClose: () => void;
+  currentPath: '' | '/my' | '/feed' | '/explore' | '/interact' | '/club' | '/feed/detail';
+}) {
   const { data: feedLikedUsers } = useQuery({
     queryKey: ['feedLikedUsers', feedId],
     queryFn: () => fetchFeedLikedUsers(feedId),
@@ -19,7 +28,14 @@ function LikesModal({ feedId }: { feedId: string }) {
   return (
     <View style={styles.container}>
       {feedLikedUsers?.map((user) => (
-        <TouchableOpacity key={user.name} style={styles.button}>
+        <TouchableOpacity
+          key={user.name}
+          style={styles.button}
+          onPress={() => {
+            onClose();
+            router.push(`${currentPath}/profile/${user.id}`);
+          }}
+        >
           {user.avatar ? (
             <Image source={{ uri: user.avatar }} style={styles.userImage} />
           ) : (

@@ -1,4 +1,5 @@
 import { View, TouchableOpacity, StyleSheet, Modal, Image, Alert, ScrollView } from 'react-native';
+import { router } from 'expo-router';
 import { useQuery } from '@tanstack/react-query';
 
 import { fetchClubMembers } from '@/apis/club';
@@ -11,9 +12,10 @@ interface MembersModalProps {
   visible: boolean;
   onClose: () => void;
   clubId: string;
+  currentPath: '' | '/my' | '/feed' | '/explore' | '/interact' | '/club' | '/feed/detail';
 }
 
-export default function MembersModal({ visible, onClose, clubId }: MembersModalProps) {
+export default function MembersModal({ visible, onClose, clubId, currentPath }: MembersModalProps) {
   const { data: members } = useQuery({
     queryKey: ['clubMembers', clubId],
     queryFn: () => fetchClubMembers(clubId as string),
@@ -25,7 +27,8 @@ export default function MembersModal({ visible, onClose, clubId }: MembersModalP
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const goToProfilePage = (userId: string) => {
-    // TODO:
+    onClose();
+    router.push(`${currentPath}/profile/${userId}`);
   };
 
   return (

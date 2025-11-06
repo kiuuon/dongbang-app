@@ -172,7 +172,7 @@ function FeedScreen() {
         height={height * 0.66}
         title="좋아요"
       >
-        <LikesModal feedId={selectedFeedId} />
+        <LikesModal feedId={selectedFeedId} onClose={() => setIsLikesModalOpen(false)} currentPath="/feed" />
       </CustomBottomSheet>
 
       <CustomBottomSheet
@@ -198,7 +198,11 @@ function FeedScreen() {
         scrollViewHeight={(taggedUsers.length as number) > 4 ? 190 : '100%'}
         title="피드에 태그된 사람"
       >
-        <TaggedUserModal taggedUsers={taggedUsers} />
+        <TaggedUserModal
+          taggedUsers={taggedUsers}
+          onClose={() => setIsTaggedUserModalOpen(false)}
+          currentPath="/feed"
+        />
       </CustomBottomSheet>
 
       <CustomBottomSheet isOpen={isSettingModalOpen} onClose={() => setIsSettingModalOpen(false)}>

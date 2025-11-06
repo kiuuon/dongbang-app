@@ -112,8 +112,8 @@ export async function searchFeeds(keyword: string, page: number) {
       *,
       author:User(name, avatar),
       club:Club(name, logo),
-      taggedUsers:Feed_User(user:User(name, avatar)),
-      taggedClubs:Feed_Club(club:Club(name, logo))
+      taggedUsers:Feed_User(user:User(id, name, avatar)),
+      taggedClubs:Feed_Club(club:Club(id, name, logo))
     `);
 
   if (error) {
