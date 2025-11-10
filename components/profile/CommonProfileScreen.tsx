@@ -11,6 +11,7 @@ import LikesModal from '@/components/feed/modal/LikesModal';
 import TaggedClubModal from '@/components/feed/modal/TaggedClubModal';
 import TaggedUserModal from '@/components/feed/modal/TaggedUserModal';
 import SettingModal from '@/components/feed/modal/SettingModal';
+import ClubsModal from './ClubsModal';
 
 const { height } = Dimensions.get('window');
 
@@ -30,6 +31,7 @@ function CommonProfileScreen({
   const [selectedAuthorId, setSelectedAuthorId] = useState<string | null>(null);
   const [taggedUsers, setTaggedUsers] = useState<{ user: { id: string; name: string; avatar: string } }[]>([]);
   const [taggedClubs, setTaggedClubs] = useState<{ club: { id: string; name: string; logo: string } }[]>([]);
+  const [isClubsModalOpen, setIsClubsModalOpen] = useState(false);
 
   const setSearchTarget = exploreStore((state) => state.setSearchTarget);
   const setKeyword = exploreStore((state) => state.setKeyword);
@@ -85,9 +87,18 @@ function CommonProfileScreen({
               } else {
                 router.push(`${currentPath}/club/${payload}`);
               }
+            } else if (action === 'open clubs modal') {
+              setIsClubsModalOpen(true);
             }
           }
         }}
+      />
+
+      <ClubsModal
+        visible={isClubsModalOpen}
+        onClose={() => setIsClubsModalOpen(false)}
+        userId={userId as string}
+        currentPath={currentPath === '/feed/detail' ? '' : currentPath}
       />
 
       <CustomBottomSheet
