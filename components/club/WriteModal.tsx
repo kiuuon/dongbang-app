@@ -29,7 +29,13 @@ export default function WriteModal({ visible, onClose, clubId }: WriteModalProps
               <PersonIcon />
               <RegularText fontSize={16}>부원 관리</RegularText>
             </TouchableOpacity>
-            <TouchableOpacity style={styles.button}>
+            <TouchableOpacity
+              style={styles.button}
+              onPress={() => {
+                router.push(`/club/edit/${clubId}/info`);
+                onClose();
+              }}
+            >
               <EditIcon2 color="#F9A825" />
               <RegularText fontSize={16}>동아리 소개 수정</RegularText>
             </TouchableOpacity>

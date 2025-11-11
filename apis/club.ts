@@ -80,6 +80,12 @@ export async function createClub(body: ClubType) {
   }
 }
 
+export async function editClubInfo(body: ClubType, clubId: string) {
+  const { error } = await supabase.from('Club').update([body]).eq('id', clubId);
+
+  if (error) throw error;
+}
+
 export async function fetchMyClubs() {
   const userId = await fetchUserId();
   const { data: clubData, error: fetchClubDataError } = await supabase
