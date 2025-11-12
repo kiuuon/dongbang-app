@@ -1,4 +1,4 @@
-import { useLocalSearchParams } from 'expo-router';
+import { router, useLocalSearchParams } from 'expo-router';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
 import CustomWebView from '@/components/common/CustomWebView';
@@ -11,7 +11,14 @@ function RecruitScreen() {
     <SafeAreaView style={{ flex: 1, backgroundColor: COLORS.white }}>
       <CustomWebView
         source={{ uri: `${process.env.EXPO_PUBLIC_WEB_URL}/club/${clubId}/members/manage` }}
-        onMessage={() => {}}
+        onMessage={(data) => {
+          const { type, action } = data;
+          if (type === 'event') {
+            if (action === 'go to application page') {
+              router.push(`/club/detail/${clubId}/members/manage/application`);
+            }
+          }
+        }}
       />
     </SafeAreaView>
   );

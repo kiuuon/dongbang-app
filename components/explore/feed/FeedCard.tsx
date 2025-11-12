@@ -40,12 +40,14 @@ function FeedCard({ feed }: { feed: FeedType }) {
 
       {/* 피드 정보 */}
       <View style={styles.bottomRow}>
-        {(feed.title || feed.content) && (
+        {feed.title || feed.content ? (
           <View style={{ paddingRight: 8, flexShrink: 1 }}>
             <BoldText fontSize={14} numberOfLines={1}>
               {feed.title ? feed.title : feed.content}
             </BoldText>
           </View>
+        ) : (
+          <View />
         )}
         <View style={styles.likeRow}>
           <LikesIcon />
