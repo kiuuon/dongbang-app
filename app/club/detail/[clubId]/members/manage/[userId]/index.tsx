@@ -5,12 +5,12 @@ import CustomWebView from '@/components/common/CustomWebView';
 import COLORS from '@/constants/colors';
 
 function ApplicationScreen() {
-  const { clubId } = useLocalSearchParams();
+  const { clubId, userId } = useLocalSearchParams();
 
   return (
     <SafeAreaView style={{ flex: 1, backgroundColor: COLORS.white }}>
       <CustomWebView
-        source={{ uri: `${process.env.EXPO_PUBLIC_WEB_URL}/club/${clubId}/members/manage/application` }}
+        source={{ uri: `${process.env.EXPO_PUBLIC_WEB_URL}/club/${clubId}/members/manage/${userId}` }}
         onMessage={(data) => {
           const { type, action, payload } = data;
           if (type === 'event') {
