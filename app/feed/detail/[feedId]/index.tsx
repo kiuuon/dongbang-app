@@ -1,4 +1,6 @@
 import { useRef, useState } from 'react';
+import { Dimensions, RefreshControl, ScrollView } from 'react-native';
+import WebView from 'react-native-webview';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useLocalSearchParams, router } from 'expo-router';
 
@@ -12,7 +14,6 @@ import InteractModal from '@/components/feed/modal/InteractModal';
 import exploreStore from '@/stores/exploreStore';
 import LoginModal from '@/components/common/LoginModal';
 import LikesModal from '@/components/feed/modal/LikesModal';
-import { Dimensions } from 'react-native';
 
 const { height } = Dimensions.get('window');
 
@@ -35,50 +36,64 @@ function FeedDetailScreen() {
 
   const [key, setKey] = useState(0);
 
-  const webViewRef = useRef(null);
+  const webViewRef = useRef<WebView>(null);
+
+  const [refreshing, setRefreshing] = useState(false);
+
+  const onRefresh = async () => {
+    setRefreshing(true);
+    webViewRef.current?.reload();
+    setRefreshing(false);
+  };
 
   return (
     <SafeAreaView style={{ flex: 1, backgroundColor: COLORS.white }}>
-      <CustomWebView
-        key={key}
-        setKey={setKey}
-        ref={webViewRef}
-        source={{ uri: `${process.env.EXPO_PUBLIC_WEB_URL}/feed/detail/${feedId}` }}
-        onMessage={(data) => {
-          const { type, action, payload } = data;
-          if (type === 'event') {
-            if (action === 'tagged club click') {
-              setTaggedClubs(payload);
-              setIsTaggedClubModalOpen(true);
-            } else if (action === 'setting click') {
-              const { authorId } = payload;
-              setSelectedAuthorId(authorId);
-              setIsSettingModalOpen(true);
-            } else if (action === 'interact click') {
-              setIsInteractModalOpen(true);
-            } else if (action === 'tagged user click') {
-              setTaggedUsers(payload);
-              setIsTaggedUserModalOpen(true);
-            } else if (action === 'hashtag click') {
-              const hashtag = payload.trim();
-              setSearchTarget('hashtag');
-              setKeyword(hashtag);
-              setSelectedHashtag(hashtag);
-              router.push(`/explore`);
-            } else if (action === 'open login modal') {
-              setIsLoginModalOpen(true);
-            } else if (action === 'open likes modal') {
-              setIsLikesModalOpen(true);
-            } else if (action === 'go to comment likes page') {
-              router.push(`/feed/detail/${feedId}/comment/${payload}/likes`);
-            } else if (action === 'go to club page') {
-              router.push(`/club/detail/${payload}`);
-            } else if (action === 'go to profile page') {
-              router.push(`/profile/${payload}`);
+      <ScrollView
+        style={{ flex: 1 }}
+        contentContainerStyle={{ flex: 1 }}
+        refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} />}
+      >
+        <CustomWebView
+          key={key}
+          setKey={setKey}
+          ref={webViewRef}
+          source={{ uri: `${process.env.EXPO_PUBLIC_WEB_URL}/feed/detail/${feedId}` }}
+          onMessage={(data) => {
+            const { type, action, payload } = data;
+            if (type === 'event') {
+              if (action === 'tagged club click') {
+                setTaggedClubs(payload);
+                setIsTaggedClubModalOpen(true);
+              } else if (action === 'setting click') {
+                const { authorId } = payload;
+                setSelectedAuthorId(authorId);
+                setIsSettingModalOpen(true);
+              } else if (action === 'interact click') {
+                setIsInteractModalOpen(true);
+              } else if (action === 'tagged user click') {
+                setTaggedUsers(payload);
+                setIsTaggedUserModalOpen(true);
+              } else if (action === 'hashtag click') {
+                const hashtag = payload.trim();
+                setSearchTarget('hashtag');
+                setKeyword(hashtag);
+                setSelectedHashtag(hashtag);
+                router.push(`/explore`);
+              } else if (action === 'open login modal') {
+                setIsLoginModalOpen(true);
+              } else if (action === 'open likes modal') {
+                setIsLikesModalOpen(true);
+              } else if (action === 'go to comment likes page') {
+                router.push(`/feed/detail/${feedId}/comment/${payload}/likes`);
+              } else if (action === 'go to club page') {
+                router.push(`/club/detail/${payload}`);
+              } else if (action === 'go to profile page') {
+                router.push(`/profile/${payload}`);
+              }
             }
-          }
-        }}
-      />
+          }}
+        />
+      </ScrollView>
 
       <LoginModal visible={isLoginModalOpen} onClose={() => setIsLoginModalOpen(false)} webViewRef={webViewRef} />
 

@@ -1,5 +1,6 @@
 import { useRef, useState } from 'react';
-import { Dimensions } from 'react-native';
+import { Dimensions, RefreshControl, ScrollView } from 'react-native';
+import WebView from 'react-native-webview';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { router, useLocalSearchParams } from 'expo-router';
 
@@ -13,6 +14,7 @@ import TaggedUserModal from '@/components/feed/modal/TaggedUserModal';
 import SettingModal from '@/components/feed/modal/SettingModal';
 import WriteModal from '@/components/club/WriteModal';
 import MembersModal from '@/components/club/MembersModal';
+import LoginModal from '../common/LoginModal';
 
 const { height } = Dimensions.get('window');
 
@@ -34,56 +36,75 @@ function CommonClubScreen({
 
   const [isWriteModalOpen, setIsWriteModalOpen] = useState(false);
   const [isMembersModalOpen, setIsMembersModalOpen] = useState(false);
+  const [isLoginModalOpen, setIsLoginModalOpen] = useState(false);
 
   const setSearchTarget = exploreStore((state) => state.setSearchTarget);
   const setKeyword = exploreStore((state) => state.setKeyword);
   const setSelectedHashtag = exploreStore((state) => state.setSelectedHashtag);
 
-  const webViewRef = useRef(null);
+  const webViewRef = useRef<WebView>(null);
+
+  const [refreshing, setRefreshing] = useState(false);
+
+  const onRefresh = async () => {
+    setRefreshing(true);
+    webViewRef.current?.reload();
+    setRefreshing(false);
+  };
 
   return (
     <SafeAreaView edges={['top']} style={{ flex: 1, backgroundColor: COLORS.white }}>
-      <CustomWebView
-        ref={webViewRef}
-        source={{ uri: `${process.env.EXPO_PUBLIC_WEB_URL}/club/${clubId}` }}
-        onMessage={(data) => {
-          const { type, action, payload } = data;
-          if (type === 'event') {
-            if (action === 'go to coming soon page') {
-              router.push('/coming-soon');
-            } else if (action === 'open write modal') {
-              setIsWriteModalOpen(true);
-            } else if (action === 'tagged club click') {
-              setTaggedClubs(payload);
-              setIsTaggedClubModalOpen(true);
-            } else if (action === 'setting click') {
-              const { feedId, authorId } = payload;
-              setSelectedFeedId(feedId);
-              setSelectedAuthorId(authorId);
-              setIsSettingModalOpen(true);
-            } else if (action === 'tagged user click') {
-              setTaggedUsers(payload);
-              setIsTaggedUserModalOpen(true);
-            } else if (action === 'hashtag click') {
-              const hashtag = payload.trim();
-              setSearchTarget('hashtag');
-              setKeyword(hashtag);
-              setSelectedHashtag(hashtag);
-              router.push(`/explore`);
-            } else if (action === 'open likes modal') {
-              setSelectedFeedId(payload);
-              setIsLikesModalOpen(true);
-            } else if (action === 'open comments bottom sheet') {
-              // TODO: 댓글 바텀시트 열기
-            } else if (action === 'go to feed detail page') {
-              setSelectedFeedId(payload);
-              router.push(`/feed/detail/${payload}`);
-            } else if (action === 'open members modal') {
-              setIsMembersModalOpen(true);
+      <ScrollView
+        style={{ flex: 1 }}
+        contentContainerStyle={{ flex: 1 }}
+        refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} />}
+      >
+        <CustomWebView
+          ref={webViewRef}
+          source={{ uri: `${process.env.EXPO_PUBLIC_WEB_URL}/club/${clubId}` }}
+          onMessage={(data) => {
+            const { type, action, payload } = data;
+            if (type === 'event') {
+              if (action === 'go to coming soon page') {
+                router.push('/coming-soon');
+              } else if (action === 'open write modal') {
+                setIsWriteModalOpen(true);
+              } else if (action === 'tagged club click') {
+                setTaggedClubs(payload);
+                setIsTaggedClubModalOpen(true);
+              } else if (action === 'setting click') {
+                const { feedId, authorId } = payload;
+                setSelectedFeedId(feedId);
+                setSelectedAuthorId(authorId);
+                setIsSettingModalOpen(true);
+              } else if (action === 'tagged user click') {
+                setTaggedUsers(payload);
+                setIsTaggedUserModalOpen(true);
+              } else if (action === 'hashtag click') {
+                const hashtag = payload.trim();
+                setSearchTarget('hashtag');
+                setKeyword(hashtag);
+                setSelectedHashtag(hashtag);
+                router.push(`/explore`);
+              } else if (action === 'open likes modal') {
+                setSelectedFeedId(payload);
+                setIsLikesModalOpen(true);
+              } else if (action === 'open comments bottom sheet') {
+                // TODO: 댓글 바텀시트 열기
+              } else if (action === 'go to feed detail page') {
+                setSelectedFeedId(payload);
+                router.push(`/feed/detail/${payload}`);
+              } else if (action === 'open members modal') {
+                setIsMembersModalOpen(true);
+              } else if (action === 'open login modal') {
+                setIsLoginModalOpen(true);
+              }
             }
-          }
-        }}
-      />
+          }}
+        />
+      </ScrollView>
+
+      <LoginModal visible={isLoginModalOpen} onClose={() => setIsLoginModalOpen(false)} webViewRef={webViewRef} />
 
       <WriteModal visible={isWriteModalOpen} onClose={() => setIsWriteModalOpen(false)} clubId={clubId as string} />
 

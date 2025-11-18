@@ -1,4 +1,13 @@
-import { View, StyleSheet, FlatList, ActivityIndicator, Alert, Platform, KeyboardAvoidingView } from 'react-native';
+import {
+  View,
+  StyleSheet,
+  FlatList,
+  ActivityIndicator,
+  Alert,
+  Platform,
+  KeyboardAvoidingView,
+  RefreshControl,
+} from 'react-native';
 import { useInfiniteQuery, useQuery } from '@tanstack/react-query';
 
 import { fetchClubs, fetchClubsCount } from '@/apis/club';
@@ -30,7 +39,7 @@ function ClubSection({
     },
   });
 
-  const { data, fetchNextPage, hasNextPage, isFetchingNextPage, isPending } = useInfiniteQuery({
+  const { data, fetchNextPage, hasNextPage, isFetchingNextPage, isPending, refetch, isRefetching } = useInfiniteQuery({
     initialPageParam: 0,
     queryKey: ['clubs', keyword, filters],
     queryFn: ({ pageParam }) => fetchClubs(keyword, filters, pageParam),
@@ -56,6 +65,7 @@ function ClubSection({
           renderItem={({ item }) => <ClubCard club={item} />}
           contentContainerStyle={styles.listContainer}
           showsVerticalScrollIndicator={false}
+          refreshControl={<RefreshControl refreshing={isRefetching} onRefresh={() => refetch()} />}
           onEndReached={() => {
             if (hasNextPage && !isFetchingNextPage) {
               fetchNextPage();

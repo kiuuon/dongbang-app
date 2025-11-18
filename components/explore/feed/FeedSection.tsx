@@ -1,5 +1,14 @@
 import React from 'react';
-import { View, ActivityIndicator, FlatList, StyleSheet, Alert, KeyboardAvoidingView, Platform } from 'react-native';
+import {
+  View,
+  ActivityIndicator,
+  FlatList,
+  StyleSheet,
+  Alert,
+  KeyboardAvoidingView,
+  Platform,
+  RefreshControl,
+} from 'react-native';
 import { useInfiniteQuery } from '@tanstack/react-query';
 
 import { searchFeeds } from '@/apis/feed/feed';
@@ -9,7 +18,7 @@ import { FeedType } from '@/types/FeedType';
 import FeedCard from './FeedCard';
 
 function FeedSection({ keyword }: { keyword: string }) {
-  const { data, fetchNextPage, hasNextPage, isFetchingNextPage, isPending } = useInfiniteQuery({
+  const { data, fetchNextPage, hasNextPage, isFetchingNextPage, isPending, refetch, isRefetching } = useInfiniteQuery({
     initialPageParam: 0,
     queryKey: ['feeds', keyword],
     queryFn: ({ pageParam }) => searchFeeds(keyword, pageParam),
@@ -45,6 +54,7 @@ function FeedSection({ keyword }: { keyword: string }) {
         columnWrapperStyle={{ columnGap: 13 }}
         contentContainerStyle={styles.listContainer}
         showsVerticalScrollIndicator={false}
+        refreshControl={<RefreshControl refreshing={isRefetching} onRefresh={() => refetch()} />}
         onEndReached={() => {
           if (hasNextPage && !isFetchingNextPage) {
             fetchNextPage();
