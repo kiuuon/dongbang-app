@@ -8,10 +8,10 @@ import COLORS from '@/constants/colors';
 import { useRef, useState } from 'react';
 import exploreStore from '@/stores/exploreStore';
 import CustomBottomSheet from '@/components/common/CustomBottomSheet';
-import LikesModal from '@/components/feed/modal/LikesModal';
-import TaggedClubModal from '@/components/feed/modal/TaggedClubModal';
-import TaggedUserModal from '@/components/feed/modal/TaggedUserModal';
-import SettingModal from '@/components/feed/modal/SettingModal';
+import LikesModal from '@/components/feed/modal/LikesBottomSheet';
+import TaggedClubModal from '@/components/feed/modal/TaggedClubBottomSheet';
+import TaggedUserModal from '@/components/feed/modal/TaggedUserBottomSheet';
+import SettingModal from '@/components/feed/modal/SettingBottomSheet';
 
 const { height } = Dimensions.get('window');
 

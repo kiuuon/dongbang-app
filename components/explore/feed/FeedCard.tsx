@@ -1,11 +1,8 @@
-import { View, Image, TouchableOpacity, StyleSheet, Alert } from 'react-native';
+import { View, Image, TouchableOpacity, StyleSheet } from 'react-native';
 import { router } from 'expo-router';
-import { useQuery } from '@tanstack/react-query';
-
-import { fetchFeedLikeCount } from '@/apis/feed/like';
 
 import COLORS from '@/constants/colors';
-import { ERROR_MESSAGE } from '@/constants/error';
+
 import { FeedType } from '@/types/FeedType';
 import LikesIcon from '@/icons/LikesIcon';
 import RegularText from '@/components/common/RegularText';
@@ -16,21 +13,14 @@ function FeedCard({ feed }: { feed: FeedType }) {
     router.push(`/feed/detail/${feed.id}`);
   };
 
-  const { data: likeCount } = useQuery({
-    queryKey: ['likeCount', feed.id],
-    queryFn: () => fetchFeedLikeCount(feed.id),
-    throwOnError: (error) => {
-      Alert.alert(ERROR_MESSAGE.LIKE.COUNT_FETCH_FAILED, (error as Error).message);
-      return false;
-    },
-  });
-
   return (
     <TouchableOpacity style={styles.container} activeOpacity={0.8} onPress={handlePress}>
       {/* 상단 클럽 로고 + 이름 */}
       <View style={styles.clubRow}>
         <Image source={{ uri: feed.club.logo }} style={styles.clubLogo} />
-        <RegularText fontSize={12}>{feed.club.name}</RegularText>
+        <RegularText fontSize={12} numberOfLines={1}>
+          {feed.club.name}
+        </RegularText>
       </View>
 
       {/* 피드 이미지 */}
@@ -51,7 +41,7 @@ function FeedCard({ feed }: { feed: FeedType }) {
         )}
         <View style={styles.likeRow}>
           <LikesIcon />
-          <RegularText fontSize={12}>{likeCount}</RegularText>
+          <RegularText fontSize={12}>{feed.like_count}</RegularText>
         </View>
       </View>
     </TouchableOpacity>
@@ -69,6 +59,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     gap: 4,
+    width: '80%',
   },
   clubLogo: {
     width: 20,

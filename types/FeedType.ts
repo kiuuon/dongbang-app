@@ -29,5 +29,6 @@ export interface FeedType {
       logo: string;
     };
   }[];
+  like_count: number;
   created_at: string;
 }

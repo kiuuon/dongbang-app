@@ -15,7 +15,7 @@ import ShareIcon from '@/icons/ShareIcon';
 import ReportIcon from '@/icons/ReportIcon';
 import BoldText from '@/components/common/SemiBoldText';
 
-function SettingModal({
+function SettingBottomSheet({
   authorId,
   feedId,
   onClose,
@@ -144,4 +144,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default SettingModal;
+export default SettingBottomSheet;

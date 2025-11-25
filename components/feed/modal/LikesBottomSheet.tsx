@@ -1,21 +1,33 @@
-import { View, StyleSheet, TouchableOpacity, Image } from 'react-native';
+import { View, StyleSheet, TouchableOpacity, Image, Alert } from 'react-native';
 import { router } from 'expo-router';
+import { useQuery } from '@tanstack/react-query';
 
+import { fetchFeedLikedUsers } from '@/apis/feed/like';
 import COLORS from '@/constants/colors';
+import { ERROR_MESSAGE } from '@/constants/error';
 import BoldText from '@/components/common/SemiBoldText';
 
-function TaggedUserModal({
-  taggedUsers,
+function LikesBottomSheet({
+  feedId,
   onClose,
   currentPath,
 }: {
-  taggedUsers: { user: { id: string; name: string; avatar: string } }[];
+  feedId: string;
   onClose: () => void;
   currentPath: '' | '/my' | '/feed' | '/explore' | '/interact' | '/club' | '/feed/detail';
 }) {
+  const { data: feedLikedUsers } = useQuery({
+    queryKey: ['feedLikedUsers', feedId],
+    queryFn: () => fetchFeedLikedUsers(feedId),
+    throwOnError: (error) => {
+      Alert.alert(ERROR_MESSAGE.LIKE.USERS_FETCH_FAILED, error.message);
+      return false;
+    },
+  });
+
   return (
     <View style={styles.container}>
-      {taggedUsers.map(({ user }) => (
+      {feedLikedUsers?.map((user) => (
         <TouchableOpacity
           key={user.name}
           style={styles.button}
@@ -44,6 +56,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     gap: 10,
     paddingHorizontal: 20,
+    marginBottom: 60,
   },
   button: {
     width: '100%',
@@ -60,4 +73,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default TaggedUserModal;
+export default LikesBottomSheet;

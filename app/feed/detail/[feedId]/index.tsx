@@ -5,25 +5,23 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import { useLocalSearchParams, router } from 'expo-router';
 
 import COLORS from '@/constants/colors';
+import exploreStore from '@/stores/exploreStore';
 import CustomWebView from '@/components/common/CustomWebView';
 import CustomBottomSheet from '@/components/common/CustomBottomSheet';
-import TaggedClubModal from '@/components/feed/modal/TaggedClubModal';
-import TaggedUserModal from '@/components/feed/modal/TaggedUserModal';
-import SettingModal from '@/components/feed/modal/SettingModal';
-import InteractModal from '@/components/feed/modal/InteractModal';
-import exploreStore from '@/stores/exploreStore';
 import LoginModal from '@/components/common/LoginModal';
-import LikesModal from '@/components/feed/modal/LikesModal';
+import TaggedClubBottomSheet from '@/components/feed/modal/TaggedClubBottomSheet';
+import TaggedUserBottomSheet from '@/components/feed/modal/TaggedUserBottomSheet';
+import SettingBottomSheet from '@/components/feed/modal/SettingBottomSheet';
+import LikesBottomSheet from '@/components/feed/modal/LikesBottomSheet';
 
 const { height } = Dimensions.get('window');
 
 function FeedDetailScreen() {
   const { feedId } = useLocalSearchParams() as { feedId: string };
-  const [isTaggedUserModalOpen, setIsTaggedUserModalOpen] = useState(false);
-  const [isTaggedClubModalOpen, setIsTaggedClubModalOpen] = useState(false);
-  const [isInteractModalOpen, setIsInteractModalOpen] = useState(false);
-  const [isSettingModalOpen, setIsSettingModalOpen] = useState(false);
-  const [isLikesModalOpen, setIsLikesModalOpen] = useState(false);
+  const [isTaggedUserBottomSheetOpen, setIsTaggedUserBottomSheetOpen] = useState(false);
+  const [isTaggedClubBottomSheetOpen, setIsTaggedClubBottomSheetOpen] = useState(false);
+  const [isSettingBottomSheetOpen, setIsSettingBottomSheetOpen] = useState(false);
+  const [isLikesBottomSheetOpen, setIsLikesBottomSheetOpen] = useState(false);
   const [isLoginModalOpen, setIsLoginModalOpen] = useState(false);
 
   const [selectedAuthorId, setSelectedAuthorId] = useState<string | null>(null);
@@ -63,16 +61,14 @@ function FeedDetailScreen() {
             if (type === 'event') {
               if (action === 'tagged club click') {
                 setTaggedClubs(payload);
-                setIsTaggedClubModalOpen(true);
+                setIsTaggedClubBottomSheetOpen(true);
               } else if (action === 'setting click') {
                 const { authorId } = payload;
                 setSelectedAuthorId(authorId);
-                setIsSettingModalOpen(true);
-              } else if (action === 'interact click') {
-                setIsInteractModalOpen(true);
+                setIsSettingBottomSheetOpen(true);
               } else if (action === 'tagged user click') {
                 setTaggedUsers(payload);
-                setIsTaggedUserModalOpen(true);
+                setIsTaggedUserBottomSheetOpen(true);
               } else if (action === 'hashtag click') {
                 const hashtag = payload.trim();
                 setSearchTarget('hashtag');
@@ -82,7 +78,7 @@ function FeedDetailScreen() {
               } else if (action === 'open login modal') {
                 setIsLoginModalOpen(true);
               } else if (action === 'open likes modal') {
-                setIsLikesModalOpen(true);
+                setIsLikesBottomSheetOpen(true);
               } else if (action === 'go to comment likes page') {
                 router.push(`/feed/detail/${feedId}/comment/${payload}/likes`);
               } else if (action === 'go to club page') {
@@ -98,53 +94,53 @@ function FeedDetailScreen() {
       <LoginModal visible={isLoginModalOpen} onClose={() => setIsLoginModalOpen(false)} webViewRef={webViewRef} />
 
       <CustomBottomSheet
-        isOpen={isLikesModalOpen}
-        onClose={() => setIsLikesModalOpen(false)}
+        isOpen={isLikesBottomSheetOpen}
+        onClose={() => setIsLikesBottomSheetOpen(false)}
         scrollable
         height={height * 0.66}
         title="좋아요"
       >
-        <LikesModal feedId={feedId} onClose={() => setIsLikesModalOpen(false)} currentPath="" />
+        <LikesBottomSheet feedId={feedId} onClose={() => setIsLikesBottomSheetOpen(false)} currentPath="" />
       </CustomBottomSheet>
 
       <CustomBottomSheet
-        isOpen={isTaggedClubModalOpen}
-        onClose={() => setIsTaggedClubModalOpen(false)}
+        isOpen={isTaggedClubBottomSheetOpen}
+        onClose={() => setIsTaggedClubBottomSheetOpen(false)}
         scrollable={(taggedClubs.length as number) > 4 && true}
         height={(taggedClubs.length as number) > 4 ? 300 : -1}
         scrollViewHeight={(taggedClubs.length as number) > 4 ? 190 : '100%'}
         title="피드에 태그된 동아리"
       >
-        <TaggedClubModal
+        <TaggedClubBottomSheet
           taggedClubs={taggedClubs}
-          onClose={() => setIsTaggedClubModalOpen(false)}
+          onClose={() => setIsTaggedClubBottomSheetOpen(false)}
           currentPath="/feed/detail"
         />
       </CustomBottomSheet>
 
       <CustomBottomSheet
-        isOpen={isTaggedUserModalOpen}
-        onClose={() => setIsTaggedUserModalOpen(false)}
+        isOpen={isTaggedUserBottomSheetOpen}
+        onClose={() => setIsTaggedUserBottomSheetOpen(false)}
         scrollable={(taggedUsers.length as number) > 4 && true}
         height={(taggedUsers.length as number) > 4 ? 300 : -1}
         scrollViewHeight={(taggedUsers.length as number) > 4 ? 190 : '100%'}
         title="피드에 태그된 사람"
       >
-        <TaggedUserModal taggedUsers={taggedUsers} onClose={() => setIsTaggedUserModalOpen(false)} currentPath="" />
-      </CustomBottomSheet>
-
-      <CustomBottomSheet isOpen={isSettingModalOpen} onClose={() => setIsSettingModalOpen(false)}>
-        <SettingModal
-          authorId={selectedAuthorId as string}
-          feedId={feedId}
-          onClose={() => setIsSettingModalOpen(false)}
-          isFeedDetail
-          webViewRef={webViewRef}
+        <TaggedUserBottomSheet
+          taggedUsers={taggedUsers}
+          onClose={() => setIsTaggedUserBottomSheetOpen(false)}
+          currentPath=""
         />
       </CustomBottomSheet>
 
-      <CustomBottomSheet isOpen={isInteractModalOpen} onClose={() => setIsInteractModalOpen(false)}>
-        <InteractModal />
+      <CustomBottomSheet isOpen={isSettingBottomSheetOpen} onClose={() => setIsSettingBottomSheetOpen(false)}>
+        <SettingBottomSheet
+          authorId={selectedAuthorId as string}
+          feedId={feedId}
+          onClose={() => setIsSettingBottomSheetOpen(false)}
+          isFeedDetail
+          webViewRef={webViewRef}
+        />
       </CustomBottomSheet>
     </SafeAreaView>
   );

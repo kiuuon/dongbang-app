@@ -5,7 +5,7 @@ interface StyledTextProps extends TextProps {
 }
 
 function BoldText({ style, fontSize, ...props }: StyledTextProps) {
-  return <Text style={[styles.baseText, { fontSize }, { lineHeight: fontSize * 1.5 }, style]} {...props} />;
+  return <Text style={[styles.baseText, { fontSize }, { lineHeight: fontSize * 1.2 }, style]} {...props} />;
 }
 
 const styles = StyleSheet.create({

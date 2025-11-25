@@ -25,7 +25,6 @@ export default function MembersModal({ visible, onClose, clubId, currentPath }: 
     },
   });
 
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const goToProfilePage = (userId: string) => {
     onClose();
     router.push(`${currentPath}/profile/${userId}`);

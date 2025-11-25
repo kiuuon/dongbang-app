@@ -4,7 +4,7 @@ import { View, StyleSheet, TouchableOpacity, Image } from 'react-native';
 import COLORS from '@/constants/colors';
 import BoldText from '@/components/common/SemiBoldText';
 
-function TaggedClubModal({
+function TaggedClubBottomSheet({
   taggedClubs,
   onClose,
   currentPath,
@@ -59,4 +59,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default TaggedClubModal;
+export default TaggedClubBottomSheet;
