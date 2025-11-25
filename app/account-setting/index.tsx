@@ -33,6 +33,8 @@ function AccountSettingScreen() {
               router.back();
             } else if (action === 'click edit profile button') {
               router.push('/profile/edit');
+            } else if (action === 'go to profile visibility page') {
+              router.push('/account-setting/profile-visibility');
             }
           }
         }}
