@@ -22,7 +22,7 @@ import CommentCard from './CommentCard';
 function CommentBottomSheet({ feedId, isOpen, onClose }: { feedId: string; isOpen: boolean; onClose: () => void }) {
   const bottomSheetModalRef = useRef<BottomSheetModal | null>(null);
 
-  const snapPoints = useMemo(() => ['66%', '95%'], []);
+  const snapPoints = useMemo(() => ['66%', '90%'], []);
 
   const [keyboardVisible, setKeyboardVisible] = useState(false);
 
@@ -82,7 +82,6 @@ function CommentBottomSheet({ feedId, isOpen, onClose }: { feedId: string; isOpe
       index={0}
       snapPoints={snapPoints}
       keyboardBehavior="extend"
-      enableContentPanningGesture={false}
       enableDynamicSizing={false}
       onDismiss={onClose}
       backgroundStyle={styles.sheetBackground}

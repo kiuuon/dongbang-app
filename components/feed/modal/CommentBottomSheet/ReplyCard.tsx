@@ -1,5 +1,5 @@
-import { useState } from 'react';
-import { Alert, Image, StyleSheet, TouchableOpacity, View } from 'react-native';
+import { useRef, useState } from 'react';
+import { Alert, Image, Modal, StyleSheet, TouchableOpacity, View, TouchableWithoutFeedback } from 'react-native';
 import { router } from 'expo-router';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 
@@ -21,6 +21,9 @@ function ReplyCard({ reply, parentId, feedId }: { reply: CommentType; parentId: 
   const queryClient = useQueryClient();
 
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
+  const [dropdownPosition, setDropdownPosition] = useState({ x: 0, y: 0 });
+
+  const moreButtonRef = useRef<View>(null);
 
   const { data: session } = useQuery({
     queryKey: ['session'],
@@ -138,7 +141,15 @@ function ReplyCard({ reply, parentId, feedId }: { reply: CommentType; parentId: 
         </View>
 
         <View style={styles.commentButtonsContainer}>
-          <TouchableOpacity onPress={() => setIsDropdownOpen((prev) => !prev)}>
+          <TouchableOpacity
+            ref={moreButtonRef}
+            onPress={() => {
+              moreButtonRef.current?.measureInWindow((x, y) => {
+                setDropdownPosition({ x, y });
+              });
+              setIsDropdownOpen((prev) => !prev);
+            }}
+          >
             <MoreHorizontalIcon />
           </TouchableOpacity>
           <TouchableOpacity
@@ -158,8 +169,12 @@ function ReplyCard({ reply, parentId, feedId }: { reply: CommentType; parentId: 
             </BoldText>
           </TouchableOpacity>
 
-          {isDropdownOpen && (
-            <View style={styles.dropdownContainer}>
+          <Modal transparent visible={isDropdownOpen} animationType="fade">
+            <TouchableWithoutFeedback onPress={() => setIsDropdownOpen(false)}>
+              <View style={{ position: 'absolute', top: 0, left: 0, right: 0, bottom: 0 }} />
+            </TouchableWithoutFeedback>
+
+            <View style={[styles.dropdownContainer, { top: dropdownPosition.y + 25, left: dropdownPosition.x - 50 }]}>
               {(feed?.author_id === userId || reply.author_id === userId) && (
                 <TouchableOpacity
                   style={styles.dropdownItem}
@@ -182,7 +197,7 @@ function ReplyCard({ reply, parentId, feedId }: { reply: CommentType; parentId: 
                 </TouchableOpacity>
               )}
             </View>
-          )}
+          </Modal>
         </View>
       </View>
     </View>

@@ -17,6 +17,7 @@ const COLORS = {
   error: '#F40707',
   kakao: '#FFEB3B',
   modalBackdrop: 'rgba(0, 0, 0, 0.6)',
+  transparent: 'transparent',
 };
 
 export default COLORS;
