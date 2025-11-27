@@ -39,7 +39,9 @@ function CommonClubScreen({
   const [isLikesModalOpen, setIsLikesModalOpen] = useState(false);
   const [selectedFeedId, setSelectedFeedId] = useState<string>('');
   const [selectedAuthorId, setSelectedAuthorId] = useState<string | null>(null);
-  const [taggedUsers, setTaggedUsers] = useState<{ user: { id: string; name: string; avatar: string } }[]>([]);
+  const [taggedUsers, setTaggedUsers] = useState<
+    { user: { id: string; name: string; avatar: string; nickname: string } }[]
+  >([]);
   const [taggedClubs, setTaggedClubs] = useState<{ club: { id: string; name: string; logo: string } }[]>([]);
 
   const [isHeaderBackgroundWhite, setIsHeaderBackgroundWhite] = useState(false);
@@ -190,6 +192,8 @@ function CommonClubScreen({
               setIsLoginModalOpen(true);
             } else if (action === 'scroll event') {
               setIsHeaderBackgroundWhite(payload);
+            } else if (action === 'go to announcement page') {
+              router.push(`/club/detail/${clubId}/announcement`);
             }
           }
         }}
