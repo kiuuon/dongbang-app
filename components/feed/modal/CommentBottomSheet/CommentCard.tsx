@@ -97,7 +97,7 @@ function CommentCard({ comment }: { comment: CommentType }) {
   });
 
   const goToProfilePage = () => {
-    router.push(`/profile/${comment.author_id}`);
+    router.push(`/profile/${comment.author.nickname}`);
   };
 
   function getTimeAgo(dateString: string) {

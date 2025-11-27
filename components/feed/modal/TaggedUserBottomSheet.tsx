@@ -9,7 +9,7 @@ function TaggedUserBottomSheet({
   onClose,
   currentPath,
 }: {
-  taggedUsers: { user: { id: string; name: string; avatar: string } }[];
+  taggedUsers: { user: { id: string; name: string; avatar: string; nickname: string } }[];
   onClose: () => void;
   currentPath: '' | '/my' | '/feed' | '/explore' | '/interact' | '/club' | '/feed/detail';
 }) {
@@ -21,7 +21,7 @@ function TaggedUserBottomSheet({
           style={styles.button}
           onPress={() => {
             onClose();
-            router.push(`${currentPath}/profile/${user.id}`);
+            router.push(`${currentPath}/profile/${user.nickname}`);
           }}
         >
           {user.avatar ? (

@@ -25,9 +25,9 @@ export default function MembersModal({ visible, onClose, clubId, currentPath }: 
     },
   });
 
-  const goToProfilePage = (userId: string) => {
+  const goToProfilePage = (nickname: string | undefined) => {
     onClose();
-    router.push(`${currentPath}/profile/${userId}`);
+    router.push(`${currentPath}/profile/${nickname}`);
   };
 
   return (
@@ -49,7 +49,7 @@ export default function MembersModal({ visible, onClose, clubId, currentPath }: 
                       key={member.userId}
                       style={styles.button}
                       onPress={() => {
-                        goToProfilePage(member.userId);
+                        goToProfilePage(member.nickname);
                       }}
                     >
                       {member.avatar ? (

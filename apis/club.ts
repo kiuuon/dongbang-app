@@ -108,28 +108,14 @@ export async function fetchMyClubs() {
   return clubs;
 }
 
-export async function fetchClubsByUserId(userId: string) {
-  const { data: clubData, error: fetchClubDataError } = await supabase
-    .from('Club_User')
-    .select('club_id')
-    .eq('user_id', userId);
+export async function fetchClubsByUserNickname(nickname: string) {
+  const { data, error } = await supabase.rpc('get_clubs_by_user_nickname', {
+    p_nickname: nickname,
+  });
 
-  if (fetchClubDataError) {
-    throw fetchClubDataError;
-  }
+  if (error) throw error;
 
-  const clubIds = clubData?.map((club) => club.club_id) || [];
-
-  const { data: clubs, error: fetchClubsError } = await supabase
-    .from('Club')
-    .select('*, role:Club_User(role)')
-    .in('id', clubIds);
-
-  if (fetchClubsError) {
-    throw fetchClubsError;
-  }
-
-  return clubs;
+  return data;
 }
 
 export async function fetchClubMembers(clubId: string) {

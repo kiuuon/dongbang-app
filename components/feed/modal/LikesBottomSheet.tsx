@@ -33,7 +33,7 @@ function LikesBottomSheet({
           style={styles.button}
           onPress={() => {
             onClose();
-            router.push(`${currentPath}/profile/${user.id}`);
+            router.push(`${currentPath}/profile/${user.nickname}`);
           }}
         >
           {user.avatar ? (

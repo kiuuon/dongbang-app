@@ -2,22 +2,24 @@ import { View, TouchableOpacity, StyleSheet, Modal, Image, Alert, ScrollView } f
 import { router } from 'expo-router';
 import { useQuery } from '@tanstack/react-query';
 
-import { fetchClubsByUserId } from '@/apis/club';
+import { fetchClubsByUserNickname } from '@/apis/club';
 import COLORS from '@/constants/colors';
 import { ERROR_MESSAGE } from '@/constants/error';
+import { ClubType } from '@/types/ClubType';
 import BoldText from '../common/SemiBoldText';
 
 interface ClubsModalProps {
   visible: boolean;
   onClose: () => void;
-  userId: string;
+  nickname: string;
   currentPath: '' | '/my' | '/feed' | '/explore' | '/interact' | '/club' | '/feed/detail';
 }
 
-export default function ClubsModal({ visible, onClose, userId, currentPath }: ClubsModalProps) {
+export default function ClubsModal({ visible, onClose, nickname, currentPath }: ClubsModalProps) {
   const { data: clubs } = useQuery({
-    queryKey: ['clubs', userId],
-    queryFn: () => fetchClubsByUserId(userId as string),
+    queryKey: ['clubs', nickname],
+    queryFn: () => fetchClubsByUserNickname(nickname as string),
+    enabled: !!nickname,
     throwOnError: (error) => {
       Alert.alert(ERROR_MESSAGE.CLUB.LIST_FETCH_FAILED, error.message);
       return false;
@@ -57,25 +59,25 @@ export default function ClubsModal({ visible, onClose, userId, currentPath }: Cl
           </BoldText>
 
           <View style={styles.buttonContainer}>
-            {clubs?.map((club) => (
+            {clubs?.map((item: { club: ClubType; role: string }) => (
               <TouchableOpacity
-                key={club.id}
+                key={item.club.id}
                 style={styles.button}
                 onPress={() => {
-                  goToProfilePage(club.id);
+                  goToProfilePage(item.club.id);
                 }}
               >
-                <Image source={{ uri: club.logo }} style={styles.memberImage} />
+                <Image source={{ uri: item.club.logo }} style={styles.memberImage} />
 
                 <View style={{ flexDirection: 'column', justifyContent: 'space-between' }}>
                   <BoldText fontSize={16} style={{ height: 19 }}>
-                    {club.name}
+                    {item.club.name}
                   </BoldText>
                   <BoldText fontSize={12} style={{ height: 14, color: COLORS.gray2 }}>
-                    {getRole(club.role[0].role)}
+                    {getRole(item.role)}
                   </BoldText>
                   <View style={styles.tagContainer}>
-                    {club.tags.slice(0, 3).map((tag: string) => (
+                    {item.club.tags.slice(0, 3).map((tag: string) => (
                       <View key={tag} style={styles.tag}>
                         <BoldText fontSize={10} style={{ color: COLORS.gray2 }}>
                           {tag}

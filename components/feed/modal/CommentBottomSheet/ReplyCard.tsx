@@ -84,7 +84,7 @@ function ReplyCard({ reply, parentId, feedId }: { reply: CommentType; parentId: 
   });
 
   const goToProfilePage = () => {
-    router.push(`/profile/${reply.author_id}`);
+    router.push(`/profile/${reply.author.nickname}`);
   };
 
   function getTimeAgo(dateString: string) {

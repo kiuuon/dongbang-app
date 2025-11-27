@@ -21,7 +21,7 @@ function CommonProfileScreen({
 }: {
   currentPath: '/my' | '/feed' | '/explore' | '/interact' | '/club' | '/feed/detail';
 }) {
-  const { userId } = useLocalSearchParams() as { userId: string };
+  const { nickname } = useLocalSearchParams() as { nickname: string };
 
   const [key, setKey] = useState(0);
   const [isTaggedUserModalOpen, setIsTaggedUserModalOpen] = useState(false);
@@ -30,7 +30,9 @@ function CommonProfileScreen({
   const [isLikesModalOpen, setIsLikesModalOpen] = useState(false);
   const [selectedFeedId, setSelectedFeedId] = useState<string>('');
   const [selectedAuthorId, setSelectedAuthorId] = useState<string | null>(null);
-  const [taggedUsers, setTaggedUsers] = useState<{ user: { id: string; name: string; avatar: string } }[]>([]);
+  const [taggedUsers, setTaggedUsers] = useState<
+    { user: { id: string; name: string; avatar: string; nickname: string } }[]
+  >([]);
   const [taggedClubs, setTaggedClubs] = useState<{ club: { id: string; name: string; logo: string } }[]>([]);
   const [isClubsModalOpen, setIsClubsModalOpen] = useState(false);
 
@@ -59,7 +61,7 @@ function CommonProfileScreen({
           ref={webViewRef}
           key={key}
           setKey={setKey}
-          source={{ uri: `${process.env.EXPO_PUBLIC_WEB_URL}/profile/${userId}` }}
+          source={{ uri: `${process.env.EXPO_PUBLIC_WEB_URL}/profile/${nickname}` }}
           onMessage={(data) => {
             const { type, action, payload } = data;
 
@@ -112,7 +114,7 @@ function CommonProfileScreen({
       <ClubsModal
         visible={isClubsModalOpen}
         onClose={() => setIsClubsModalOpen(false)}
-        userId={userId as string}
+        nickname={nickname}
         currentPath={currentPath === '/feed/detail' ? '' : currentPath}
       />
 
