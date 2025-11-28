@@ -4,7 +4,7 @@ import { router } from 'expo-router';
 import { useInfiniteQuery, useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 
 import { fetchSession } from '@/apis/auth';
-import { fetchUserId } from '@/apis/user';
+import { blockUser, fetchUserId } from '@/apis/user';
 import { fetchFeedDetail } from '@/apis/feed/feed';
 import { deleteComment, fetchMyCommentLike, fetchReplyComment, toggleCommentLike } from '@/apis/feed/comment';
 import COLORS from '@/constants/colors';
@@ -14,6 +14,7 @@ import MoreHorizontalIcon from '@/icons/MoreHorizontalIcon';
 import LikesIcon2 from '@/icons/LikesIcon2';
 import TrashIcon from '@/icons/TrashIcon';
 import ReportIcon2 from '@/icons/ReportIcon2';
+import BanIcon2 from '@/icons/BanIcon2';
 import BoldText from '@/components/common/SemiBoldText';
 import RegularText from '@/components/common/RegularText';
 import ReplyCard from './ReplyCard';
@@ -94,6 +95,21 @@ function CommentCard({ comment }: { comment: CommentType }) {
     onError: (error) => {
       Alert.alert(ERROR_MESSAGE.LIKE.TOGGLE_FAILED, error.message);
     },
+  });
+
+  const { mutate: handleBlockUser } = useMutation({
+    mutationFn: () => blockUser(comment.author_id),
+    onSuccess: () => {
+      setIsDropdownOpen(false);
+      queryClient.invalidateQueries({
+        predicate: (q) => q.queryKey[0] === 'rootCommentList',
+      });
+
+      queryClient.invalidateQueries({
+        predicate: (q) => q.queryKey[0] === 'replyCommentList',
+      });
+    },
+    onError: (error) => Alert.alert(ERROR_MESSAGE.USER.BLOCK_FAILED, error.message),
   });
 
   const goToProfilePage = () => {
@@ -206,6 +222,19 @@ function CommentCard({ comment }: { comment: CommentType }) {
                   <ReportIcon2 />
                   <RegularText fontSize={16} style={{ color: COLORS.error }}>
                     신고
+                  </RegularText>
+                </TouchableOpacity>
+              )}
+              {(!session?.user || comment.author_id !== userId) && (
+                <TouchableOpacity
+                  style={styles.dropdownItem}
+                  onPress={() => {
+                    handleBlockUser();
+                  }}
+                >
+                  <BanIcon2 />
+                  <RegularText fontSize={16} style={{ color: COLORS.error }}>
+                    차단
                   </RegularText>
                 </TouchableOpacity>
               )}

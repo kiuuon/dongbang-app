@@ -14,6 +14,11 @@ export const ERROR_MESSAGE = {
     SIGN_UP_FAILED: '회원가입에 실패했습니다. 다시 시도해주세요.',
     NICKNAME_DUPLICATE_CHECK_FAILED: '닉네임 중복 확인에 실패했습니다. 다시 시도해주세요.',
     LIST_FETCH_FAILED: '유저 목록을 불러오는 데 실패했습니다. 다시 시도해주세요.',
+    PROFILE_VISIBILITY_FETCH_FAILED: '프로필 공개 범위 설정을 불러오는 데 실패했습니다. 다시 시도해주세요.',
+    PROFILE_VISIBILITY_UPDATE_FAILED: '프로필 공개 범위 설정을 업데이트하는 데 실패했습니다. 다시 시도해주세요.',
+    BLOCK_FAILED: '차단에 실패했습니다. 다시 시도해주세요.',
+    UNBLOCK_FAILED: '차단 해제에 실패했습니다. 다시 시도해주세요.',
+    BLOCKED_USER_LIST_FETCH_FAILED: '차단 목록을 불러오는 데 실패했습니다. 다시 시도해주세요.',
   },
   CLUB: {
     INFO_FETCH_FAILED: '동아리 정보를 불러오는 데 실패했습니다. 다시 시도해주세요.',
@@ -39,6 +44,11 @@ export const ERROR_MESSAGE = {
     WRITE_INQUIRY_FAILED: '문의 작성에 실패했습니다. 다시 시도해주세요',
     DELETE_INQUIRY_FAILED: '문의 삭제에 실패했습니다. 다시 시도해주세요',
     FETCH_INQUIRY_FAILED: '문의를 불러오는 데 실패했습니다. 다시 시도해주세요',
+    FETCH_ANNOUNCEMENTS_FAILED: '공지 목록를 불러오는 데 실패했습니다. 다시 시도해주세요',
+    FETCH_ANNOUNCEMENT_FAILED: '공지를 불러오는 데 실패했습니다. 다시 시도해주세요',
+    WRITE_ANNOUNCEMENT_FAILED: '공지 작성에 실패했습니다. 다시 시도해주세요',
+    DELETE_ANNOUNCEMENT_FAILED: '공지 삭제에 실패했습니다. 다시 시도해주세요',
+    EDIT_ANNOUNCEMENT_FAILED: '공지 수정에 실패했습니다. 다시 시도해주세요',
   },
   UNIVERSITY: {
     LIST_FETCH_FAILED: '대학 목록을 불러오는 데 실패했습니다. 다시 시도해주세요.',

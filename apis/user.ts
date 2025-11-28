@@ -42,3 +42,11 @@ export async function fetchUniversityList() {
 
   return data;
 }
+
+export async function blockUser(userId: string) {
+  const { error } = await supabase.rpc('block_user', {
+    p_blocked_id: userId,
+  });
+
+  if (error) throw error;
+}

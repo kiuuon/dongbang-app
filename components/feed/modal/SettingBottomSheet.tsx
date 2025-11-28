@@ -6,12 +6,13 @@ import * as Clipboard from 'expo-clipboard';
 import Toast from 'react-native-toast-message';
 
 import { deleteFeed } from '@/apis/feed/feed';
-import { fetchUserId } from '@/apis/user';
+import { blockUser, fetchUserId } from '@/apis/user';
 import COLORS from '@/constants/colors';
 import { ERROR_MESSAGE } from '@/constants/error';
 import EditIcon from '@/icons/EditIcon';
 import DeleteIcon from '@/icons/DeleteIcon';
 import ShareIcon from '@/icons/ShareIcon';
+import BanIcon from '@/icons/BanIcon';
 import ReportIcon from '@/icons/ReportIcon';
 import BoldText from '@/components/common/SemiBoldText';
 
@@ -60,6 +61,26 @@ function SettingBottomSheet({
     onError: (error) => {
       Alert.alert(ERROR_MESSAGE.FEED.DELETE_FAILED, error.message);
     },
+  });
+
+  const { mutate: handleBlockUser } = useMutation({
+    mutationFn: () => blockUser(authorId),
+    onSuccess: () => {
+      onClose();
+
+      queryClient.invalidateQueries({
+        predicate: (query) => query.queryKey[0] === 'feeds',
+      });
+
+      const message = {
+        type: 'event',
+        action: 'block user in Feed',
+        payload: feedId,
+      };
+
+      webViewRef.current?.postMessage(JSON.stringify(message));
+    },
+    onError: (error) => Alert.alert(ERROR_MESSAGE.USER.BLOCK_FAILED, error.message),
   });
 
   const clickEditButton = () => {
@@ -111,13 +132,22 @@ function SettingBottomSheet({
         </View>
       ) : (
         <View style={styles.buttonContainer}>
-          <TouchableOpacity style={[styles.button, styles.bottomBorder]}>
-            <ReportIcon />
-            <BoldText fontSize={16}>신고</BoldText>
-          </TouchableOpacity>
           <TouchableOpacity style={styles.button} onPress={clickShareButton}>
             <ShareIcon />
             <BoldText fontSize={16}>공유</BoldText>
+          </TouchableOpacity>
+          <TouchableOpacity
+            style={[styles.button, styles.bottomBorder]}
+            onPress={() => {
+              handleBlockUser();
+            }}
+          >
+            <BanIcon />
+            <BoldText fontSize={16}>차단</BoldText>
+          </TouchableOpacity>
+          <TouchableOpacity style={[styles.button, styles.bottomBorder]}>
+            <ReportIcon />
+            <BoldText fontSize={16}>신고</BoldText>
           </TouchableOpacity>
         </View>
       )}

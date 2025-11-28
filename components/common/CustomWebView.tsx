@@ -79,6 +79,8 @@ const CustomWebView = forwardRef<WebViewType, CustomWebViewProps>(
               }
             } else if (action === 'back button click') {
               navigation.goBack();
+            } else if (action === 'go to home') {
+              router.replace('/');
             }
           }
 

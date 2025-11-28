@@ -83,7 +83,7 @@ export default function MembersModal({ visible, onClose, clubId, currentPath }: 
                       key={member.userId}
                       style={styles.button}
                       onPress={() => {
-                        goToProfilePage(member.userId);
+                        goToProfilePage(member.nickname);
                       }}
                     >
                       {member.avatar ? (
@@ -117,7 +117,7 @@ export default function MembersModal({ visible, onClose, clubId, currentPath }: 
                       key={member.userId}
                       style={styles.button}
                       onPress={() => {
-                        goToProfilePage(member.userId);
+                        goToProfilePage(member.nickname);
                       }}
                     >
                       {member.avatar ? (

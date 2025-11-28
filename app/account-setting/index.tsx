@@ -35,6 +35,8 @@ function AccountSettingScreen() {
               router.push('/profile/edit');
             } else if (action === 'go to profile visibility page') {
               router.push('/account-setting/profile-visibility');
+            } else if (action === 'go to block list page') {
+              router.push('/account-setting/block-list');
             }
           }
         }}
