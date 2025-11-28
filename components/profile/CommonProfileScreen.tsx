@@ -13,6 +13,7 @@ import TaggedClubModal from '@/components/feed/modal/TaggedClubBottomSheet';
 import TaggedUserModal from '@/components/feed/modal/TaggedUserBottomSheet';
 import SettingModal from '@/components/feed/modal/SettingBottomSheet';
 import ClubsModal from './ClubsModal';
+import UserReportBottomsheet from '../report/UserReportBottomsheet';
 
 const { height } = Dimensions.get('window');
 
@@ -35,6 +36,9 @@ function CommonProfileScreen({
   >([]);
   const [taggedClubs, setTaggedClubs] = useState<{ club: { id: string; name: string; logo: string } }[]>([]);
   const [isClubsModalOpen, setIsClubsModalOpen] = useState(false);
+  const [isReportBottomSheetOpen, setIsReportBottomSheetOpen] = useState(false);
+  const [userInfo, setUserInfo] = useState<{ userId: string; username: string; nickname: string } | null>(null);
+  const [isReportSuccess, setIsReportSuccess] = useState(false);
 
   const setSearchTarget = exploreStore((state) => state.setSearchTarget);
   const setKeyword = exploreStore((state) => state.setKeyword);
@@ -105,6 +109,10 @@ function CommonProfileScreen({
                 }
               } else if (action === 'open clubs modal') {
                 setIsClubsModalOpen(true);
+              } else if (action === 'open report bottom sheet') {
+                setIsReportBottomSheetOpen(true);
+                setUserInfo(payload);
+                setIsReportSuccess(false);
               }
             }
           }}
@@ -117,6 +125,20 @@ function CommonProfileScreen({
         nickname={nickname}
         currentPath={currentPath === '/feed/detail' ? '' : currentPath}
       />
+
+      <CustomBottomSheet
+        isOpen={isReportBottomSheetOpen}
+        onClose={() => setIsReportBottomSheetOpen(false)}
+        title={isReportSuccess ? '신고가 접수되었습니다' : '신고'}
+      >
+        <UserReportBottomsheet
+          userInfo={userInfo}
+          isReportSuccess={isReportSuccess}
+          setIsReportSuccess={setIsReportSuccess}
+          onClose={() => setIsReportBottomSheetOpen(false)}
+          webViewRef={webViewRef}
+        />
+      </CustomBottomSheet>
 
       <CustomBottomSheet
         isOpen={isLikesModalOpen}

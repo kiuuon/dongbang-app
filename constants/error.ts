@@ -3,6 +3,9 @@ export const ERROR_MESSAGE = {
     FETCH_FAILED: '세션 정보를 불러오는 데 실패했습니다. 다시 시도해주세요.',
     SET_FAILED: '세션 정보를 설정하는 데 실패했습니다. 다시 시도해주세요.',
   },
+  REPORT: {
+    REPORT_FAILED: '신고에 실패했습니다. 다시 시도해주세요.',
+  },
   AUTH: {
     LOGIN_STATUS_CHECK_FAILED: '로그인 상태를 확인하는 데 실패했습니다. 다시 시도해주세요.',
     LOGOUT_FAILED: '로그아웃에 실패했습니다. 다시 시도해주세요.',
@@ -19,6 +22,7 @@ export const ERROR_MESSAGE = {
     BLOCK_FAILED: '차단에 실패했습니다. 다시 시도해주세요.',
     UNBLOCK_FAILED: '차단 해제에 실패했습니다. 다시 시도해주세요.',
     BLOCKED_USER_LIST_FETCH_FAILED: '차단 목록을 불러오는 데 실패했습니다. 다시 시도해주세요.',
+    BLOCK_STATUS_FETCH_FAILED: '차단 상태를 불러오는 데 실패했습니다. 다시 시도해주세요.',
   },
   CLUB: {
     INFO_FETCH_FAILED: '동아리 정보를 불러오는 데 실패했습니다. 다시 시도해주세요.',
