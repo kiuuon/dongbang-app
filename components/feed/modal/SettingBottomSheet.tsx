@@ -22,12 +22,16 @@ function SettingBottomSheet({
   onClose,
   isFeedDetail,
   webViewRef,
+  setIsReportSuccess,
+  setIsReportBottomSheetOpen,
 }: {
   authorId: string;
   feedId: string;
   onClose: () => void;
   isFeedDetail: boolean;
   webViewRef: React.RefObject<WebViewType | null>;
+  setIsReportSuccess: React.Dispatch<React.SetStateAction<boolean>>;
+  setIsReportBottomSheetOpen: React.Dispatch<React.SetStateAction<boolean>>;
 }) {
   const queryClient = useQueryClient();
 
@@ -74,8 +78,8 @@ function SettingBottomSheet({
 
       const message = {
         type: 'event',
-        action: 'block user in Feed',
-        payload: feedId,
+        action: 'block user',
+        payload: { feedId },
       };
 
       webViewRef.current?.postMessage(JSON.stringify(message));
@@ -145,7 +149,14 @@ function SettingBottomSheet({
             <BanIcon />
             <BoldText fontSize={16}>차단</BoldText>
           </TouchableOpacity>
-          <TouchableOpacity style={[styles.button, styles.bottomBorder]}>
+          <TouchableOpacity
+            style={[styles.button, styles.bottomBorder]}
+            onPress={() => {
+              setIsReportBottomSheetOpen(true);
+              setIsReportSuccess(false);
+              onClose();
+            }}
+          >
             <ReportIcon />
             <BoldText fontSize={16}>신고</BoldText>
           </TouchableOpacity>

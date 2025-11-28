@@ -14,6 +14,7 @@ import TaggedUserModal from '@/components/feed/modal/TaggedUserBottomSheet';
 import SettingModal from '@/components/feed/modal/SettingBottomSheet';
 import ClubsModal from './ClubsModal';
 import UserReportBottomsheet from '../report/UserReportBottomsheet';
+import FeedReportBottomsheet from '../report/FeedReportBottomsheet';
 
 const { height } = Dimensions.get('window');
 
@@ -36,9 +37,12 @@ function CommonProfileScreen({
   >([]);
   const [taggedClubs, setTaggedClubs] = useState<{ club: { id: string; name: string; logo: string } }[]>([]);
   const [isClubsModalOpen, setIsClubsModalOpen] = useState(false);
-  const [isReportBottomSheetOpen, setIsReportBottomSheetOpen] = useState(false);
+
+  const [isUserReportBottomSheetOpen, setIsUserReportBottomSheetOpen] = useState(false);
+  const [isUserReportSuccess, setIsUserReportSuccess] = useState(false);
   const [userInfo, setUserInfo] = useState<{ userId: string; username: string; nickname: string } | null>(null);
-  const [isReportSuccess, setIsReportSuccess] = useState(false);
+  const [isFeedReportBottomSheetOpen, setIsFeedReportBottomSheetOpen] = useState(false);
+  const [isFeedReportSuccess, setIsFeedReportSuccess] = useState(false);
 
   const setSearchTarget = exploreStore((state) => state.setSearchTarget);
   const setKeyword = exploreStore((state) => state.setKeyword);
@@ -110,9 +114,9 @@ function CommonProfileScreen({
               } else if (action === 'open clubs modal') {
                 setIsClubsModalOpen(true);
               } else if (action === 'open report bottom sheet') {
-                setIsReportBottomSheetOpen(true);
+                setIsUserReportBottomSheetOpen(true);
                 setUserInfo(payload);
-                setIsReportSuccess(false);
+                setIsUserReportSuccess(false);
               }
             }
           }}
@@ -127,15 +131,29 @@ function CommonProfileScreen({
       />
 
       <CustomBottomSheet
-        isOpen={isReportBottomSheetOpen}
-        onClose={() => setIsReportBottomSheetOpen(false)}
-        title={isReportSuccess ? '신고가 접수되었습니다' : '신고'}
+        isOpen={isFeedReportBottomSheetOpen}
+        onClose={() => setIsFeedReportBottomSheetOpen(false)}
+        title={isFeedReportSuccess ? '신고가 접수되었습니다' : '신고'}
+      >
+        <FeedReportBottomsheet
+          feedId={selectedFeedId}
+          isReportSuccess={isFeedReportSuccess}
+          setIsReportSuccess={setIsFeedReportSuccess}
+          onClose={() => setIsFeedReportBottomSheetOpen(false)}
+          webViewRef={webViewRef}
+        />
+      </CustomBottomSheet>
+
+      <CustomBottomSheet
+        isOpen={isUserReportBottomSheetOpen}
+        onClose={() => setIsUserReportBottomSheetOpen(false)}
+        title={isUserReportSuccess ? '신고가 접수되었습니다' : '신고'}
       >
         <UserReportBottomsheet
           userInfo={userInfo}
-          isReportSuccess={isReportSuccess}
-          setIsReportSuccess={setIsReportSuccess}
-          onClose={() => setIsReportBottomSheetOpen(false)}
+          isReportSuccess={isUserReportSuccess}
+          setIsReportSuccess={setIsUserReportSuccess}
+          onClose={() => setIsUserReportBottomSheetOpen(false)}
           webViewRef={webViewRef}
         />
       </CustomBottomSheet>
@@ -191,6 +209,8 @@ function CommonProfileScreen({
           onClose={() => setIsSettingModalOpen(false)}
           isFeedDetail={false}
           webViewRef={webViewRef}
+          setIsReportBottomSheetOpen={setIsFeedReportBottomSheetOpen}
+          setIsReportSuccess={setIsFeedReportSuccess}
         />
       </CustomBottomSheet>
     </SafeAreaView>

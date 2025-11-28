@@ -68,7 +68,7 @@ export async function fetchFeedDetail(feedId: string) {
     .select(
       `
       *,
-      author:User(name, avatar),
+      author:User(id, name, nickname, avatar),
       club:Club(name, logo),
       taggedUsers:Feed_User(user:User(id, name, avatar)),
       taggedClubs:Feed_Club(club:Club(id, name, logo))

@@ -23,6 +23,7 @@ import WriteModal from '@/components/club/WriteModal';
 import MembersModal from '@/components/club/MembersModal';
 import LoginModal from '../common/LoginModal';
 import RegularText from '../common/RegularText';
+import FeedReportBottomsheet from '../report/FeedReportBottomsheet';
 
 const { height } = Dimensions.get('window');
 
@@ -54,6 +55,8 @@ function CommonClubScreen({
   const [isWriteModalOpen, setIsWriteModalOpen] = useState(false);
   const [isMembersModalOpen, setIsMembersModalOpen] = useState(false);
   const [isLoginModalOpen, setIsLoginModalOpen] = useState(false);
+  const [isReportBottomSheetOpen, setIsReportBottomSheetOpen] = useState(false);
+  const [isReportSuccess, setIsReportSuccess] = useState(false);
 
   const setSearchTarget = exploreStore((state) => state.setSearchTarget);
   const setKeyword = exploreStore((state) => state.setKeyword);
@@ -211,6 +214,20 @@ function CommonClubScreen({
       />
 
       <CustomBottomSheet
+        isOpen={isReportBottomSheetOpen}
+        onClose={() => setIsReportBottomSheetOpen(false)}
+        title={isReportSuccess ? '신고가 접수되었습니다' : '신고'}
+      >
+        <FeedReportBottomsheet
+          feedId={selectedFeedId}
+          isReportSuccess={isReportSuccess}
+          setIsReportSuccess={setIsReportSuccess}
+          onClose={() => setIsReportBottomSheetOpen(false)}
+          webViewRef={webViewRef}
+        />
+      </CustomBottomSheet>
+
+      <CustomBottomSheet
         isOpen={isLikesModalOpen}
         onClose={() => setIsLikesModalOpen(false)}
         scrollable
@@ -261,6 +278,8 @@ function CommonClubScreen({
           onClose={() => setIsSettingModalOpen(false)}
           isFeedDetail={false}
           webViewRef={webViewRef}
+          setIsReportSuccess={setIsReportSuccess}
+          setIsReportBottomSheetOpen={setIsReportBottomSheetOpen}
         />
       </CustomBottomSheet>
     </View>

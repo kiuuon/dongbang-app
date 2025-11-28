@@ -12,6 +12,7 @@ import LikesModal from '@/components/feed/modal/LikesBottomSheet';
 import TaggedClubModal from '@/components/feed/modal/TaggedClubBottomSheet';
 import TaggedUserModal from '@/components/feed/modal/TaggedUserBottomSheet';
 import SettingModal from '@/components/feed/modal/SettingBottomSheet';
+import FeedReportBottomsheet from '@/components/report/FeedReportBottomsheet';
 
 const { height } = Dimensions.get('window');
 
@@ -23,8 +24,12 @@ function MyScreen() {
   const [isLikesModalOpen, setIsLikesModalOpen] = useState(false);
   const [selectedFeedId, setSelectedFeedId] = useState<string>('');
   const [selectedAuthorId, setSelectedAuthorId] = useState<string | null>(null);
-  const [taggedUsers, setTaggedUsers] = useState<{ user: { id: string; name: string; avatar: string } }[]>([]);
+  const [taggedUsers, setTaggedUsers] = useState<
+    { user: { id: string; name: string; avatar: string; nickname: string } }[]
+  >([]);
   const [taggedClubs, setTaggedClubs] = useState<{ club: { id: string; name: string; logo: string } }[]>([]);
+  const [isReportBottomSheetOpen, setIsReportBottomSheetOpen] = useState(false);
+  const [isReportSuccess, setIsReportSuccess] = useState(false);
 
   const setSearchTarget = exploreStore((state) => state.setSearchTarget);
   const setKeyword = exploreStore((state) => state.setKeyword);
@@ -94,6 +99,20 @@ function MyScreen() {
       </ScrollView>
 
       <CustomBottomSheet
+        isOpen={isReportBottomSheetOpen}
+        onClose={() => setIsReportBottomSheetOpen(false)}
+        title={isReportSuccess ? '신고가 접수되었습니다' : '신고'}
+      >
+        <FeedReportBottomsheet
+          feedId={selectedFeedId}
+          isReportSuccess={isReportSuccess}
+          setIsReportSuccess={setIsReportSuccess}
+          onClose={() => setIsReportBottomSheetOpen(false)}
+          webViewRef={webViewRef}
+        />
+      </CustomBottomSheet>
+
+      <CustomBottomSheet
         isOpen={isLikesModalOpen}
         onClose={() => setIsLikesModalOpen(false)}
         scrollable
@@ -132,6 +151,8 @@ function MyScreen() {
           onClose={() => setIsSettingModalOpen(false)}
           isFeedDetail={false}
           webViewRef={webViewRef}
+          setIsReportSuccess={setIsReportSuccess}
+          setIsReportBottomSheetOpen={setIsReportBottomSheetOpen}
         />
       </CustomBottomSheet>
     </SafeAreaView>

@@ -19,6 +19,7 @@ import TaggedUserBottomSheet from '@/components/feed/modal/TaggedUserBottomSheet
 import SettingBottomSheet from '@/components/feed/modal/SettingBottomSheet';
 import LikesBottomSheet from '@/components/feed/modal/LikesBottomSheet';
 import CommentBottomSheet from '@/components/feed/modal/CommentBottomSheet/CommentBottomSheet';
+import FeedReportBottomsheet from '@/components/report/FeedReportBottomsheet';
 
 const { height } = Dimensions.get('window');
 
@@ -30,12 +31,16 @@ function FeedScreen() {
   const [isSettingBottomSheetOpen, setIsSettingBottomSheetOpen] = useState(false);
   const [isLikesBottomSheetOpen, setIsLikesBottomSheetOpen] = useState(false);
   const [isCommentBottomSheetOpen, setIsCommentBottomSheetOpen] = useState(false);
+  const [isReportBottomSheetOpen, setIsReportBottomSheetOpen] = useState(false);
+  const [isReportSuccess, setIsReportSuccess] = useState(false);
   const [isLoginModalOpen, setIsLoginModalOpen] = useState(false);
   const [key, setKey] = useState(0);
 
   const [selectedFeedId, setSelectedFeedId] = useState<string>('');
   const [selectedAuthorId, setSelectedAuthorId] = useState<string | null>(null);
-  const [taggedUsers, setTaggedUsers] = useState<{ user: { id: string; name: string; avatar: string } }[]>([]);
+  const [taggedUsers, setTaggedUsers] = useState<
+    { user: { id: string; name: string; nickname: string; avatar: string } }[]
+  >([]);
   const [taggedClubs, setTaggedClubs] = useState<{ club: { id: string; name: string; logo: string } }[]>([]);
 
   const setSearchTarget = exploreStore((state) => state.setSearchTarget);
@@ -143,6 +148,20 @@ function FeedScreen() {
         }}
       />
 
+      <CustomBottomSheet
+        isOpen={isReportBottomSheetOpen}
+        onClose={() => setIsReportBottomSheetOpen(false)}
+        title={isReportSuccess ? '신고가 접수되었습니다' : '신고'}
+      >
+        <FeedReportBottomsheet
+          feedId={selectedFeedId}
+          isReportSuccess={isReportSuccess}
+          setIsReportSuccess={setIsReportSuccess}
+          onClose={() => setIsReportBottomSheetOpen(false)}
+          webViewRef={webViewRef}
+        />
+      </CustomBottomSheet>
+
       <CustomBottomSheet isOpen={isNavigationOpen} onClose={() => setIsNavigationOpen(false)}>
         {clubType !== 'my' && (
           <TouchableOpacity
@@ -237,6 +256,8 @@ function FeedScreen() {
           onClose={() => setIsSettingBottomSheetOpen(false)}
           isFeedDetail={false}
           webViewRef={webViewRef}
+          setIsReportSuccess={setIsReportSuccess}
+          setIsReportBottomSheetOpen={setIsReportBottomSheetOpen}
         />
       </CustomBottomSheet>
     </SafeAreaView>

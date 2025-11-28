@@ -9,10 +9,12 @@ import RegularText from '../common/RegularText';
 import BoldText from '../common/SemiBoldText';
 
 function UserBlockBottomsheet({
+  feedId,
   userInfo,
   onClose,
   webViewRef,
 }: {
+  feedId?: string;
   userInfo: { userId: string; username: string; nickname: string } | null;
   onClose: () => void;
   webViewRef: React.RefObject<WebViewType | null>;
@@ -24,8 +26,8 @@ function UserBlockBottomsheet({
 
       const message = {
         type: 'event',
-        action: 'block user in Profile',
-        payload: userInfo?.nickname,
+        action: 'block user',
+        payload: { feedId, nickname: userInfo?.nickname },
       };
 
       webViewRef.current?.postMessage(JSON.stringify(message));

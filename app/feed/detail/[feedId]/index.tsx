@@ -13,6 +13,7 @@ import TaggedClubBottomSheet from '@/components/feed/modal/TaggedClubBottomSheet
 import TaggedUserBottomSheet from '@/components/feed/modal/TaggedUserBottomSheet';
 import SettingBottomSheet from '@/components/feed/modal/SettingBottomSheet';
 import LikesBottomSheet from '@/components/feed/modal/LikesBottomSheet';
+import FeedReportBottomsheet from '@/components/report/FeedReportBottomsheet';
 
 const { height } = Dimensions.get('window');
 
@@ -23,9 +24,13 @@ function FeedDetailScreen() {
   const [isSettingBottomSheetOpen, setIsSettingBottomSheetOpen] = useState(false);
   const [isLikesBottomSheetOpen, setIsLikesBottomSheetOpen] = useState(false);
   const [isLoginModalOpen, setIsLoginModalOpen] = useState(false);
+  const [isReportBottomSheetOpen, setIsReportBottomSheetOpen] = useState(false);
+  const [isReportSuccess, setIsReportSuccess] = useState(false);
 
   const [selectedAuthorId, setSelectedAuthorId] = useState<string | null>(null);
-  const [taggedUsers, setTaggedUsers] = useState<{ user: { id: string; name: string; avatar: string } }[]>([]);
+  const [taggedUsers, setTaggedUsers] = useState<
+    { user: { id: string; name: string; avatar: string; nickname: string } }[]
+  >([]);
   const [taggedClubs, setTaggedClubs] = useState<{ club: { id: string; name: string; logo: string } }[]>([]);
 
   const setSearchTarget = exploreStore((state) => state.setSearchTarget);
@@ -94,6 +99,20 @@ function FeedDetailScreen() {
       <LoginModal visible={isLoginModalOpen} onClose={() => setIsLoginModalOpen(false)} webViewRef={webViewRef} />
 
       <CustomBottomSheet
+        isOpen={isReportBottomSheetOpen}
+        onClose={() => setIsReportBottomSheetOpen(false)}
+        title={isReportSuccess ? '신고가 접수되었습니다' : '신고'}
+      >
+        <FeedReportBottomsheet
+          feedId={feedId}
+          isReportSuccess={isReportSuccess}
+          setIsReportSuccess={setIsReportSuccess}
+          onClose={() => setIsReportBottomSheetOpen(false)}
+          webViewRef={webViewRef}
+        />
+      </CustomBottomSheet>
+
+      <CustomBottomSheet
         isOpen={isLikesBottomSheetOpen}
         onClose={() => setIsLikesBottomSheetOpen(false)}
         scrollable
@@ -140,6 +159,8 @@ function FeedDetailScreen() {
           onClose={() => setIsSettingBottomSheetOpen(false)}
           isFeedDetail
           webViewRef={webViewRef}
+          setIsReportSuccess={setIsReportSuccess}
+          setIsReportBottomSheetOpen={setIsReportBottomSheetOpen}
         />
       </CustomBottomSheet>
     </SafeAreaView>
