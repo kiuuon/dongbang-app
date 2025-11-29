@@ -24,6 +24,7 @@ import MembersModal from '@/components/club/MembersModal';
 import LoginModal from '../common/LoginModal';
 import RegularText from '../common/RegularText';
 import FeedReportBottomsheet from '../report/FeedReportBottomsheet';
+import ClubReportBottomsheet from '../report/ClubReportBottomsheet';
 
 const { height } = Dimensions.get('window');
 
@@ -55,8 +56,9 @@ function CommonClubScreen({
   const [isWriteModalOpen, setIsWriteModalOpen] = useState(false);
   const [isMembersModalOpen, setIsMembersModalOpen] = useState(false);
   const [isLoginModalOpen, setIsLoginModalOpen] = useState(false);
-  const [isReportBottomSheetOpen, setIsReportBottomSheetOpen] = useState(false);
-  const [isReportSuccess, setIsReportSuccess] = useState(false);
+  const [isFeedReportBottomSheetOpen, setIsFeedReportBottomSheetOpen] = useState(false);
+  const [isFeedReportSuccess, setIsFeedReportSuccess] = useState(false);
+  const [isClubReportBottomSheetOpen, setIsClubReportBottomSheetOpen] = useState(false);
 
   const setSearchTarget = exploreStore((state) => state.setSearchTarget);
   const setKeyword = exploreStore((state) => state.setKeyword);
@@ -142,7 +144,13 @@ function CommonClubScreen({
             </TouchableWithoutFeedback>
 
             <View style={[styles.dropdownContainer, { top: dropdownPosition.y + 40, left: dropdownPosition.x - 55 }]}>
-              <TouchableOpacity style={styles.dropdownItem}>
+              <TouchableOpacity
+                style={styles.dropdownItem}
+                onPress={() => {
+                  setIsClubReportBottomSheetOpen(true);
+                  setIsDropdownOpen(false);
+                }}
+              >
                 <ReportIcon2 />
                 <RegularText fontSize={16} style={{ color: COLORS.error }}>
                   신고
@@ -214,15 +222,23 @@ function CommonClubScreen({
       />
 
       <CustomBottomSheet
-        isOpen={isReportBottomSheetOpen}
-        onClose={() => setIsReportBottomSheetOpen(false)}
-        title={isReportSuccess ? '신고가 접수되었습니다' : '신고'}
+        isOpen={isClubReportBottomSheetOpen}
+        onClose={() => setIsClubReportBottomSheetOpen(false)}
+        title="신고"
+      >
+        <ClubReportBottomsheet clubId={clubId as string} onClose={() => setIsClubReportBottomSheetOpen(false)} />
+      </CustomBottomSheet>
+
+      <CustomBottomSheet
+        isOpen={isFeedReportBottomSheetOpen}
+        onClose={() => setIsFeedReportBottomSheetOpen(false)}
+        title={isFeedReportSuccess ? '신고가 접수되었습니다' : '신고'}
       >
         <FeedReportBottomsheet
           feedId={selectedFeedId}
-          isReportSuccess={isReportSuccess}
-          setIsReportSuccess={setIsReportSuccess}
-          onClose={() => setIsReportBottomSheetOpen(false)}
+          isReportSuccess={isFeedReportSuccess}
+          setIsReportSuccess={setIsFeedReportSuccess}
+          onClose={() => setIsFeedReportBottomSheetOpen(false)}
           webViewRef={webViewRef}
         />
       </CustomBottomSheet>
@@ -278,8 +294,8 @@ function CommonClubScreen({
           onClose={() => setIsSettingModalOpen(false)}
           isFeedDetail={false}
           webViewRef={webViewRef}
-          setIsReportSuccess={setIsReportSuccess}
-          setIsReportBottomSheetOpen={setIsReportBottomSheetOpen}
+          setIsReportSuccess={setIsFeedReportSuccess}
+          setIsReportBottomSheetOpen={setIsFeedReportBottomSheetOpen}
         />
       </CustomBottomSheet>
     </View>
