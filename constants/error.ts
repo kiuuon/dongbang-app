@@ -74,6 +74,7 @@ export const ERROR_MESSAGE = {
     LIST_FETCH_FAILED: '댓글 목록을 불러오는 데 실패했습니다. 다시 시도해주세요.',
     WRITE_FAILED: '댓글 작성에 실패했습니다. 다시 시도해주세요.',
     DELETE_FAILED: '댓글 삭제에 실패했습니다. 다시 시도해주세요.',
+    DETAIL_FETCH_FAILED: '댓글 상세 정보를 불러오는 데 실패했습니다. 다시 시도해주세요.',
   },
   IMAGE: {
     LOGO_UPLOAD_FAILED: '로고 업로드에 실패했습니다. 다시 시도해주세요.',

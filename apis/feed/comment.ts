@@ -28,6 +28,24 @@ export async function fetchRootComment(feedId: string, page: number) {
   }));
 }
 
+export async function fetchCommentDetail(commentId: string) {
+  const { data, error } = await supabase
+    .from('Comment')
+    .select('author:User!Comment_author_id_fkey(id, name, nickname)')
+    .eq('id', commentId)
+    .is('deleted_at', null)
+    .single();
+
+  if (error) throw error;
+
+  if (!data) return null;
+
+  return {
+    ...data,
+    author: Array.isArray(data.author) ? data.author[0] : data.author,
+  };
+}
+
 export async function fetchReplyComment(feedId: string, parentId: string, page: number) {
   const PAGE_SIZE = 5;
   const start = page * PAGE_SIZE;

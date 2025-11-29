@@ -14,6 +14,7 @@ import TaggedUserBottomSheet from '@/components/feed/modal/TaggedUserBottomSheet
 import SettingBottomSheet from '@/components/feed/modal/SettingBottomSheet';
 import LikesBottomSheet from '@/components/feed/modal/LikesBottomSheet';
 import FeedReportBottomsheet from '@/components/report/FeedReportBottomsheet';
+import CommentReportBottomsheet from '@/components/report/CommentReportBottomsheet';
 
 const { height } = Dimensions.get('window');
 
@@ -24,9 +25,12 @@ function FeedDetailScreen() {
   const [isSettingBottomSheetOpen, setIsSettingBottomSheetOpen] = useState(false);
   const [isLikesBottomSheetOpen, setIsLikesBottomSheetOpen] = useState(false);
   const [isLoginModalOpen, setIsLoginModalOpen] = useState(false);
-  const [isReportBottomSheetOpen, setIsReportBottomSheetOpen] = useState(false);
-  const [isReportSuccess, setIsReportSuccess] = useState(false);
+  const [isFeedReportBottomSheetOpen, setIsFeedReportBottomSheetOpen] = useState(false);
+  const [isFeedReportSuccess, setIsFeedReportSuccess] = useState(false);
+  const [isCommentReportBottomSheetOpen, setIsCommentReportBottomSheetOpen] = useState(false);
+  const [isCommentReportSuccess, setIsCommentReportSuccess] = useState(false);
 
+  const [selectedCommentId, setSelectedCommentId] = useState<string | null>(null);
   const [selectedAuthorId, setSelectedAuthorId] = useState<string | null>(null);
   const [taggedUsers, setTaggedUsers] = useState<
     { user: { id: string; name: string; avatar: string; nickname: string } }[]
@@ -90,6 +94,10 @@ function FeedDetailScreen() {
                 router.push(`/club/detail/${payload}`);
               } else if (action === 'go to profile page') {
                 router.push(`/profile/${payload}`);
+              } else if (action === 'open comment report bottom sheet') {
+                setSelectedCommentId(payload);
+                setIsCommentReportBottomSheetOpen(true);
+                setIsCommentReportSuccess(false);
               }
             }
           }}
@@ -99,15 +107,28 @@ function FeedDetailScreen() {
       <LoginModal visible={isLoginModalOpen} onClose={() => setIsLoginModalOpen(false)} webViewRef={webViewRef} />
 
       <CustomBottomSheet
-        isOpen={isReportBottomSheetOpen}
-        onClose={() => setIsReportBottomSheetOpen(false)}
-        title={isReportSuccess ? '신고가 접수되었습니다' : '신고'}
+        isOpen={isFeedReportBottomSheetOpen}
+        onClose={() => setIsFeedReportBottomSheetOpen(false)}
+        title={isFeedReportSuccess ? '신고가 접수되었습니다' : '신고'}
       >
         <FeedReportBottomsheet
           feedId={feedId}
-          isReportSuccess={isReportSuccess}
-          setIsReportSuccess={setIsReportSuccess}
-          onClose={() => setIsReportBottomSheetOpen(false)}
+          isReportSuccess={isFeedReportSuccess}
+          setIsReportSuccess={setIsFeedReportSuccess}
+          onClose={() => setIsFeedReportBottomSheetOpen(false)}
+          webViewRef={webViewRef}
+        />
+      </CustomBottomSheet>
+      <CustomBottomSheet
+        isOpen={isCommentReportBottomSheetOpen}
+        onClose={() => setIsCommentReportBottomSheetOpen(false)}
+        title={isCommentReportSuccess ? '신고가 접수되었습니다' : '신고'}
+      >
+        <CommentReportBottomsheet
+          commentId={selectedCommentId as string}
+          isReportSuccess={isCommentReportSuccess}
+          setIsReportSuccess={setIsCommentReportSuccess}
+          onClose={() => setIsCommentReportBottomSheetOpen(false)}
           webViewRef={webViewRef}
         />
       </CustomBottomSheet>
@@ -159,8 +180,8 @@ function FeedDetailScreen() {
           onClose={() => setIsSettingBottomSheetOpen(false)}
           isFeedDetail
           webViewRef={webViewRef}
-          setIsReportSuccess={setIsReportSuccess}
-          setIsReportBottomSheetOpen={setIsReportBottomSheetOpen}
+          setIsReportSuccess={setIsFeedReportSuccess}
+          setIsReportBottomSheetOpen={setIsFeedReportBottomSheetOpen}
         />
       </CustomBottomSheet>
     </SafeAreaView>

@@ -10,11 +10,13 @@ import BoldText from '../common/SemiBoldText';
 
 function UserBlockBottomsheet({
   feedId,
+  commentId,
   userInfo,
   onClose,
   webViewRef,
 }: {
   feedId?: string;
+  commentId?: string;
   userInfo: { userId: string; username: string; nickname: string } | null;
   onClose: () => void;
   webViewRef: React.RefObject<WebViewType | null>;
@@ -27,7 +29,7 @@ function UserBlockBottomsheet({
       const message = {
         type: 'event',
         action: 'block user',
-        payload: { feedId, nickname: userInfo?.nickname },
+        payload: { feedId, commentId, nickname: userInfo?.nickname },
       };
 
       webViewRef.current?.postMessage(JSON.stringify(message));
