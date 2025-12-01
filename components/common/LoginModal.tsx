@@ -16,7 +16,8 @@ interface LoginModalProps {
 
 export default function LoginModal({ visible, onClose, webViewRef }: LoginModalProps) {
   const { hide } = useTabVisibility();
-  const handleLogin = (provider: 'kakao' | 'google') => {
+
+  const handleLogin = async (provider: 'kakao' | 'google') => {
     const message = {
       type: 'event',
       action: 'login request',
@@ -30,6 +31,7 @@ export default function LoginModal({ visible, onClose, webViewRef }: LoginModalP
   return (
     <Modal visible={visible} transparent animationType="fade">
       <TouchableOpacity style={styles.backdrop} activeOpacity={1} onPress={onClose}>
+        {/* {url && <WebView source={{ uri: url }} />} */}
         <View style={styles.container}>
           <View style={styles.logoWrapper}>
             <DongbangIcon />

@@ -143,3 +143,13 @@ export async function fetchClubMembers(clubId: string) {
     role: member.role,
   }));
 }
+
+export async function leaveClub(clubId: string) {
+  const { error } = await supabase.rpc('leave_club', {
+    p_club_id: clubId,
+  });
+
+  if (error) {
+    throw error;
+  }
+}

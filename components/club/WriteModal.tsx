@@ -4,6 +4,7 @@ import { router } from 'expo-router';
 import COLORS from '@/constants/colors';
 import FeedIcon from '@/icons/FeedIcon';
 import PersonIcon from '@/icons/PersonIcon';
+import TagIcon from '@/icons/TagIcon';
 import EditIcon2 from '@/icons/EditIcon2';
 import RegularText from '../common/RegularText';
 
@@ -41,6 +42,16 @@ export default function WriteModal({ visible, onClose, clubId }: WriteModalProps
             </TouchableOpacity>
           </View>
           <View style={styles.buttonContainer}>
+            <TouchableOpacity
+              style={styles.button}
+              onPress={() => {
+                router.push(`/club/detail/${clubId}/profile`);
+                onClose();
+              }}
+            >
+              <TagIcon />
+              <RegularText fontSize={16}>활동명 변경</RegularText>
+            </TouchableOpacity>
             <TouchableOpacity
               style={styles.button}
               onPress={() => {

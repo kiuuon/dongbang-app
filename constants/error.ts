@@ -53,6 +53,7 @@ export const ERROR_MESSAGE = {
     WRITE_ANNOUNCEMENT_FAILED: '공지 작성에 실패했습니다. 다시 시도해주세요',
     DELETE_ANNOUNCEMENT_FAILED: '공지 삭제에 실패했습니다. 다시 시도해주세요',
     EDIT_ANNOUNCEMENT_FAILED: '공지 수정에 실패했습니다. 다시 시도해주세요',
+    LEAVE_CLUB_FAILED: '동아리 탈퇴에 실패했습니다. 다시 시도해주세요',
   },
   UNIVERSITY: {
     LIST_FETCH_FAILED: '대학 목록을 불러오는 데 실패했습니다. 다시 시도해주세요.',

@@ -1,15 +1,19 @@
 import { useRef, useState } from 'react';
-import { Dimensions, Modal, StyleSheet, TouchableOpacity, TouchableWithoutFeedback, View } from 'react-native';
+import { Alert, Dimensions, Modal, StyleSheet, TouchableOpacity, TouchableWithoutFeedback, View } from 'react-native';
 import WebView from 'react-native-webview';
 import { SafeAreaView, useSafeAreaInsets } from 'react-native-safe-area-context';
 import { router, useLocalSearchParams } from 'expo-router';
+import { useMutation } from '@tanstack/react-query';
 import * as Clipboard from 'expo-clipboard';
 import Toast from 'react-native-toast-message';
 
+import { leaveClub } from '@/apis/club';
 import COLORS from '@/constants/colors';
+import { ERROR_MESSAGE } from '@/constants/error';
 import exploreStore from '@/stores/exploreStore';
 import LeftArrowIcon from '@/icons/LeftArrowIcon';
 import ReportIcon2 from '@/icons/ReportIcon2';
+import LogoutIcon from '@/icons/LogoutIcon';
 import MoreVertIcon from '@/icons/MoreVertIcon';
 import ExternalLinkIcon from '@/icons/ExternalLinkIcon';
 import MessageIcon from '@/icons/MessageIcon';
@@ -25,6 +29,7 @@ import LoginModal from '../common/LoginModal';
 import RegularText from '../common/RegularText';
 import FeedReportBottomsheet from '../report/FeedReportBottomsheet';
 import ClubReportBottomsheet from '../report/ClubReportBottomsheet';
+import BoldText from '../common/SemiBoldText';
 
 const { height } = Dimensions.get('window');
 
@@ -59,12 +64,29 @@ function CommonClubScreen({
   const [isFeedReportBottomSheetOpen, setIsFeedReportBottomSheetOpen] = useState(false);
   const [isFeedReportSuccess, setIsFeedReportSuccess] = useState(false);
   const [isClubReportBottomSheetOpen, setIsClubReportBottomSheetOpen] = useState(false);
+  const [isClubLeaveModalOpen, setIsClubLeaveModalOpen] = useState(false);
 
   const setSearchTarget = exploreStore((state) => state.setSearchTarget);
   const setKeyword = exploreStore((state) => state.setKeyword);
   const setSelectedHashtag = exploreStore((state) => state.setSelectedHashtag);
 
   const webViewRef = useRef<WebView>(null);
+
+  const { mutate: handleLeaveClub } = useMutation({
+    mutationFn: async () => leaveClub(clubId as string),
+    onSuccess: () => {
+      setIsClubLeaveModalOpen(false);
+
+      const message = {
+        type: 'event',
+        action: 'leave club',
+        payload: clubId,
+      };
+
+      webViewRef.current?.postMessage(JSON.stringify(message));
+    },
+    onError: (error) => Alert.alert(ERROR_MESSAGE.CLUB.LEAVE_CLUB_FAILED, error.message),
+  });
 
   const handleLoadEnd = () => {
     webViewRef.current?.postMessage(
@@ -98,6 +120,7 @@ function CommonClubScreen({
 
   return (
     <View style={{ flex: 1, backgroundColor: COLORS.white }}>
+      {/* 헤더 영역 */}
       <View style={{ position: 'absolute', top: 0, left: 0, right: 0, zIndex: 1000 }}>
         <SafeAreaView
           edges={['top']}
@@ -156,9 +179,62 @@ function CommonClubScreen({
                   신고
                 </RegularText>
               </TouchableOpacity>
+              <TouchableOpacity
+                style={styles.dropdownItem}
+                onPress={() => {
+                  setIsClubLeaveModalOpen(true);
+                  setIsDropdownOpen(false);
+                }}
+              >
+                <LogoutIcon />
+                <RegularText fontSize={16} style={{ color: COLORS.error }}>
+                  탈퇴
+                </RegularText>
+              </TouchableOpacity>
             </View>
           </Modal>
         </SafeAreaView>
+        {isClubLeaveModalOpen && (
+          <Modal transparent visible={isClubLeaveModalOpen} animationType="fade">
+            <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
+              <TouchableWithoutFeedback onPress={() => setIsClubLeaveModalOpen(false)}>
+                <View
+                  style={{
+                    position: 'absolute',
+                    top: 0,
+                    left: 0,
+                    right: 0,
+                    bottom: 0,
+                    backgroundColor: COLORS.modalBackdrop,
+                  }}
+                />
+              </TouchableWithoutFeedback>
+              <View
+                style={{
+                  backgroundColor: COLORS.white,
+                  padding: 20,
+                  borderRadius: 10,
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                }}
+              >
+                <BoldText fontSize={14}>소속된 동아리에서 탈퇴하시겠습니까?</BoldText>
+                <TouchableOpacity>
+                  <BoldText
+                    fontSize={14}
+                    style={{ color: COLORS.error, marginBottom: 16, marginTop: 24 }}
+                    onPress={() => handleLeaveClub()}
+                  >
+                    탈퇴 하기
+                  </BoldText>
+                </TouchableOpacity>
+                <TouchableOpacity onPress={() => setIsClubLeaveModalOpen(false)}>
+                  <RegularText fontSize={14}>취소</RegularText>
+                </TouchableOpacity>
+              </View>
+            </View>
+          </Modal>
+        )}
       </View>
 
       <CustomWebView
