@@ -31,8 +31,8 @@ function FeedScreen() {
   const [isSettingBottomSheetOpen, setIsSettingBottomSheetOpen] = useState(false);
   const [isLikesBottomSheetOpen, setIsLikesBottomSheetOpen] = useState(false);
   const [isCommentBottomSheetOpen, setIsCommentBottomSheetOpen] = useState(false);
-  const [isReportBottomSheetOpen, setIsReportBottomSheetOpen] = useState(false);
-  const [isReportSuccess, setIsReportSuccess] = useState(false);
+  const [isFeedReportBottomSheetOpen, setIsFeedReportBottomSheetOpen] = useState(false);
+  const [isFeedReportSuccess, setIsFeedReportSuccess] = useState(false);
   const [isLoginModalOpen, setIsLoginModalOpen] = useState(false);
   const [key, setKey] = useState(0);
 
@@ -146,18 +146,19 @@ function FeedScreen() {
         onClose={() => {
           setIsCommentBottomSheetOpen(false);
         }}
+        webViewRef={webViewRef}
       />
 
       <CustomBottomSheet
-        isOpen={isReportBottomSheetOpen}
-        onClose={() => setIsReportBottomSheetOpen(false)}
-        title={isReportSuccess ? '신고가 접수되었습니다' : '신고'}
+        isOpen={isFeedReportBottomSheetOpen}
+        onClose={() => setIsFeedReportBottomSheetOpen(false)}
+        title={isFeedReportSuccess ? '신고가 접수되었습니다' : '신고'}
       >
         <FeedReportBottomsheet
           feedId={selectedFeedId}
-          isReportSuccess={isReportSuccess}
-          setIsReportSuccess={setIsReportSuccess}
-          onClose={() => setIsReportBottomSheetOpen(false)}
+          isReportSuccess={isFeedReportSuccess}
+          setIsReportSuccess={setIsFeedReportSuccess}
+          onClose={() => setIsFeedReportBottomSheetOpen(false)}
           webViewRef={webViewRef}
         />
       </CustomBottomSheet>
@@ -256,8 +257,8 @@ function FeedScreen() {
           onClose={() => setIsSettingBottomSheetOpen(false)}
           isFeedDetail={false}
           webViewRef={webViewRef}
-          setIsReportSuccess={setIsReportSuccess}
-          setIsReportBottomSheetOpen={setIsReportBottomSheetOpen}
+          setIsReportSuccess={setIsFeedReportSuccess}
+          setIsReportBottomSheetOpen={setIsFeedReportBottomSheetOpen}
         />
       </CustomBottomSheet>
     </SafeAreaView>

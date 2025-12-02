@@ -2,6 +2,8 @@ import { useRef, useState } from 'react';
 import { Alert, Image, Modal, StyleSheet, TouchableOpacity, View, TouchableWithoutFeedback } from 'react-native';
 import { router } from 'expo-router';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
+import type { WebView as WebViewType } from 'react-native-webview';
+import { BottomSheetFlatListMethods } from '@gorhom/bottom-sheet';
 
 import { fetchSession } from '@/apis/auth';
 import { blockUser, fetchUserId } from '@/apis/user';
@@ -10,19 +12,50 @@ import { deleteComment, fetchMyCommentLike, toggleCommentLike } from '@/apis/fee
 import COLORS from '@/constants/colors';
 import { ERROR_MESSAGE } from '@/constants/error';
 import { CommentType } from '@/types/CommentType';
+import commentInputValue from '@/stores/commentInputValueStore';
 import MoreHorizontalIcon from '@/icons/MoreHorizontalIcon';
 import LikesIcon2 from '@/icons/LikesIcon2';
 import TrashIcon from '@/icons/TrashIcon';
 import ReportIcon2 from '@/icons/ReportIcon2';
+import BanIcon2 from '@/icons/BanIcon2';
 import BoldText from '@/components/common/SemiBoldText';
 import RegularText from '@/components/common/RegularText';
-import BanIcon2 from '@/icons/BanIcon2';
+import CustomBottomSheet from '@/components/common/CustomBottomSheet';
+import CommentReportBottomsheet from '@/components/report/CommentReportBottomsheet';
+import MentionRenderer from './MentionRenderer';
 
-function ReplyCard({ reply, parentId, feedId }: { reply: CommentType; parentId: string; feedId: string }) {
+function ReplyCard({
+  reply,
+  parentId,
+  feedId,
+  inputRef,
+
+  setReplyTargetId,
+  parentIndex,
+  index,
+  flatListRef,
+  webViewRef,
+}: {
+  reply: CommentType;
+  parentId: string;
+  feedId: string;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  inputRef: React.RefObject<any>;
+  setReplyTargetId: React.Dispatch<React.SetStateAction<string>>;
+  parentIndex: number;
+  index: number;
+  flatListRef: React.RefObject<BottomSheetFlatListMethods | null>;
+  webViewRef: React.RefObject<WebViewType | null>;
+}) {
   const queryClient = useQueryClient();
 
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const [dropdownPosition, setDropdownPosition] = useState({ x: 0, y: 0 });
+
+  const setInputValue = commentInputValue((state) => state.setValue);
+
+  const [isCommentReportBottomSheetOpen, setIsCommentReportBottomSheetOpen] = useState(false);
+  const [isCommentReportSuccess, setIsCommentReportSuccess] = useState(false);
 
   const moreButtonRef = useRef<View>(null);
 
@@ -55,7 +88,8 @@ function ReplyCard({ reply, parentId, feedId }: { reply: CommentType; parentId: 
 
   const { data: isLike } = useQuery({
     queryKey: ['isCommentLike', reply.id],
-    queryFn: () => fetchMyCommentLike(reply.id),
+    queryFn: () => fetchMyCommentLike(reply.id, userId as string),
+    enabled: !!userId,
     throwOnError: (error) => {
       Alert.alert(ERROR_MESSAGE.LIKE.MY_LIKE_FETCH_FAILED, error.message);
       return false;
@@ -67,6 +101,8 @@ function ReplyCard({ reply, parentId, feedId }: { reply: CommentType; parentId: 
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['commentCount', feedId] });
       queryClient.invalidateQueries({ queryKey: ['rootCommentList', feedId] });
+      queryClient.invalidateQueries({ queryKey: ['replyCommentList', parentId] });
+      setIsDropdownOpen(false);
     },
     onError: (error) => {
       Alert.alert(ERROR_MESSAGE.COMMENT.DELETE_FAILED, error.message);
@@ -146,9 +182,27 @@ function ReplyCard({ reply, parentId, feedId }: { reply: CommentType; parentId: 
               </RegularText>
             </TouchableOpacity>
 
-            <RegularText fontSize={14}>{reply.content}</RegularText>
+            <RegularText fontSize={14}>
+              <MentionRenderer text={reply.content} />
+            </RegularText>
 
-            <TouchableOpacity>
+            <TouchableOpacity
+              onPress={() => {
+                setReplyTargetId(reply.parent_id);
+                setInputValue(`@${reply.author.nickname} `);
+                inputRef.current?.focus();
+
+                // 답글 달기 클릭 시 해당 댓글로 스크롤 (키보드 위에 위치하도록)
+                setTimeout(() => {
+                  flatListRef.current?.scrollToIndex({
+                    index: parentIndex,
+                    animated: true,
+                    viewPosition: 0.25,
+                    viewOffset: -80 * index,
+                  });
+                }, 100);
+              }}
+            >
               <RegularText fontSize={12} style={{ marginTop: 2, color: COLORS.gray3 }}>
                 답글 달기
               </RegularText>
@@ -205,7 +259,14 @@ function ReplyCard({ reply, parentId, feedId }: { reply: CommentType; parentId: 
                 </TouchableOpacity>
               )}
               {(!session?.user || reply.author_id !== userId) && (
-                <TouchableOpacity style={styles.dropdownItem}>
+                <TouchableOpacity
+                  style={styles.dropdownItem}
+                  onPress={() => {
+                    setIsCommentReportBottomSheetOpen(true);
+                    setIsCommentReportSuccess(false);
+                    setIsDropdownOpen(false);
+                  }}
+                >
                   <ReportIcon2 />
                   <RegularText fontSize={16} style={{ color: COLORS.error }}>
                     신고
@@ -229,6 +290,20 @@ function ReplyCard({ reply, parentId, feedId }: { reply: CommentType; parentId: 
           </Modal>
         </View>
       </View>
+
+      <CustomBottomSheet
+        isOpen={isCommentReportBottomSheetOpen}
+        onClose={() => setIsCommentReportBottomSheetOpen(false)}
+        title={isCommentReportSuccess ? '신고가 접수되었습니다' : '신고'}
+      >
+        <CommentReportBottomsheet
+          commentId={reply.id}
+          isReportSuccess={isCommentReportSuccess}
+          setIsReportSuccess={setIsCommentReportSuccess}
+          onClose={() => setIsCommentReportBottomSheetOpen(false)}
+          webViewRef={webViewRef}
+        />
+      </CustomBottomSheet>
     </View>
   );
 }

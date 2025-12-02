@@ -1,5 +1,4 @@
 import { supabase } from '../supabaseClient';
-import { fetchUserId } from '../user';
 
 export async function fetchRootComment(feedId: string, page: number) {
   const PAGE_SIZE = 20;
@@ -17,7 +16,7 @@ export async function fetchRootComment(feedId: string, page: number) {
     .eq('feed_id', feedId)
     .is('parent_id', null)
     .is('deleted_at', null)
-    .order('created_at', { ascending: true })
+    .order('created_at', { ascending: false })
     .range(start, end);
 
   if (error) throw error;
@@ -73,6 +72,26 @@ export async function fetchReplyComment(feedId: string, parentId: string, page: 
   }));
 }
 
+export async function addRootComment(feedId: string, content: string) {
+  const { error } = await supabase.rpc('write_comment', {
+    p_feed_id: feedId,
+    p_parent_id: null,
+    p_content: content,
+  });
+
+  if (error) throw error;
+}
+
+export async function addReplyComment(feedId: string, parentId: string, content: string) {
+  const { error } = await supabase.rpc('write_comment', {
+    p_feed_id: feedId,
+    p_parent_id: parentId,
+    p_content: content,
+  });
+
+  if (error) throw error;
+}
+
 export async function deleteComment(commentId: string) {
   const { error } = await supabase.rpc('delete_comment', {
     p_comment_id: commentId,
@@ -81,11 +100,7 @@ export async function deleteComment(commentId: string) {
   if (error) throw error;
 }
 
-export async function fetchMyCommentLike(commentId: string) {
-  const userId = await fetchUserId();
-
-  if (!userId) return false;
-
+export async function fetchMyCommentLike(commentId: string, userId: string) {
   const { data, error } = await supabase
     .from('Comment_Like')
     .select('*')

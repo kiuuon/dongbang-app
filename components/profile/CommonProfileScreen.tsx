@@ -15,6 +15,7 @@ import SettingModal from '@/components/feed/modal/SettingBottomSheet';
 import ClubsModal from './ClubsModal';
 import UserReportBottomsheet from '../report/UserReportBottomsheet';
 import FeedReportBottomsheet from '../report/FeedReportBottomsheet';
+import CommentBottomSheet from '../feed/modal/CommentBottomSheet/CommentBottomSheet';
 
 const { height } = Dimensions.get('window');
 
@@ -43,6 +44,7 @@ function CommonProfileScreen({
   const [userInfo, setUserInfo] = useState<{ userId: string; username: string; nickname: string } | null>(null);
   const [isFeedReportBottomSheetOpen, setIsFeedReportBottomSheetOpen] = useState(false);
   const [isFeedReportSuccess, setIsFeedReportSuccess] = useState(false);
+  const [isCommentBottomSheetOpen, setIsCommentBottomSheetOpen] = useState(false);
 
   const setSearchTarget = exploreStore((state) => state.setSearchTarget);
   const setKeyword = exploreStore((state) => state.setKeyword);
@@ -99,7 +101,8 @@ function CommonProfileScreen({
                 setSelectedFeedId(payload);
                 setIsLikesModalOpen(true);
               } else if (action === 'open comments bottom sheet') {
-                // TODO: 댓글 바텀시트 열기
+                setSelectedFeedId(payload);
+                setIsCommentBottomSheetOpen(true);
               } else if (action === 'go to feed detail page') {
                 setSelectedFeedId(payload);
                 router.push(`/feed/detail/${payload}`);
@@ -122,6 +125,15 @@ function CommonProfileScreen({
           }}
         />
       </ScrollView>
+
+      <CommentBottomSheet
+        feedId={selectedFeedId}
+        isOpen={isCommentBottomSheetOpen}
+        onClose={() => {
+          setIsCommentBottomSheetOpen(false);
+        }}
+        webViewRef={webViewRef}
+      />
 
       <ClubsModal
         visible={isClubsModalOpen}

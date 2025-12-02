@@ -1,5 +1,5 @@
 import { Alert, StyleSheet, TouchableOpacity, View } from 'react-native';
-import { useMutation } from '@tanstack/react-query';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
 import type { WebView as WebViewType } from 'react-native-webview';
 
 import { blockUser } from '@/apis/user';
@@ -21,6 +21,8 @@ function UserBlockBottomsheet({
   onClose: () => void;
   webViewRef: React.RefObject<WebViewType | null>;
 }) {
+  const queryClient = useQueryClient();
+
   const { mutate: handleBlockUser } = useMutation({
     mutationFn: () => blockUser(userInfo?.userId as string),
     onSuccess: () => {
@@ -33,6 +35,16 @@ function UserBlockBottomsheet({
       };
 
       webViewRef.current?.postMessage(JSON.stringify(message));
+
+      if (commentId) {
+        queryClient.invalidateQueries({
+          predicate: (q) => q.queryKey[0] === 'rootCommentList',
+        });
+
+        queryClient.invalidateQueries({
+          predicate: (q) => q.queryKey[0] === 'replyCommentList',
+        });
+      }
     },
     onError: (error) => Alert.alert(ERROR_MESSAGE.USER.BLOCK_FAILED, error.message),
   });

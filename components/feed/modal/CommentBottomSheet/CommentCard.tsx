@@ -2,6 +2,8 @@ import { useRef, useState } from 'react';
 import { Alert, Image, Modal, StyleSheet, TouchableOpacity, View, TouchableWithoutFeedback } from 'react-native';
 import { router } from 'expo-router';
 import { useInfiniteQuery, useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
+import { BottomSheetFlatListMethods } from '@gorhom/bottom-sheet';
+import type { WebView as WebViewType } from 'react-native-webview';
 
 import { fetchSession } from '@/apis/auth';
 import { blockUser, fetchUserId } from '@/apis/user';
@@ -17,14 +19,37 @@ import ReportIcon2 from '@/icons/ReportIcon2';
 import BanIcon2 from '@/icons/BanIcon2';
 import BoldText from '@/components/common/SemiBoldText';
 import RegularText from '@/components/common/RegularText';
+import CustomBottomSheet from '@/components/common/CustomBottomSheet';
+import CommentReportBottomsheet from '@/components/report/CommentReportBottomsheet';
 import ReplyCard from './ReplyCard';
+import MentionRenderer from './MentionRenderer';
 
-function CommentCard({ comment }: { comment: CommentType }) {
+function CommentCard({
+  comment,
+  replyTargetId,
+  setReplyTargetId,
+  inputRef,
+  index,
+  flatListRef,
+  webViewRef,
+}: {
+  comment: CommentType;
+  replyTargetId: string;
+  setReplyTargetId: React.Dispatch<React.SetStateAction<string>>;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  inputRef: React.RefObject<any>;
+  index: number;
+  flatListRef: React.RefObject<BottomSheetFlatListMethods | null>;
+  webViewRef: React.RefObject<WebViewType | null>;
+}) {
   const queryClient = useQueryClient();
 
   const [isReplyOpen, setIsReplyOpen] = useState(false);
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const [dropdownPosition, setDropdownPosition] = useState({ x: 0, y: 0 });
+
+  const [isCommentReportBottomSheetOpen, setIsCommentReportBottomSheetOpen] = useState(false);
+  const [isCommentReportSuccess, setIsCommentReportSuccess] = useState(false);
 
   const moreButtonRef = useRef<View>(null);
 
@@ -48,7 +73,8 @@ function CommentCard({ comment }: { comment: CommentType }) {
 
   const { data: isLike } = useQuery({
     queryKey: ['isCommentLike', comment.id],
-    queryFn: () => fetchMyCommentLike(comment.id),
+    queryFn: () => fetchMyCommentLike(comment.id, userId as string),
+    enabled: !!userId,
     throwOnError: (error) => {
       Alert.alert(ERROR_MESSAGE.LIKE.MY_LIKE_FETCH_FAILED, error.message);
       return false;
@@ -80,6 +106,8 @@ function CommentCard({ comment }: { comment: CommentType }) {
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['commentCount', comment.feed_id] });
       queryClient.invalidateQueries({ queryKey: ['rootCommentList', comment.feed_id] });
+      queryClient.invalidateQueries({ queryKey: ['replyCommentList', comment.id] });
+      setIsDropdownOpen(false);
     },
     onError: (error) => {
       Alert.alert(ERROR_MESSAGE.COMMENT.DELETE_FAILED, error.message);
@@ -138,7 +166,7 @@ function CommentCard({ comment }: { comment: CommentType }) {
 
   return (
     <View style={styles.container}>
-      <View style={styles.commentContainer}>
+      <View style={[styles.commentContainer, replyTargetId === comment.id && styles.highlighted]}>
         <View style={styles.commentInfoContainer}>
           <TouchableOpacity onPress={goToProfilePage}>
             {comment.author.avatar ? (
@@ -159,9 +187,31 @@ function CommentCard({ comment }: { comment: CommentType }) {
               </RegularText>
             </TouchableOpacity>
 
-            <RegularText fontSize={14}>{comment.content}</RegularText>
+            <RegularText fontSize={14}>
+              <MentionRenderer text={comment.content} />
+            </RegularText>
 
-            <TouchableOpacity>
+            <TouchableOpacity
+              onPress={() => {
+                if (replyTargetId === comment.id) {
+                  setReplyTargetId('');
+                  return;
+                }
+
+                inputRef.current?.focus();
+
+                setReplyTargetId(comment.id);
+
+                // 답글 달기 클릭 시 해당 댓글로 스크롤 (키보드 위에 위치하도록)
+                setTimeout(() => {
+                  flatListRef.current?.scrollToIndex({
+                    index,
+                    animated: true,
+                    viewPosition: 0.25,
+                  });
+                }, 100);
+              }}
+            >
               <RegularText fontSize={12} style={{ marginTop: 2, color: COLORS.gray3 }}>
                 답글 달기
               </RegularText>
@@ -218,7 +268,14 @@ function CommentCard({ comment }: { comment: CommentType }) {
                 </TouchableOpacity>
               )}
               {(!session?.user || comment.author_id !== userId) && (
-                <TouchableOpacity style={styles.dropdownItem}>
+                <TouchableOpacity
+                  style={styles.dropdownItem}
+                  onPress={() => {
+                    setIsCommentReportBottomSheetOpen(true);
+                    setIsCommentReportSuccess(false);
+                    setIsDropdownOpen(false);
+                  }}
+                >
                   <ReportIcon2 />
                   <RegularText fontSize={16} style={{ color: COLORS.error }}>
                     신고
@@ -254,8 +311,21 @@ function CommentCard({ comment }: { comment: CommentType }) {
 
           {isReplyOpen && (
             <View style={styles.replyCardContainer}>
-              {data?.pages.map((page) =>
-                page.map((rp) => <ReplyCard key={rp.id} reply={rp} parentId={comment.id} feedId={comment.feed_id} />),
+              {data?.pages.map((page, i) =>
+                page.map((rp, idx) => (
+                  <ReplyCard
+                    key={rp.id}
+                    reply={rp}
+                    parentId={comment.id}
+                    feedId={comment.feed_id}
+                    inputRef={inputRef}
+                    setReplyTargetId={setReplyTargetId}
+                    parentIndex={index}
+                    index={i * 5 + idx}
+                    flatListRef={flatListRef}
+                    webViewRef={webViewRef}
+                  />
+                )),
               )}
             </View>
           )}
@@ -276,6 +346,20 @@ function CommentCard({ comment }: { comment: CommentType }) {
           )}
         </View>
       )}
+
+      <CustomBottomSheet
+        isOpen={isCommentReportBottomSheetOpen}
+        onClose={() => setIsCommentReportBottomSheetOpen(false)}
+        title={isCommentReportSuccess ? '신고가 접수되었습니다' : '신고'}
+      >
+        <CommentReportBottomsheet
+          commentId={comment.id}
+          isReportSuccess={isCommentReportSuccess}
+          setIsReportSuccess={setIsCommentReportSuccess}
+          onClose={() => setIsCommentReportBottomSheetOpen(false)}
+          webViewRef={webViewRef}
+        />
+      </CustomBottomSheet>
     </View>
   );
 }
@@ -286,7 +370,14 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'flex-start',
-    marginBottom: 20,
+    marginBottom: 12,
+    paddingVertical: 8,
+  },
+  highlighted: {
+    backgroundColor: COLORS.background,
+    marginHorizontal: -24,
+    paddingHorizontal: 24,
+    paddingVertical: 8,
   },
   commentInfoContainer: {
     flexDirection: 'row',
