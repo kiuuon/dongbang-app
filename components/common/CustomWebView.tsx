@@ -51,6 +51,7 @@ const CustomWebView = forwardRef<WebViewType, CustomWebViewProps>(
       <WebView
         ref={webViewRef}
         source={source}
+        hideKeyboardAccessoryView
         onLoadEnd={() => {
           onLoadEnd();
           sendTokenToWeb();

@@ -3,11 +3,13 @@ import { Alert, Dimensions, Modal, StyleSheet, TouchableOpacity, TouchableWithou
 import WebView from 'react-native-webview';
 import { SafeAreaView, useSafeAreaInsets } from 'react-native-safe-area-context';
 import { router, useLocalSearchParams } from 'expo-router';
-import { useMutation } from '@tanstack/react-query';
+import { useMutation, useQuery } from '@tanstack/react-query';
 import * as Clipboard from 'expo-clipboard';
 import Toast from 'react-native-toast-message';
 
-import { leaveClub } from '@/apis/club';
+import { fetchSession } from '@/apis/auth';
+import { checkIsClubMember, leaveClub } from '@/apis/club';
+import { getChatRoomIdByClubId } from '@/apis/chats';
 import COLORS from '@/constants/colors';
 import { ERROR_MESSAGE } from '@/constants/error';
 import exploreStore from '@/stores/exploreStore';
@@ -73,6 +75,34 @@ function CommonClubScreen({
   const setSelectedHashtag = exploreStore((state) => state.setSelectedHashtag);
 
   const webViewRef = useRef<WebView>(null);
+
+  const { data: session, isPending } = useQuery({
+    queryKey: ['session'],
+    queryFn: fetchSession,
+    throwOnError: (error) => {
+      Alert.alert(ERROR_MESSAGE.SESSION.FETCH_FAILED, error.message);
+      return false;
+    },
+  });
+
+  const { data: isClubMember, isPending: isPendingToCheckingClubMember } = useQuery({
+    queryKey: ['isClubMember', clubId],
+    queryFn: () => checkIsClubMember(clubId as string),
+    throwOnError: (error) => {
+      Alert.alert(ERROR_MESSAGE.CLUB.JOIN_STATUS_FETCH_FAILED, error.message);
+      return false;
+    },
+  });
+
+  const { data: chatRoomId } = useQuery({
+    queryKey: ['chatRoomId', clubId],
+    queryFn: () => getChatRoomIdByClubId(clubId as string),
+    enabled: !!isClubMember,
+    throwOnError: (error) => {
+      Alert.alert(ERROR_MESSAGE.CHATS.FETCH_ROOM_INFO_FAILED, error.message);
+      return false;
+    },
+  });
 
   const { mutate: handleLeaveClub } = useMutation({
     mutationFn: async () => leaveClub(clubId as string),
@@ -143,9 +173,11 @@ function CommonClubScreen({
               <LeftArrowIcon color={isHeaderBackgroundWhite ? COLORS.black : COLORS.white} />
             </TouchableOpacity>
             <View style={{ flexDirection: 'row', gap: 10, alignItems: 'center' }}>
-              <TouchableOpacity>
-                <MessageIcon color={isHeaderBackgroundWhite ? COLORS.black : COLORS.white} />
-              </TouchableOpacity>
+              {!isPending && session?.user && !isPendingToCheckingClubMember && isClubMember && (
+                <TouchableOpacity onPress={() => router.push(`/chats/${chatRoomId}`)}>
+                  <MessageIcon color={isHeaderBackgroundWhite ? COLORS.black : COLORS.white} />
+                </TouchableOpacity>
+              )}
               <TouchableOpacity onPress={clickShareButton}>
                 <ExternalLinkIcon color={isHeaderBackgroundWhite ? COLORS.black : COLORS.white} />
               </TouchableOpacity>

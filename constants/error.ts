@@ -25,6 +25,7 @@ export const ERROR_MESSAGE = {
     BLOCK_STATUS_FETCH_FAILED: '차단 상태를 불러오는 데 실패했습니다. 다시 시도해주세요.',
   },
   CLUB: {
+    LEAVE_CLUB_FAILED: '동아리 탈퇴에 실패했습니다. 다시 시도해주세요.',
     INFO_FETCH_FAILED: '동아리 정보를 불러오는 데 실패했습니다. 다시 시도해주세요.',
     MEMBERS_FETCH_FAILED: '동아리 멤버 목록을 불러오는 데 실패했습니다. 다시 시도해주세요.',
     MEMBER_FETCH_FAILED: '동아리 멤버를 불러오는 데 실패했습니다. 다시 시도해주세요.',
@@ -53,7 +54,8 @@ export const ERROR_MESSAGE = {
     WRITE_ANNOUNCEMENT_FAILED: '공지 작성에 실패했습니다. 다시 시도해주세요',
     DELETE_ANNOUNCEMENT_FAILED: '공지 삭제에 실패했습니다. 다시 시도해주세요',
     EDIT_ANNOUNCEMENT_FAILED: '공지 수정에 실패했습니다. 다시 시도해주세요',
-    LEAVE_CLUB_FAILED: '동아리 탈퇴에 실패했습니다. 다시 시도해주세요',
+    NICKNAME_FETCH_FAILED: '동아리 활동명을 불러오는 데 실패했습니다. 다시 시도해주세요',
+    UPDATE_NICKNAME_FAILED: '동아리 활동명 변경에 실패했습니다. 다시 시도해주세요',
   },
   UNIVERSITY: {
     LIST_FETCH_FAILED: '대학 목록을 불러오는 데 실패했습니다. 다시 시도해주세요.',
@@ -75,7 +77,6 @@ export const ERROR_MESSAGE = {
     LIST_FETCH_FAILED: '댓글 목록을 불러오는 데 실패했습니다. 다시 시도해주세요.',
     WRITE_FAILED: '댓글 작성에 실패했습니다. 다시 시도해주세요.',
     DELETE_FAILED: '댓글 삭제에 실패했습니다. 다시 시도해주세요.',
-    DETAIL_FETCH_FAILED: '댓글 상세 정보를 불러오는 데 실패했습니다. 다시 시도해주세요.',
   },
   IMAGE: {
     LOGO_UPLOAD_FAILED: '로고 업로드에 실패했습니다. 다시 시도해주세요.',
@@ -91,5 +92,12 @@ export const ERROR_MESSAGE = {
   },
   FEEDBACK: {
     SEND_FAILED: '피드백 전송에 실패했습니다. 다시 시도해주세요.',
+  },
+  CHATS: {
+    FETCH_FAILED: '채팅방 목록을 불러오는 데 실패했습니다. 다시 시도해주세요.',
+    FETCH_ROOM_INFO_FAILED: '채팅방 정보를 불러오는 데 실패했습니다. 다시 시도해주세요.',
+    DEACTIVATE_ROOM_FAILED: '채팅방 비활성화에 실패했습니다. 다시 시도해주세요.',
+    ACTIVATE_ROOM_FAILED: '채팅방 활성화에 실패했습니다. 다시 시도해주세요.',
+    SEND_FAILED: '메시지 전송에 실패했습니다. 다시 시도해주세요.',
   },
 };

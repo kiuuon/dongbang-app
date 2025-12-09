@@ -132,6 +132,8 @@ function FeedScreen() {
                 setIsCommentBottomSheetOpen(true);
               } else if (action === 'go to club page') {
                 router.push(`/feed/club/${payload}`);
+              } else if (action === 'go to chats page') {
+                router.push(`/chats`);
               }
             }
           }}

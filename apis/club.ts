@@ -153,3 +153,21 @@ export async function leaveClub(clubId: string) {
     throw error;
   }
 }
+
+export async function checkIsClubMember(clubId: string) {
+  const userId = await fetchUserId();
+
+  if (!userId) return false;
+
+  const { data, error } = await supabase
+    .from('Club_User')
+    .select('club_id')
+    .eq('club_id', clubId)
+    .eq('user_id', userId)
+    .is('deleted_at', null)
+    .maybeSingle();
+
+  if (error) throw error;
+
+  return !!data;
+}
