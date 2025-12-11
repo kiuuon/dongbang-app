@@ -37,7 +37,7 @@ export async function registerForPushNotifications() {
     return null;
   }
 
-  const deviceId = Device.modelName || 'unknown';
+  const deviceId = Device.modelId || 'unknown';
   const platform = Platform.OS;
 
   // 기존 토큰 비활성화

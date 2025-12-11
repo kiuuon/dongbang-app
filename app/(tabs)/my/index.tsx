@@ -95,6 +95,8 @@ function MyScreen() {
                 router.push(`/feed/detail/${payload}`);
               } else if (action === 'go to club page') {
                 router.push(`/my/club/${payload}`);
+              } else if (action === 'go to setting page') {
+                router.push('/setting');
               }
             }
           }}

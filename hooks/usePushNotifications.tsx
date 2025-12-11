@@ -2,17 +2,13 @@ import { useEffect, useRef } from 'react';
 import * as Notifications from 'expo-notifications';
 import { usePathname, useRouter } from 'expo-router';
 import { registerForPushNotifications } from '@/utils/pushNotifications';
-import { fetchSession } from '@/apis/auth';
-import { ERROR_MESSAGE } from '@/constants/error';
-import { useQuery } from '@tanstack/react-query';
-import { Alert } from 'react-native';
 
 export function usePushNotifications() {
   const router = useRouter();
   const pathname = usePathname();
 
-  const notificationListener = useRef<Notifications.Subscription>();
-  const responseListener = useRef<Notifications.Subscription>();
+  const notificationListener = useRef<Notifications.EventSubscription | null>(null);
+  const responseListener = useRef<Notifications.EventSubscription | null>(null);
   const currentChatRoomIdRef = useRef<string>('');
 
   // currentChatRoomId가 변경될 때마다 ref 업데이트
@@ -35,15 +31,17 @@ export function usePushNotifications() {
         // 현재 채팅방에 있으면 알림 무시
         if (data?.type === 'chat_message' && data?.chatRoomId === currentChatRoomIdRef.current) {
           return {
-            shouldShowAlert: false,
+            shouldShowBanner: false,
+            shouldShowList: false,
             shouldPlaySound: false,
             shouldSetBadge: false,
           };
         }
 
         return {
-          shouldShowAlert: true,
-          shouldPlaySound: true,
+          shouldShowBanner: true,
+          shouldShowList: false,
+          shouldPlaySound: false,
           shouldSetBadge: false,
         };
       },
@@ -51,7 +49,6 @@ export function usePushNotifications() {
 
     // 포그라운드 알림 수신 처리
     notificationListener.current = Notifications.addNotificationReceivedListener(() => {
-      console.log('notification received');
       Notifications.setBadgeCountAsync(0);
     });
 
@@ -64,14 +61,5 @@ export function usePushNotifications() {
         router.push(`/chats/${chatRoomId}`);
       }
     });
-
-    return () => {
-      if (notificationListener.current) {
-        Notifications.removeNotificationSubscription(notificationListener.current);
-      }
-      if (responseListener.current) {
-        Notifications.removeNotificationSubscription(responseListener.current);
-      }
-    };
   }, [router]);
 }
