@@ -8,6 +8,7 @@ import Toast from 'react-native-toast-message';
 
 import pretendardRegular from '@/assets/fonts/Pretendard-Regular.otf';
 import pretendardSemiBold from '@/assets/fonts/Pretendard-SemiBold.otf';
+import { usePushNotifications } from '@/hooks/usePushNotifications';
 
 export const unstable_settings = {
   initialRouteName: 'index',
@@ -20,6 +21,8 @@ export default function RootLayout() {
     PretendardRegular: pretendardRegular,
     PretendardSemiBold: pretendardSemiBold,
   });
+
+  usePushNotifications();
 
   if (!fontsLoaded) return null;
 

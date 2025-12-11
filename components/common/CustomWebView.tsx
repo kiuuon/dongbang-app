@@ -7,6 +7,7 @@ import { useQuery } from '@tanstack/react-query';
 
 import { fetchSession, login } from '@/apis/auth';
 import { fetchUser } from '@/apis/user';
+import { registerForPushNotifications } from '@/utils/pushNotifications';
 import { ERROR_MESSAGE } from '@/constants/error';
 import useTabVisibility from '@/stores/useTabVisibility';
 
@@ -70,6 +71,7 @@ const CustomWebView = forwardRef<WebViewType, CustomWebViewProps>(
           if (type === 'event') {
             if (action === 'login success') {
               show();
+              registerForPushNotifications();
               await login(payload.accessToken, payload.refreshToken);
               setKey((prev) => prev + 1); // 웹뷰 리로드
               const user = await fetchUser();

@@ -1,21 +1,24 @@
 import { router } from 'expo-router';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
+import * as Notifications from 'expo-notifications';
+import { Alert } from 'react-native';
 
 import { logout } from '@/apis/auth';
 import CustomWebView from '@/components/common/CustomWebView';
 import COLORS from '@/constants/colors';
 import { ERROR_MESSAGE } from '@/constants/error';
-import { Alert } from 'react-native';
 
 function AccountSettingScreen() {
   const queryClient = useQueryClient();
 
   const { mutate } = useMutation({
     mutationFn: logout,
-    onSuccess: () => {
+    onSuccess: async () => {
       queryClient.invalidateQueries({ queryKey: ['session'] });
       router.replace('/login');
+
+      await Notifications.setBadgeCountAsync(0);
     },
     onError: (error) => Alert.alert(ERROR_MESSAGE.AUTH.LOGOUT_FAILED, error.message),
   });

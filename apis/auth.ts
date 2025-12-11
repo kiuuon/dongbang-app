@@ -1,4 +1,5 @@
 import { supabase } from './supabaseClient';
+import { fetchUserId } from './user';
 
 export async function fetchSession() {
   const { data, error } = await supabase.auth.getSession();
@@ -18,5 +19,13 @@ export async function login(accessToken: string, refreshToken: string) {
 }
 
 export async function logout() {
+  const userId = await fetchUserId();
+
+  if (!userId) return;
+
+  const { error } = await supabase.from('user_push_tokens').update({ is_active: false }).eq('user_id', userId);
+
+  if (error) throw error;
+
   await supabase.auth.signOut();
 }
