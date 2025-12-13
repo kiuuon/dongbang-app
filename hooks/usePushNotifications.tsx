@@ -10,6 +10,7 @@ export function usePushNotifications() {
   const notificationListener = useRef<Notifications.EventSubscription | null>(null);
   const responseListener = useRef<Notifications.EventSubscription | null>(null);
   const currentChatRoomIdRef = useRef<string>('');
+  const currentPathnameRef = useRef<string>('');
 
   // currentChatRoomId가 변경될 때마다 ref 업데이트
   useEffect(() => {
@@ -17,6 +18,7 @@ export function usePushNotifications() {
     const currentChatRoomId = chatRoomIdMatch ? chatRoomIdMatch[1] : '';
 
     currentChatRoomIdRef.current = currentChatRoomId;
+    currentPathnameRef.current = pathname;
   }, [pathname]);
 
   useEffect(() => {
@@ -38,7 +40,7 @@ export function usePushNotifications() {
           };
         }
 
-        if (data?.type === 'notification' && pathname === '/notification') {
+        if (data?.type === 'notification' && currentPathnameRef.current === '/notification') {
           return {
             shouldShowBanner: false,
             shouldShowList: false,
@@ -70,9 +72,9 @@ export function usePushNotifications() {
         router.push(`/chats/${chatRoomId}`);
       }
 
-      if (data.type === 'notification') {
+      if (data.type === 'notification' && currentPathnameRef.current !== '/notification') {
         router.push('/notification');
       }
     });
-  }, [router, pathname]);
+  }, [router]);
 }
