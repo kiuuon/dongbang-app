@@ -38,6 +38,15 @@ export function usePushNotifications() {
           };
         }
 
+        if (data?.type === 'notification' && pathname === '/notification') {
+          return {
+            shouldShowBanner: false,
+            shouldShowList: false,
+            shouldPlaySound: false,
+            shouldSetBadge: false,
+          };
+        }
+
         return {
           shouldShowBanner: true,
           shouldShowList: false,
@@ -60,6 +69,10 @@ export function usePushNotifications() {
         const { chatRoomId } = data;
         router.push(`/chats/${chatRoomId}`);
       }
+
+      if (data.type === 'notification') {
+        router.push('/notification');
+      }
     });
-  }, [router]);
+  }, [router, pathname]);
 }
