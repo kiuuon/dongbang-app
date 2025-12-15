@@ -40,6 +40,8 @@ function AccountSettingScreen() {
               router.push('/account-setting/profile-visibility');
             } else if (action === 'go to block list page') {
               router.push('/account-setting/block-list');
+            } else if (action === 'go to notification settings page') {
+              router.push('/account-setting/notification-settings');
             }
           }
         }}

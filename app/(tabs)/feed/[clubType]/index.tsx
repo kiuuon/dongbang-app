@@ -134,6 +134,8 @@ function FeedScreen() {
                 router.push(`/feed/club/${payload}`);
               } else if (action === 'go to chats page') {
                 router.push(`/chats`);
+              } else if (action === 'go to notification page') {
+                router.push('/notification');
               }
             }
           }}
