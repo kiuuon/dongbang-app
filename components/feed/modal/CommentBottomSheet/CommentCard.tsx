@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { useRef, useState } from 'react';
 import { Alert, Image, Modal, StyleSheet, TouchableOpacity, View, TouchableWithoutFeedback } from 'react-native';
 import { router } from 'expo-router';
@@ -114,14 +115,40 @@ function CommentCard({
     },
   });
 
-  const { mutate: handleToggleFeedLike } = useMutation({
+  const { mutate: handleToggleCommentLike } = useMutation({
     mutationFn: () => toggleCommentLike(comment.id),
+    onMutate: () => {
+      queryClient.setQueryData(['rootCommentList', feed?.id], (oldData: any) => {
+        if (!oldData) return oldData;
+
+        return {
+          ...oldData,
+          pages: oldData.pages.map((page: any) =>
+            page.map((item: any) => {
+              if (item.id === comment.id) {
+                return {
+                  ...item,
+                  like_count: item.like_count + (!isLike ? 1 : -1),
+                };
+              }
+              return item;
+            }),
+          ),
+        };
+      });
+
+      queryClient.setQueryData(['isCommentLike', comment.id], (oldData: any) => !oldData);
+    },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['isCommentLike', comment.id] });
       queryClient.invalidateQueries({ queryKey: ['rootCommentList', comment.feed_id] });
     },
     onError: (error) => {
       Alert.alert(ERROR_MESSAGE.LIKE.TOGGLE_FAILED, error.message);
+    },
+    onSettled: () => {
+      queryClient.invalidateQueries({ queryKey: ['isCommentLike', comment.id] });
+      queryClient.invalidateQueries({ queryKey: ['rootCommentList', comment.feed_id] });
     },
   });
 
@@ -233,7 +260,7 @@ function CommentCard({
           </TouchableOpacity>
           <TouchableOpacity
             onPress={() => {
-              handleToggleFeedLike();
+              handleToggleCommentLike();
             }}
           >
             <LikesIcon2 isActive={isLike || false} />
