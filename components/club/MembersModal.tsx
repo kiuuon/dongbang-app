@@ -139,6 +139,74 @@ export default function MembersModal({ visible, onClose, clubId, currentPath }: 
               )}
             </View>
           </View>
+
+          {/* 휴학생  */}
+          <View style={{ flexDirection: 'column', gap: 8, marginBottom: 16 }}>
+            <BoldText fontSize={14}>휴학생</BoldText>
+            <View style={styles.buttonContainer}>
+              {members?.map(
+                (member) =>
+                  member.role === 'on_leave' && (
+                    <TouchableOpacity
+                      key={member.userId}
+                      style={styles.button}
+                      onPress={() => {
+                        goToProfilePage(member.nickname);
+                      }}
+                    >
+                      {member.avatar ? (
+                        <Image source={{ uri: member.avatar }} style={styles.memberImage} />
+                      ) : (
+                        // eslint-disable-next-line global-require, @typescript-eslint/no-require-imports
+                        <Image source={require('@/assets/images/none_avatar.png')} style={styles.memberImage} />
+                      )}
+                      <View>
+                        <BoldText fontSize={14} style={{ height: 17 }}>
+                          {member.name}
+                        </BoldText>
+                        <RegularText fontSize={12} style={{ color: COLORS.gray2, height: 14 }}>
+                          {member.nickname}
+                        </RegularText>
+                      </View>
+                    </TouchableOpacity>
+                  ),
+              )}
+            </View>
+          </View>
+
+          {/* 졸업생 */}
+          <View style={{ flexDirection: 'column', gap: 8, marginBottom: 16 }}>
+            <BoldText fontSize={14}>졸업생</BoldText>
+            <View style={styles.buttonContainer}>
+              {members?.map(
+                (member) =>
+                  member.role === 'graduate' && (
+                    <TouchableOpacity
+                      key={member.userId}
+                      style={styles.button}
+                      onPress={() => {
+                        goToProfilePage(member.nickname);
+                      }}
+                    >
+                      {member.avatar ? (
+                        <Image source={{ uri: member.avatar }} style={styles.memberImage} />
+                      ) : (
+                        // eslint-disable-next-line global-require, @typescript-eslint/no-require-imports
+                        <Image source={require('@/assets/images/none_avatar.png')} style={styles.memberImage} />
+                      )}
+                      <View>
+                        <BoldText fontSize={14} style={{ height: 17 }}>
+                          {member.name}
+                        </BoldText>
+                        <RegularText fontSize={12} style={{ color: COLORS.gray2, height: 14 }}>
+                          {member.nickname}
+                        </RegularText>
+                      </View>
+                    </TouchableOpacity>
+                  ),
+              )}
+            </View>
+          </View>
         </ScrollView>
       </TouchableOpacity>
     </Modal>

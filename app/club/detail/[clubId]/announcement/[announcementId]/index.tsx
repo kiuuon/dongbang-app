@@ -16,6 +16,8 @@ function ClubAnnouncementDetailScreen() {
           if (type === 'event') {
             if (action === 'go to announcement edit page') {
               router.push(`/club/detail/${clubId}/announcement/${payload}/edit`);
+            } else if (action === 'go to announcement list page') {
+              router.push(`/club/detail/${clubId}/announcement`);
             }
           }
         }}

@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { useState, useCallback } from 'react';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
@@ -12,7 +13,7 @@ function ChatRoomScreen() {
   const [shouldAvoidKeyboard, setShouldAvoidKeyboard] = useState(false);
 
   const handleMessage = useCallback(
-    (data: { type: string; action: string; payload?: string }) => {
+    (data: any) => {
       const { type, action, payload } = data;
       if (type === 'event') {
         if (action === 'go to chat room menu') {
@@ -23,6 +24,9 @@ function ChatRoomScreen() {
           setShouldAvoidKeyboard(true);
         } else if (action === 'top input blur') {
           setShouldAvoidKeyboard(false);
+        } else if (action === 'go to announcement page') {
+          const { clubId, announcementId } = payload;
+          router.push(`/club/detail/${clubId}/announcement/${announcementId}`);
         }
       }
     },
