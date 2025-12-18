@@ -1,6 +1,7 @@
 import { useEffect } from 'react';
 import { Alert } from 'react-native';
 import { router } from 'expo-router';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 import { fetchSession } from '@/apis/auth';
 import { fetchUser } from '@/apis/user';
@@ -11,6 +12,7 @@ function Screen() {
       try {
         const session = await fetchSession();
         const user = await fetchUser();
+
         if (session) {
           if (user) {
             router.replace('/feed/my');
@@ -21,7 +23,11 @@ function Screen() {
           router.replace('/login');
         }
       } catch (error) {
-        Alert.alert('로그인 상태를 확인하는 데 실패했습니다. 다시 시도해주세요.', (error as Error).message);
+        if ((error as Error).message === 'User from sub claim in JWT does not exist') {
+          AsyncStorage.clear();
+        } else {
+          Alert.alert('로그인 상태를 확인하는 데 실패했습니다. 다시 시도해주세요.', (error as Error).message);
+        }
       }
     })();
   }, []);

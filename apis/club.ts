@@ -121,12 +121,12 @@ export async function fetchClubsByUserNickname(nickname: string) {
 export async function fetchClubMembers(clubId: string) {
   const { data, error } = (await supabase
     .from('Club_User')
-    .select('user_id, User(name, avatar, nickname), role')
+    .select('user_id, User(name, avatar, nickname, deleted_at), role')
     .eq('club_id', clubId)) as unknown as {
     data: {
       user_id: string;
       role: string;
-      User: { name: string; avatar: string; nickname: string } | null;
+      User: { name: string; avatar: string; nickname: string; deleted_at: string | null } | null;
     }[];
     error: Error | null;
   };
@@ -141,6 +141,7 @@ export async function fetchClubMembers(clubId: string) {
     nickname: member.User?.nickname,
     avatar: member.User?.avatar,
     role: member.role,
+    deletedAt: member.User?.deleted_at,
   }));
 }
 
@@ -170,4 +171,28 @@ export async function checkIsClubMember(clubId: string) {
   if (error) throw error;
 
   return !!data;
+}
+
+export async function fetchMyRole(clubId: string) {
+  const userId = await fetchUserId();
+
+  if (!userId) return null;
+
+  const { data, error } = await supabase
+    .from('Club_User')
+    .select('role')
+    .eq('user_id', userId)
+    .eq('club_id', clubId)
+    .is('deleted_at', null)
+    .maybeSingle();
+
+  if (error) {
+    throw error;
+  }
+
+  if (!data) {
+    return null;
+  }
+
+  return data?.role;
 }

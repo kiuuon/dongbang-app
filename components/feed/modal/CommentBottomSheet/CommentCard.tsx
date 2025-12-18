@@ -168,6 +168,9 @@ function CommentCard({
   });
 
   const goToProfilePage = () => {
+    if (comment.author.deleted_at) {
+      return;
+    }
     router.push(`/profile/${comment.author.nickname}`);
   };
 
@@ -206,8 +209,11 @@ function CommentCard({
 
           <View style={styles.commentContentContainer}>
             <TouchableOpacity style={{ flexDirection: 'row', gap: 4, alignItems: 'center' }} onPress={goToProfilePage}>
-              <BoldText fontSize={16} style={{ height: 19 }}>
-                {comment.author.name}
+              <BoldText
+                fontSize={16}
+                style={{ height: 19, color: comment.author.deleted_at ? COLORS.gray2 : COLORS.black }}
+              >
+                {comment.author.deleted_at ? '(알수없음)' : comment.author.name}
               </BoldText>
               <RegularText fontSize={12} style={{ height: 14, color: COLORS.gray2 }}>
                 {getTimeAgo(comment.created_at)}

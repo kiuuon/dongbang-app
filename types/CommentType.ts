@@ -7,6 +7,7 @@ export interface CommentType {
     avatar: string;
     name: string;
     nickname: string;
+    deleted_at: string | null;
   };
   content: string;
   feed_id: string;

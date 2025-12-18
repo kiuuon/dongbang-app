@@ -1,10 +1,9 @@
-import { View, TouchableOpacity, StyleSheet, Modal } from 'react-native';
+import { View, TouchableOpacity, StyleSheet, Modal, Image } from 'react-native';
 import type { WebView as WebViewType } from 'react-native-webview';
 
 import COLORS from '@/constants/colors';
 import useTabVisibility from '@/stores/useTabVisibility';
 import DongbangIcon from '@/icons/DongBangIcon';
-import KakaoIcon from '@/icons/KakaoIcon';
 import BoldText from './SemiBoldText';
 import RegularText from './RegularText';
 
@@ -17,15 +16,18 @@ interface LoginModalProps {
 export default function LoginModal({ visible, onClose, webViewRef }: LoginModalProps) {
   const { hide } = useTabVisibility();
 
-  const handleLogin = async (provider: 'kakao' | 'google') => {
+  const handleLogin = async (provider: 'kakao' | 'apple') => {
     const message = {
       type: 'event',
       action: 'login request',
       payload: provider,
     };
     webViewRef.current?.postMessage(JSON.stringify(message));
-    onClose();
-    hide();
+
+    if (provider === 'kakao') {
+      hide();
+      onClose();
+    }
   };
 
   return (
@@ -46,11 +48,22 @@ export default function LoginModal({ visible, onClose, webViewRef }: LoginModalP
             더 많은 동아리 정보와 편리한 교류 기능을{'\n'}이용하려면 로그인이 필요해요.
           </RegularText>
 
-          <TouchableOpacity style={[styles.loginButton, styles.kakao]} onPress={() => handleLogin('kakao')}>
-            <KakaoIcon />
-            <RegularText fontSize={16} style={styles.kakaoText}>
-              카카오톡 계정으로 시작하기
-            </RegularText>
+          <TouchableOpacity onPress={() => handleLogin('kakao')}>
+            <Image
+              // eslint-disable-next-line global-require, @typescript-eslint/no-require-imports
+              source={require('@/assets/images/kakao_login.png')}
+              style={styles.loginButton}
+              resizeMode="contain"
+            />
+          </TouchableOpacity>
+
+          <TouchableOpacity onPress={() => handleLogin('apple')}>
+            <Image
+              // eslint-disable-next-line global-require, @typescript-eslint/no-require-imports
+              source={require('@/assets/images/apple_login.png')}
+              style={styles.loginButton}
+              resizeMode="contain"
+            />
           </TouchableOpacity>
 
           <TouchableOpacity onPress={onClose}>
@@ -97,19 +110,8 @@ const styles = StyleSheet.create({
     marginBottom: 40,
   },
   loginButton: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    borderRadius: 12,
+    width: 280,
     height: 48,
-    width: 292,
-    paddingLeft: 27,
-  },
-  kakao: {
-    backgroundColor: COLORS.kakao,
-  },
-  kakaoText: {
-    flex: 1,
-    textAlign: 'center',
   },
   skipText: {
     marginTop: 20,

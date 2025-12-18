@@ -6,6 +6,7 @@ import { useNavigation } from '@react-navigation/native';
 import type { NativeStackNavigationProp } from '@react-navigation/native-stack';
 
 import { signUp } from '@/apis/user';
+import { registerForPushNotifications } from '@/utils/pushNotifications';
 import COLORS from '@/constants/colors';
 import { ERROR_MESSAGE } from '@/constants/error';
 import { UserType } from '@/types/UserType';
@@ -34,6 +35,7 @@ function InfoScreen() {
         index: 0,
         routes: [{ name: 'sign-up/complete' }],
       });
+      registerForPushNotifications();
     },
     onError: (error) => {
       Alert.alert(ERROR_MESSAGE.USER.SIGN_UP_FAILED, error.message);

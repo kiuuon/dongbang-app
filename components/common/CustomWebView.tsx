@@ -36,7 +36,10 @@ const CustomWebView = forwardRef<WebViewType, CustomWebViewProps>(
     useImperativeHandle(ref, () => webViewRef.current as WebViewType, []);
 
     const sendTokenToWeb = async () => {
-      if (!session) return;
+      if (!session) {
+        return;
+      }
+
       const { access_token: accessToken, refresh_token: refreshToken } = session;
 
       const message = {
@@ -52,6 +55,7 @@ const CustomWebView = forwardRef<WebViewType, CustomWebViewProps>(
       <WebView
         ref={webViewRef}
         source={source}
+        cacheEnabled={false}
         hideKeyboardAccessoryView
         onLoadEnd={() => {
           onLoadEnd();

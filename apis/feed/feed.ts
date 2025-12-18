@@ -62,9 +62,9 @@ export async function fetchFeedDetail(feedId: string) {
     .select(
       `
       *,
-      author:User(id, name, nickname, avatar),
+      author:User(id, name, nickname, avatar, deleted_at),
       club:Club(name, logo),
-      taggedUsers:Feed_User(user:User(id, name, avatar)),
+      taggedUsers:Feed_User(user:User(id, name, avatar, deleted_at)),
       taggedClubs:Feed_Club(club:Club(id, name, logo))
     `,
     )
@@ -104,9 +104,9 @@ export async function searchFeeds(keyword: string, page: number) {
     offset_count: page * PAGE_SIZE,
   }).select(`
       *,
-      author:User(name, avatar),
+      author:User(name, avatar, deleted_at),
       club:Club(name, logo),
-      taggedUsers:Feed_User(user:User(id, name, avatar)),
+      taggedUsers:Feed_User(user:User(id, name, avatar, deleted_at)),
       taggedClubs:Feed_Club(club:Club(id, name, logo))
     `);
 

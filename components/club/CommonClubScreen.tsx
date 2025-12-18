@@ -8,7 +8,7 @@ import * as Clipboard from 'expo-clipboard';
 import Toast from 'react-native-toast-message';
 
 import { fetchSession } from '@/apis/auth';
-import { checkIsClubMember, leaveClub } from '@/apis/club';
+import { checkIsClubMember, fetchMyRole, leaveClub } from '@/apis/club';
 import { getChatRoomIdByClubId } from '@/apis/chats';
 import COLORS from '@/constants/colors';
 import { ERROR_MESSAGE } from '@/constants/error';
@@ -81,6 +81,14 @@ function CommonClubScreen({
     queryFn: fetchSession,
     throwOnError: (error) => {
       Alert.alert(ERROR_MESSAGE.SESSION.FETCH_FAILED, error.message);
+      return false;
+    },
+  });
+  const { data: myRole } = useQuery({
+    queryKey: ['myRole', clubId],
+    queryFn: () => fetchMyRole(clubId as string),
+    throwOnError: (error) => {
+      Alert.alert(ERROR_MESSAGE.USER.ROLE_FETCH_FAILED, error.message);
       return false;
     },
   });
@@ -213,18 +221,20 @@ function CommonClubScreen({
                   신고
                 </RegularText>
               </TouchableOpacity>
-              <TouchableOpacity
-                style={styles.dropdownItem}
-                onPress={() => {
-                  setIsClubLeaveModalOpen(true);
-                  setIsDropdownOpen(false);
-                }}
-              >
-                <LogoutIcon />
-                <RegularText fontSize={16} style={{ color: COLORS.error }}>
-                  탈퇴
-                </RegularText>
-              </TouchableOpacity>
+              {isClubMember && myRole !== 'president' && (
+                <TouchableOpacity
+                  style={styles.dropdownItem}
+                  onPress={() => {
+                    setIsClubLeaveModalOpen(true);
+                    setIsDropdownOpen(false);
+                  }}
+                >
+                  <LogoutIcon />
+                  <RegularText fontSize={16} style={{ color: COLORS.error }}>
+                    탈퇴
+                  </RegularText>
+                </TouchableOpacity>
+              )}
             </View>
           </Modal>
         </SafeAreaView>

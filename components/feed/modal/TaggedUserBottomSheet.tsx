@@ -9,7 +9,7 @@ function TaggedUserBottomSheet({
   onClose,
   currentPath,
 }: {
-  taggedUsers: { user: { id: string; name: string; avatar: string; nickname: string } }[];
+  taggedUsers: { user: { id: string; name: string; avatar: string; nickname: string; deleted_at: string | null } }[];
   onClose: () => void;
   currentPath: '' | '/my' | '/feed' | '/explore' | '/interact' | '/club' | '/feed/detail';
 }) {
@@ -20,6 +20,9 @@ function TaggedUserBottomSheet({
           key={user.name}
           style={styles.button}
           onPress={() => {
+            if (user.deleted_at) {
+              return;
+            }
             onClose();
             router.push(`${currentPath}/profile/${user.nickname}`);
           }}
@@ -30,7 +33,9 @@ function TaggedUserBottomSheet({
             // eslint-disable-next-line global-require, @typescript-eslint/no-require-imports
             <Image source={require('@/assets/images/none_avatar.png')} style={styles.userImage} />
           )}
-          <BoldText fontSize={12}>{user.name}</BoldText>
+          <BoldText fontSize={12} style={{ color: user.deleted_at ? COLORS.gray2 : COLORS.black }}>
+            {user.deleted_at ? '(알수없음)' : user.name}
+          </BoldText>
         </TouchableOpacity>
       ))}
     </View>

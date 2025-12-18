@@ -163,6 +163,9 @@ function ReplyCard({
   });
 
   const goToProfilePage = () => {
+    if (reply.author.deleted_at) {
+      return;
+    }
     router.push(`/profile/${reply.author.nickname}`);
   };
 
@@ -201,8 +204,11 @@ function ReplyCard({
 
           <View style={styles.commentContentContainer}>
             <TouchableOpacity style={{ flexDirection: 'row', gap: 4, alignItems: 'center' }} onPress={goToProfilePage}>
-              <BoldText fontSize={16} style={{ height: 19 }}>
-                {reply.author.name}
+              <BoldText
+                fontSize={16}
+                style={{ height: 19, color: reply.author.deleted_at ? COLORS.gray2 : COLORS.black }}
+              >
+                {reply.author.deleted_at ? '(알수없음)' : reply.author.name}
               </BoldText>
               <RegularText fontSize={12} style={{ height: 14, color: COLORS.gray2 }}>
                 {getTimeAgo(reply.created_at)}

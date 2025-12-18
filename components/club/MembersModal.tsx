@@ -49,6 +49,9 @@ export default function MembersModal({ visible, onClose, clubId, currentPath }: 
                       key={member.userId}
                       style={styles.button}
                       onPress={() => {
+                        if (member.deletedAt) {
+                          return;
+                        }
                         goToProfilePage(member.nickname);
                       }}
                     >
@@ -59,8 +62,11 @@ export default function MembersModal({ visible, onClose, clubId, currentPath }: 
                         <Image source={require('@/assets/images/none_avatar.png')} style={styles.memberImage} />
                       )}
                       <View>
-                        <BoldText fontSize={14} style={{ height: 17 }}>
-                          {member.name}
+                        <BoldText
+                          fontSize={14}
+                          style={{ height: 17, color: member.deletedAt ? COLORS.gray2 : COLORS.black }}
+                        >
+                          {member.deletedAt ? '(알수없음)' : member.name}
                         </BoldText>
                         <RegularText fontSize={12} style={{ color: COLORS.gray2, height: 14 }}>
                           {member.nickname}
@@ -83,6 +89,9 @@ export default function MembersModal({ visible, onClose, clubId, currentPath }: 
                       key={member.userId}
                       style={styles.button}
                       onPress={() => {
+                        if (member.deletedAt) {
+                          return;
+                        }
                         goToProfilePage(member.nickname);
                       }}
                     >
@@ -93,8 +102,11 @@ export default function MembersModal({ visible, onClose, clubId, currentPath }: 
                         <Image source={require('@/assets/images/none_avatar.png')} style={styles.memberImage} />
                       )}
                       <View>
-                        <BoldText fontSize={14} style={{ height: 17 }}>
-                          {member.name}
+                        <BoldText
+                          fontSize={14}
+                          style={{ height: 17, color: member.deletedAt ? COLORS.gray2 : COLORS.black }}
+                        >
+                          {member.deletedAt ? '(알수없음)' : member.name}
                         </BoldText>
                         <RegularText fontSize={12} style={{ color: COLORS.gray2, height: 14 }}>
                           {member.nickname}
@@ -117,6 +129,9 @@ export default function MembersModal({ visible, onClose, clubId, currentPath }: 
                       key={member.userId}
                       style={styles.button}
                       onPress={() => {
+                        if (member.deletedAt) {
+                          return;
+                        }
                         goToProfilePage(member.nickname);
                       }}
                     >
@@ -127,8 +142,11 @@ export default function MembersModal({ visible, onClose, clubId, currentPath }: 
                         <Image source={require('@/assets/images/none_avatar.png')} style={styles.memberImage} />
                       )}
                       <View>
-                        <BoldText fontSize={14} style={{ height: 17 }}>
-                          {member.name}
+                        <BoldText
+                          fontSize={14}
+                          style={{ height: 17, color: member.deletedAt ? COLORS.gray2 : COLORS.black }}
+                        >
+                          {member.deletedAt ? '(알수없음)' : member.name}
                         </BoldText>
                         <RegularText fontSize={12} style={{ color: COLORS.gray2, height: 14 }}>
                           {member.nickname}
@@ -151,6 +169,9 @@ export default function MembersModal({ visible, onClose, clubId, currentPath }: 
                       key={member.userId}
                       style={styles.button}
                       onPress={() => {
+                        if (member.deletedAt) {
+                          return;
+                        }
                         goToProfilePage(member.nickname);
                       }}
                     >
@@ -161,8 +182,11 @@ export default function MembersModal({ visible, onClose, clubId, currentPath }: 
                         <Image source={require('@/assets/images/none_avatar.png')} style={styles.memberImage} />
                       )}
                       <View>
-                        <BoldText fontSize={14} style={{ height: 17 }}>
-                          {member.name}
+                        <BoldText
+                          fontSize={14}
+                          style={{ height: 17, color: member.deletedAt ? COLORS.gray2 : COLORS.black }}
+                        >
+                          {member.deletedAt ? '(알수없음)' : member.name}
                         </BoldText>
                         <RegularText fontSize={12} style={{ color: COLORS.gray2, height: 14 }}>
                           {member.nickname}
@@ -185,6 +209,9 @@ export default function MembersModal({ visible, onClose, clubId, currentPath }: 
                       key={member.userId}
                       style={styles.button}
                       onPress={() => {
+                        if (member.deletedAt) {
+                          return;
+                        }
                         goToProfilePage(member.nickname);
                       }}
                     >
@@ -195,8 +222,11 @@ export default function MembersModal({ visible, onClose, clubId, currentPath }: 
                         <Image source={require('@/assets/images/none_avatar.png')} style={styles.memberImage} />
                       )}
                       <View>
-                        <BoldText fontSize={14} style={{ height: 17 }}>
-                          {member.name}
+                        <BoldText
+                          fontSize={14}
+                          style={{ height: 17, color: member.deletedAt ? COLORS.gray2 : COLORS.black }}
+                        >
+                          {member.deletedAt ? '(알수없음)' : member.name}
                         </BoldText>
                         <RegularText fontSize={12} style={{ color: COLORS.gray2, height: 14 }}>
                           {member.nickname}

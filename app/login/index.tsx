@@ -1,8 +1,8 @@
 import { router } from 'expo-router';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
-import CustomWebView from '@/components/common/CustomWebView';
 import COLORS from '@/constants/colors';
+import CustomWebView from '@/components/common/CustomWebView';
 
 function LoginScreen() {
   return (
