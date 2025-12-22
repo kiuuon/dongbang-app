@@ -18,6 +18,8 @@ function ClubAnnouncementDetailScreen() {
               router.push(`/club/detail/${clubId}/announcement/${payload}/edit`);
             } else if (action === 'go to announcement list page') {
               router.push(`/club/detail/${clubId}/announcement`);
+            } else if (action === 'go to profile page') {
+              router.push(`/profile/${payload}`);
             }
           }
         }}

@@ -9,14 +9,19 @@ import Toast from 'react-native-toast-message';
 import pretendardRegular from '@/assets/fonts/Pretendard-Regular.otf';
 import pretendardSemiBold from '@/assets/fonts/Pretendard-SemiBold.otf';
 import { usePushNotifications } from '@/hooks/usePushNotifications';
+import { useRealtime } from '@/hooks/useRealTime';
 
 export const unstable_settings = {
   initialRouteName: 'index',
 };
 
+function RealTimeProvider() {
+  useRealtime();
+
+  return null;
+}
 export default function RootLayout() {
   const [queryClient] = useState(() => new QueryClient());
-
   const [fontsLoaded] = useFonts({
     PretendardRegular: pretendardRegular,
     PretendardSemiBold: pretendardSemiBold,
@@ -29,6 +34,7 @@ export default function RootLayout() {
   return (
     <QueryClientProvider client={queryClient}>
       <GestureHandlerRootView style={{ flex: 1 }}>
+        <RealTimeProvider />
         <BottomSheetModalProvider>
           <Stack
             screenOptions={{

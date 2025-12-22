@@ -18,6 +18,8 @@ import LikesIcon2 from '@/icons/LikesIcon2';
 import TrashIcon from '@/icons/TrashIcon';
 import ReportIcon2 from '@/icons/ReportIcon2';
 import BanIcon2 from '@/icons/BanIcon2';
+import TopArrowIcon from '@/icons/TopArrowIcon';
+import BottomArrowIcon2 from '@/icons/BottomArrowIcon2';
 import BoldText from '@/components/common/SemiBoldText';
 import RegularText from '@/components/common/RegularText';
 import CustomBottomSheet from '@/components/common/CustomBottomSheet';
@@ -340,6 +342,7 @@ function CommentCard({
             <RegularText fontSize={12} style={{ color: COLORS.gray3 }}>
               답글 {comment.reply_count}개
             </RegularText>
+            {isReplyOpen ? <TopArrowIcon /> : <BottomArrowIcon2 />}
           </TouchableOpacity>
 
           {isReplyOpen && (

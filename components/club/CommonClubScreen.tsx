@@ -9,7 +9,7 @@ import Toast from 'react-native-toast-message';
 
 import { fetchSession } from '@/apis/auth';
 import { checkIsClubMember, fetchMyRole, leaveClub } from '@/apis/club';
-import { getChatRoomIdByClubId } from '@/apis/chats';
+import { fetchChatRoomInfo, getChatRoomIdByClubId } from '@/apis/chats';
 import COLORS from '@/constants/colors';
 import { ERROR_MESSAGE } from '@/constants/error';
 import exploreStore from '@/stores/exploreStore';
@@ -50,7 +50,7 @@ function CommonClubScreen({
   const [selectedFeedId, setSelectedFeedId] = useState<string>('');
   const [selectedAuthorId, setSelectedAuthorId] = useState<string | null>(null);
   const [taggedUsers, setTaggedUsers] = useState<
-    { user: { id: string; name: string; avatar: string; nickname: string } }[]
+    { user: { id: string; name: string; avatar: string; nickname: string; deleted_at: string | null } }[]
   >([]);
   const [taggedClubs, setTaggedClubs] = useState<{ club: { id: string; name: string; logo: string } }[]>([]);
 
@@ -106,6 +106,16 @@ function CommonClubScreen({
     queryKey: ['chatRoomId', clubId],
     queryFn: () => getChatRoomIdByClubId(clubId as string),
     enabled: !!isClubMember,
+    throwOnError: (error) => {
+      Alert.alert(ERROR_MESSAGE.CHATS.FETCH_ROOM_INFO_FAILED, error.message);
+      return false;
+    },
+  });
+
+  const { data: chatRoomInfo } = useQuery({
+    queryKey: ['chatRoomInfo', chatRoomId],
+    queryFn: () => fetchChatRoomInfo(chatRoomId),
+    enabled: !!chatRoomId,
     throwOnError: (error) => {
       Alert.alert(ERROR_MESSAGE.CHATS.FETCH_ROOM_INFO_FAILED, error.message);
       return false;
@@ -182,8 +192,21 @@ function CommonClubScreen({
             </TouchableOpacity>
             <View style={{ flexDirection: 'row', gap: 10, alignItems: 'center' }}>
               {!isPending && session?.user && !isPendingToCheckingClubMember && isClubMember && (
-                <TouchableOpacity onPress={() => router.push(`/chats/${chatRoomId}`)}>
+                <TouchableOpacity onPress={() => router.push(`/chats/${chatRoomId}`)} style={{ position: 'relative' }}>
                   <MessageIcon color={isHeaderBackgroundWhite ? COLORS.black : COLORS.white} />
+                  {chatRoomInfo?.has_unread && (
+                    <View
+                      style={{
+                        position: 'absolute',
+                        top: 2,
+                        right: 0,
+                        width: 8,
+                        height: 8,
+                        backgroundColor: COLORS.error,
+                        borderRadius: 4,
+                      }}
+                    />
+                  )}
                 </TouchableOpacity>
               )}
               <TouchableOpacity onPress={clickShareButton}>

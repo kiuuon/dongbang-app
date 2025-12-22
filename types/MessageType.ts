@@ -5,6 +5,7 @@ export interface MessageType {
   sender_id?: string;
   sender?: {
     id: string;
+    deleted_at?: string;
     name: string;
     nickname: string;
     avatar: string;
@@ -14,6 +15,7 @@ export interface MessageType {
     type: string;
     user_id: string;
     user_name: string;
+    user_names?: string[];
   };
   message_type: string;
   content?: string;
