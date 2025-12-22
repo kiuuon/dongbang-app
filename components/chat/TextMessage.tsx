@@ -24,13 +24,13 @@ const highlightSearchKeyword = (text: string, keyword: string) => {
   const after = text.slice(index + keyword.length);
 
   return (
-    <>
-      {before}
-      <RegularText fontSize={14} style={{ color: COLORS.tertiary }}>
-        {matched}
-      </RegularText>
-      {after}
-    </>
+    <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+      <RegularText fontSize={14}>{before}</RegularText>
+      <View style={{ backgroundColor: COLORS.tertiary }}>
+        <RegularText fontSize={14}>{matched}</RegularText>
+      </View>
+      <RegularText fontSize={14}>{after}</RegularText>
+    </View>
   );
 };
 
@@ -80,9 +80,7 @@ function TextMessage({
             <RegularText fontSize={10}>{formatToTime(message.created_at)}</RegularText>
           </View>
           <View style={{ backgroundColor: COLORS.primary, borderRadius: 12, padding: 12 }}>
-            <RegularText fontSize={14} style={{ color: COLORS.white }}>
-              {displayContent}
-            </RegularText>
+            <RegularText fontSize={14}>{displayContent}</RegularText>
           </View>
 
           <View style={{ position: 'absolute', right: -8, top: 3 }}>
@@ -106,9 +104,7 @@ function TextMessage({
           <RegularText fontSize={10}>{formatToTime(message.created_at)}</RegularText>
         </View>
         <View style={{ backgroundColor: COLORS.primary, borderRadius: 12, padding: 12 }}>
-          <RegularText fontSize={14} style={{ color: COLORS.white }}>
-            {displayContent}
-          </RegularText>
+          <RegularText fontSize={14}>{displayContent}</RegularText>
         </View>
       </View>
     );

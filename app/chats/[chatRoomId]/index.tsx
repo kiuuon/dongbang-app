@@ -21,11 +21,15 @@ import COLORS from '@/constants/colors';
 import { ERROR_MESSAGE } from '@/constants/error';
 import { MessageType } from '@/types/MessageType';
 import useFetchChatMessages from '@/hooks/chat/useFetchChatMessages';
+import useSearchChatMessages from '@/hooks/chat/useSearchChatMessage';
 import RightArrowIcon from '@/icons/RightArrowIcon';
+import ChevronDownIcon from '@/icons/ChevronDownIcon';
+import ChevronUpIcon from '@/icons/ChevronUpIcon';
 import RegularText from '@/components/common/RegularText';
 import ChatRoomHeader from '@/components/chat/ChatRoomHeader';
 import SystemMessage from '@/components/chat/SystemMessage';
 import TextMessage from '@/components/chat/TextMessage';
+import BouncingMessage from '@/components/chat/BouncingMessage';
 
 function ChatRoomScreen() {
   const queryClient = useQueryClient();
@@ -50,9 +54,20 @@ function ChatRoomScreen() {
     hasPreviousPage,
   } = useFetchChatMessages(chatRoomId as string);
 
-  useEffect(() => {
-    flatListRef.current?.scrollToOffset({ offset: 0, animated: false });
-  }, []);
+  const {
+    isSearchMode,
+    setIsSearchMode,
+    searchQuery,
+    setSearchQuery,
+    searchResults,
+    currentSearchIndex,
+    searchCount,
+    isConfirm,
+    setIsConfirm,
+    handleSearchConfirm,
+    handlePreviousSearchResult,
+    handleNextSearchResult,
+  } = useSearchChatMessages({ flatListRef });
 
   const { data: userId } = useQuery({
     queryKey: ['userId'],
@@ -224,7 +239,15 @@ function ChatRoomScreen() {
   return (
     <View style={styles.container}>
       <SafeAreaView edges={['top']} style={{ backgroundColor: COLORS.tag }}>
-        <ChatRoomHeader />
+        <ChatRoomHeader
+          isSearchMode={isSearchMode}
+          setIsSearchMode={setIsSearchMode}
+          searchQuery={searchQuery}
+          setSearchQuery={setSearchQuery}
+          handleSearchConfirm={handleSearchConfirm}
+          setInputValue={setInputValue}
+          setIsConfirm={setIsConfirm}
+        />
       </SafeAreaView>
 
       <KeyboardAvoidingView
@@ -240,48 +263,51 @@ function ChatRoomScreen() {
             keyExtractor={(item) => {
               return item.id;
             }}
-            renderItem={({ item, index }) => (
-              <View>
-                {item.message_type === 'grouped_system' && (
-                  <SystemMessage
-                    message={item}
-                    index={index}
-                    boundaryIndex={boundaryIndex}
-                    boundaryMessageRef={boundaryMessageRef}
-                  />
-                )}
+            renderItem={({ item, index }) => {
+              const isSearchResult = searchResults[currentSearchIndex]?.id === item.id;
+              return (
+                <BouncingMessage isSearchResult={isSearchResult}>
+                  {item.message_type === 'grouped_system' && (
+                    <SystemMessage
+                      message={item}
+                      index={index}
+                      boundaryIndex={boundaryIndex}
+                      boundaryMessageRef={boundaryMessageRef}
+                    />
+                  )}
 
-                {firstPageUnreadCount === 11 && firstUnreadIndex >= 0 && index === firstUnreadIndex && (
-                  <View
-                    style={{
-                      alignSelf: 'center',
-                      marginBottom: 8,
-                      maxWidth: '100%',
-                      backgroundColor: COLORS.gray3,
-                      borderRadius: 16,
-                      paddingHorizontal: 12,
-                      paddingVertical: 6,
-                      opacity: 0.6,
-                    }}
-                  >
-                    <RegularText fontSize={14} style={{ color: COLORS.white }}>
-                      마지막으로 읽은 위치
-                    </RegularText>
-                  </View>
-                )}
+                  {firstPageUnreadCount === 11 && firstUnreadIndex >= 0 && index === firstUnreadIndex && (
+                    <View
+                      style={{
+                        alignSelf: 'center',
+                        marginBottom: 8,
+                        maxWidth: '100%',
+                        backgroundColor: COLORS.gray3,
+                        borderRadius: 16,
+                        paddingHorizontal: 12,
+                        paddingVertical: 6,
+                        opacity: 0.6,
+                      }}
+                    >
+                      <RegularText fontSize={14} style={{ color: COLORS.white }}>
+                        마지막으로 읽은 위치
+                      </RegularText>
+                    </View>
+                  )}
 
-                {item.message_type === 'text' && (
-                  <TextMessage
-                    message={item}
-                    messages={messages}
-                    index={index}
-                    boundaryIndex={boundaryIndex}
-                    boundaryMessageRef={boundaryMessageRef}
-                    searchQuery="" // TODO: 검색어 추가
-                  />
-                )}
-              </View>
-            )}
+                  {item.message_type === 'text' && (
+                    <TextMessage
+                      message={item}
+                      messages={messages}
+                      index={index}
+                      boundaryIndex={boundaryIndex}
+                      boundaryMessageRef={boundaryMessageRef}
+                      searchQuery={searchQuery}
+                    />
+                  )}
+                </BouncingMessage>
+              );
+            }}
             style={styles.scrollView}
             onEndReached={() => {
               if (hasNextPage && !isFetchingNextPage) {
@@ -289,11 +315,8 @@ function ChatRoomScreen() {
               }
             }}
             onEndReachedThreshold={0.5}
-            // 2. 최신 메시지 로드 (리스트의 시작 = 화면의 아래쪽)
-            // ScrollView의 상단(inverted 기준 아래)에 닿았을 때 동작
             onScroll={({ nativeEvent }) => {
               const { contentOffset } = nativeEvent;
-              // inverted 상태이므로 offset이 0에 가까워지면 '최신' 쪽으로 스크롤하는 것임
               if (contentOffset.y <= 50 && hasPreviousPage && !isFetchingPreviousPage) {
                 fetchPreviousPage();
               }
@@ -334,16 +357,37 @@ function ChatRoomScreen() {
                 </TouchableOpacity>
               </View>
             )}
-            <TextInput
-              multiline
-              scrollEnabled={false}
-              placeholder={chatRoomInfo?.is_active ? '입력' : '채팅방이 비활성화되었습니다.'}
-              style={styles.textInput}
-              placeholderTextColor={COLORS.gray2}
-              value={inputValue}
-              onChangeText={setInputValue}
-              editable={chatRoomInfo?.is_active}
-            />
+            {isSearchMode ? (
+              <View style={{ flexDirection: 'row', justifyContent: 'space-between', paddingBottom: 22 }}>
+                <View style={{ width: 56 }} />
+                {isConfirm ? (
+                  <RegularText fontSize={16}>
+                    {currentSearchIndex + 1}/{searchCount}
+                  </RegularText>
+                ) : (
+                  <View />
+                )}
+                <View style={{ flexDirection: 'row', gap: 8 }}>
+                  <TouchableOpacity onPress={handlePreviousSearchResult}>
+                    <ChevronDownIcon />
+                  </TouchableOpacity>
+                  <TouchableOpacity onPress={handleNextSearchResult}>
+                    <ChevronUpIcon />
+                  </TouchableOpacity>
+                </View>
+              </View>
+            ) : (
+              <TextInput
+                multiline
+                scrollEnabled={false}
+                placeholder={chatRoomInfo?.is_active ? '입력' : '채팅방이 비활성화되었습니다.'}
+                style={styles.textInput}
+                placeholderTextColor={COLORS.gray2}
+                value={inputValue}
+                onChangeText={setInputValue}
+                editable={chatRoomInfo?.is_active}
+              />
+            )}
             {inputValue.trim() !== '' && (
               <TouchableOpacity
                 style={styles.sendButton}

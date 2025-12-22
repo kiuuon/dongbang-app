@@ -1,4 +1,5 @@
-import { TouchableOpacity, View, StyleSheet, Alert, Image } from 'react-native';
+import { useRef } from 'react';
+import { TouchableOpacity, View, StyleSheet, Alert, Image, TextInput } from 'react-native';
 import { router, useLocalSearchParams } from 'expo-router';
 import { useQuery } from '@tanstack/react-query';
 
@@ -11,8 +12,26 @@ import MenuIcon from '@/icons/MenuIcon';
 import BoldText from '../common/SemiBoldText';
 import RegularText from '../common/RegularText';
 
-function ChatRoomHeader() {
+function ChatRoomHeader({
+  isSearchMode,
+  setIsSearchMode,
+  searchQuery,
+  setSearchQuery,
+  handleSearchConfirm,
+  setInputValue,
+  setIsConfirm,
+}: {
+  isSearchMode: boolean;
+  setIsSearchMode: React.Dispatch<React.SetStateAction<boolean>>;
+  searchQuery: string;
+  setSearchQuery: (query: string) => void;
+  handleSearchConfirm: () => void;
+  setInputValue: (value: string) => void;
+  setIsConfirm: React.Dispatch<React.SetStateAction<boolean>>;
+}) {
   const { chatRoomId } = useLocalSearchParams();
+
+  const textInputRef = useRef<TextInput>(null);
 
   const { data: chatRoomInfo } = useQuery({
     queryKey: ['chatRoomInfo', chatRoomId],
@@ -23,6 +42,40 @@ function ChatRoomHeader() {
       return false;
     },
   });
+
+  if (isSearchMode) {
+    return (
+      <View style={styles.header}>
+        <TextInput
+          ref={textInputRef}
+          placeholder="검색"
+          value={searchQuery}
+          onChangeText={setSearchQuery}
+          onSubmitEditing={handleSearchConfirm}
+          returnKeyType="search"
+          style={{
+            flex: 1,
+            backgroundColor: COLORS.secondary,
+            borderRadius: 8,
+            paddingHorizontal: 12,
+            paddingVertical: 10,
+            fontFamily: 'Pretendard-Regular',
+            fontSize: 16,
+            fontWeight: '400',
+          }}
+        />
+        <TouchableOpacity
+          onPress={() => {
+            setSearchQuery('');
+            setIsConfirm(false);
+            setIsSearchMode(false);
+          }}
+        >
+          <RegularText fontSize={16}>취소</RegularText>
+        </TouchableOpacity>
+      </View>
+    );
+  }
 
   return (
     <View style={styles.header}>
@@ -39,7 +92,15 @@ function ChatRoomHeader() {
         </View>
       </View>
       <View style={styles.buttonContainer}>
-        <TouchableOpacity>
+        <TouchableOpacity
+          onPress={() => {
+            setIsSearchMode(true);
+            setInputValue('');
+            requestAnimationFrame(() => {
+              textInputRef.current?.focus();
+            });
+          }}
+        >
           <SearchIcon2 />
         </TouchableOpacity>
         <TouchableOpacity onPress={() => router.push(`/chats/${chatRoomId}/menu`)}>
