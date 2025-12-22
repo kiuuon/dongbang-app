@@ -121,10 +121,25 @@ function TextMessage({
             router.push(`/profile/${message.sender?.nickname}`);
           }}
         >
-          <Image
-            source={{ uri: message.sender?.avatar }}
-            style={{ width: 32, height: 32, minWidth: 32, minHeight: 32, borderRadius: '50%', objectFit: 'cover' }}
-          />
+          {message.sender?.avatar ? (
+            <Image
+              source={{ uri: message.sender?.avatar }}
+              style={{ width: 32, height: 32, minWidth: 32, minHeight: 32, borderRadius: 16, objectFit: 'cover' }}
+            />
+          ) : (
+            <Image
+              // eslint-disable-next-line global-require, @typescript-eslint/no-require-imports
+              source={require('@/assets/images/none_avatar.png')}
+              style={{
+                width: 32,
+                height: 32,
+                minWidth: 32,
+                minHeight: 32,
+                borderRadius: 16,
+                objectFit: 'cover',
+              }}
+            />
+          )}
         </TouchableOpacity>
         <View>
           <BoldText

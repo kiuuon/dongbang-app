@@ -1,11 +1,12 @@
 import { SafeAreaView } from 'react-native-safe-area-context';
-
 import { router, useLocalSearchParams } from 'expo-router';
+import { useQueryClient } from '@tanstack/react-query';
 
 import CustomWebView from '@/components/common/CustomWebView';
 import COLORS from '@/constants/colors';
 
 function ChatRoomMenuScreen() {
+  const queryClient = useQueryClient();
   const { chatRoomId } = useLocalSearchParams();
 
   return (
@@ -20,6 +21,8 @@ function ChatRoomMenuScreen() {
               router.push(`/club/detail/${payload}`);
             } else if (action === 'go to profile page') {
               router.push(`/profile/${payload}`);
+            } else if (action === 'handle chat room deactivate') {
+              queryClient.invalidateQueries({ queryKey: ['chatRoomInfo', chatRoomId] });
             }
           }
         }}

@@ -99,5 +99,6 @@ export const ERROR_MESSAGE = {
     DEACTIVATE_ROOM_FAILED: '채팅방 비활성화에 실패했습니다. 다시 시도해주세요.',
     ACTIVATE_ROOM_FAILED: '채팅방 활성화에 실패했습니다. 다시 시도해주세요.',
     SEND_FAILED: '메시지 전송에 실패했습니다. 다시 시도해주세요.',
+    CLOSE_ANNOUNCEMENT_FAILED: '공지사항 닫기에 실패했습니다. 다시 시도해주세요.',
   },
 };

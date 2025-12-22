@@ -196,3 +196,26 @@ export async function fetchMyRole(clubId: string) {
 
   return data?.role;
 }
+
+export async function fetchLatestAnnouncement(clubId: string) {
+  const { data, error } = await supabase
+    .from('club_announcement')
+    .select('*')
+    .eq('club_id', clubId)
+    .is('deleted_at', null)
+    .order('created_at', { ascending: false })
+    .limit(1)
+    .maybeSingle();
+
+  if (error) throw error;
+
+  return data ?? null;
+}
+
+export async function closeAnnouncement(chatRoomId: string) {
+  const { error } = await supabase.rpc('set_chat_show_announcement_false', {
+    p_chat_room_id: chatRoomId,
+  });
+
+  if (error) throw error;
+}

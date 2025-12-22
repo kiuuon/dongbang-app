@@ -12,11 +12,12 @@ import {
   DeviceEventEmitter,
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { useLocalSearchParams } from 'expo-router';
+import { router, useLocalSearchParams } from 'expo-router';
 import { useQueryClient, useMutation, useQuery } from '@tanstack/react-query';
 
 import { fetchUserId } from '@/apis/user';
 import { fetchChatRoomInfo, sendTextMessage } from '@/apis/chats';
+import { closeAnnouncement, fetchLatestAnnouncement } from '@/apis/club';
 import COLORS from '@/constants/colors';
 import { ERROR_MESSAGE } from '@/constants/error';
 import { MessageType } from '@/types/MessageType';
@@ -25,6 +26,9 @@ import useSearchChatMessages from '@/hooks/chat/useSearchChatMessage';
 import RightArrowIcon from '@/icons/RightArrowIcon';
 import ChevronDownIcon from '@/icons/ChevronDownIcon';
 import ChevronUpIcon from '@/icons/ChevronUpIcon';
+import SpeakerPhoneIcon from '@/icons/SpeakerPhoneIcon';
+import XIcon2 from '@/icons/XIcon2';
+import BoldText from '@/components/common/SemiBoldText';
 import RegularText from '@/components/common/RegularText';
 import ChatRoomHeader from '@/components/chat/ChatRoomHeader';
 import SystemMessage from '@/components/chat/SystemMessage';
@@ -78,6 +82,26 @@ function ChatRoomScreen() {
     },
   });
 
+  const { data: chatRoomInfo } = useQuery({
+    queryKey: ['chatRoomInfo', chatRoomId],
+    queryFn: () => fetchChatRoomInfo(chatRoomId),
+    enabled: !!chatRoomId,
+    throwOnError: (error) => {
+      Alert.alert(ERROR_MESSAGE.CHATS.FETCH_ROOM_INFO_FAILED, error.message);
+      return false;
+    },
+  });
+
+  const { data: latestAnnouncement } = useQuery({
+    queryKey: ['latestAnnouncement', chatRoomInfo?.club?.id],
+    queryFn: () => fetchLatestAnnouncement(chatRoomInfo?.club?.id),
+    enabled: !!chatRoomInfo?.club?.id,
+    throwOnError: (error) => {
+      Alert.alert(ERROR_MESSAGE.CLUB.FETCH_ANNOUNCEMENTS_FAILED, error.message);
+      return false;
+    },
+  });
+
   // 새 메시지 도착 시 로직
   useEffect(() => {
     const subscription = DeviceEventEmitter.addListener('chat:new-message', (data) => {
@@ -116,16 +140,6 @@ function ChatRoomScreen() {
 
     return () => subscription.remove();
   }, [chatRoomId, queryClient]);
-
-  const { data: chatRoomInfo } = useQuery({
-    queryKey: ['chatRoomInfo', chatRoomId],
-    queryFn: () => fetchChatRoomInfo(chatRoomId),
-    enabled: !!chatRoomId,
-    throwOnError: (error) => {
-      Alert.alert(ERROR_MESSAGE.CHATS.FETCH_ROOM_INFO_FAILED, error.message);
-      return false;
-    },
-  });
 
   // 텍스트 메시지 전송
   const { mutate: handleSendTextMessage } = useMutation({
@@ -213,6 +227,14 @@ function ChatRoomScreen() {
     },
   });
 
+  // 공지사항 닫기
+  const { mutate: handleCloseAnnouncement } = useMutation({
+    mutationFn: () => closeAnnouncement(chatRoomId),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['chatRoomInfo', chatRoomId] });
+    },
+    onError: (error) => Alert.alert(ERROR_MESSAGE.CHATS.CLOSE_ANNOUNCEMENT_FAILED, error.message),
+  });
   // 마지막으로 읽은 메세지로 스크롤
   useEffect(() => {
     if (firstPageUnreadCount === 11 && firstUnreadIndex >= 0) {
@@ -238,7 +260,7 @@ function ChatRoomScreen() {
 
   return (
     <View style={styles.container}>
-      <SafeAreaView edges={['top']} style={{ backgroundColor: COLORS.tag }}>
+      <SafeAreaView edges={['top']} style={{ backgroundColor: COLORS.tag, position: 'relative' }}>
         <ChatRoomHeader
           isSearchMode={isSearchMode}
           setIsSearchMode={setIsSearchMode}
@@ -248,12 +270,49 @@ function ChatRoomScreen() {
           setInputValue={setInputValue}
           setIsConfirm={setIsConfirm}
         />
+        {latestAnnouncement && chatRoomInfo?.show_announcement && (
+          <View
+            style={{
+              position: 'sticky',
+              top: 0,
+              left: 0,
+              right: 0,
+              zIndex: 1000,
+              flexDirection: 'row',
+              alignItems: 'center',
+              justifyContent: 'space-between',
+              backgroundColor: COLORS.white,
+              paddingHorizontal: 20,
+              paddingVertical: 18,
+            }}
+          >
+            <TouchableOpacity
+              style={{ flexDirection: 'row', alignItems: 'center', gap: 8, flex: 1 }}
+              onPress={() => {
+                router.push(`/club/detail/${chatRoomInfo?.club?.id}/announcement/${latestAnnouncement?.id}`);
+              }}
+            >
+              <View style={{ width: 20, height: 20, minWidth: 20, minHeight: 20 }}>
+                <SpeakerPhoneIcon />
+              </View>
+              <BoldText fontSize={14} numberOfLines={1} style={{ flexShrink: 1 }}>
+                {latestAnnouncement?.title}
+              </BoldText>
+            </TouchableOpacity>
+            <TouchableOpacity
+              style={{ marginLeft: 8, flex: 0, alignItems: 'flex-end' }}
+              onPress={() => handleCloseAnnouncement()}
+            >
+              <XIcon2 />
+            </TouchableOpacity>
+          </View>
+        )}
       </SafeAreaView>
 
       <KeyboardAvoidingView
         behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
         style={styles.keyboardAvoidingView}
-        keyboardVerticalOffset={Platform.OS === 'ios' ? 0 : 20}
+        keyboardVerticalOffset={Platform.OS === 'ios' ? 0 : 0}
       >
         <View style={{ height: '100%' }}>
           <FlatList
