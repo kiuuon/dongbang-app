@@ -9,7 +9,6 @@ function TermsScreen() {
   const setTermOfUse = termsStore((state) => state.setTermOfUse);
   const setPrivacyPolicy = termsStore((state) => state.setPrivacyPolicy);
   const setThirdPartyConsent = termsStore((state) => state.setThirdPartyConsent);
-  const setMarketing = termsStore((state) => state.setMarketing);
 
   return (
     <SafeAreaView style={{ flex: 1, backgroundColor: COLORS.white }}>
@@ -19,11 +18,10 @@ function TermsScreen() {
           const { type, action, payload } = data;
           if (type === 'event') {
             if (action === 'click next button') {
-              const { termOfUse, privacyPolicy, thirdPartyConsent, marketing } = payload;
+              const { termOfUse, privacyPolicy, thirdPartyConsent } = payload;
               setTermOfUse(termOfUse);
               setPrivacyPolicy(privacyPolicy);
               setThirdPartyConsent(thirdPartyConsent);
-              setMarketing(marketing);
 
               router.push('/sign-up/info');
             }

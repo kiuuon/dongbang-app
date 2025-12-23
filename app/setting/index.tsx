@@ -7,6 +7,7 @@ import * as Notifications from 'expo-notifications';
 import COLORS from '@/constants/colors';
 import LeftArrowIcon from '@/icons/LeftArrowIcon';
 import ToggleIcon from '@/icons/ToggleIcon';
+import RightArrowIcon2 from '@/icons/RightArrowIcon2';
 import BoldText from '@/components/common/SemiBoldText';
 import RegularText from '@/components/common/RegularText';
 
@@ -54,6 +55,18 @@ function SettingScreen() {
         >
           <RegularText fontSize={14}>푸시 알림</RegularText>
           <ToggleIcon active={notificationPermissionStatus === 'granted'} />
+        </TouchableOpacity>
+        <TouchableOpacity style={styles.button} onPress={() => {}}>
+          <RegularText fontSize={14}>공지사항</RegularText>
+          <RightArrowIcon2 />
+        </TouchableOpacity>
+        <TouchableOpacity style={styles.button} onPress={() => {}}>
+          <RegularText fontSize={14}>문의하기</RegularText>
+          <RightArrowIcon2 />
+        </TouchableOpacity>
+        <TouchableOpacity style={styles.button} onPress={() => router.push('/setting/terms')}>
+          <RegularText fontSize={14}>약관 및 정책</RegularText>
+          <RightArrowIcon2 />
         </TouchableOpacity>
       </View>
     </SafeAreaView>

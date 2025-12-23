@@ -37,7 +37,7 @@ export async function signUp(body: UserType) {
     p_term_of_use: body.term_of_use,
     p_privacy_policy: body.privacy_policy,
     p_third_party_consent: body.third_party_consent,
-    p_marketing: body.marketing,
+    p_marketing: false,
     p_avatar: body.avatar ?? null,
   });
 

@@ -26,7 +26,6 @@ function InfoScreen() {
   const termOfUse = termsStore((state) => state.termOfUse);
   const privacyPolicy = termsStore((state) => state.privacyPolicy);
   const thirdPartyConsent = termsStore((state) => state.thirdPartyConsent);
-  const marketing = termsStore((state) => state.marketing);
 
   const { mutate: signUpMutation } = useMutation({
     mutationFn: (body: UserType) => signUp(body),
@@ -68,7 +67,6 @@ function InfoScreen() {
                 term_of_use: termOfUse,
                 privacy_policy: privacyPolicy,
                 third_party_consent: thirdPartyConsent,
-                marketing,
               };
 
               signUpMutation(body);
