@@ -22,7 +22,7 @@ import MessageIcon from '@/icons/MessageIcon';
 import CustomWebView from '@/components/common/CustomWebView';
 import CustomBottomSheet from '@/components/common/CustomBottomSheet';
 import LikesModal from '@/components/feed/modal/LikesBottomSheet';
-import TaggedClubModal from '@/components/feed/modal/TaggedClubBottomSheet';
+import TaggedClubBottomSheet from '@/components/feed/modal/TaggedClubBottomSheet';
 import TaggedUserModal from '@/components/feed/modal/TaggedUserBottomSheet';
 import SettingModal from '@/components/feed/modal/SettingBottomSheet';
 import WriteModal from '@/components/club/WriteModal';
@@ -316,7 +316,10 @@ function CommonClubScreen({
             } else if (action === 'open write modal') {
               setIsWriteModalOpen(true);
             } else if (action === 'tagged club click') {
-              setTaggedClubs(payload);
+              const { taggedClubs: taggedClubsPayload, feedId } = payload;
+              setTaggedClubs(taggedClubsPayload);
+              setSelectedFeedId(feedId);
+
               setIsTaggedClubModalOpen(true);
             } else if (action === 'setting click') {
               const { feedId, authorId } = payload;
@@ -418,7 +421,8 @@ function CommonClubScreen({
         scrollViewHeight={(taggedClubs.length as number) > 4 ? 190 : '100%'}
         title="피드에 태그된 동아리"
       >
-        <TaggedClubModal
+        <TaggedClubBottomSheet
+          feedId={selectedFeedId}
           taggedClubs={taggedClubs}
           onClose={() => setIsTaggedClubModalOpen(false)}
           currentPath={currentPath === '/club' ? '' : currentPath}

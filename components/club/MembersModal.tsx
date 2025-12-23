@@ -44,7 +44,8 @@ export default function MembersModal({ visible, onClose, clubId, currentPath }: 
             <View style={styles.buttonContainer}>
               {members?.map(
                 (member) =>
-                  member.role === 'president' && (
+                  member.role === 'president' &&
+                  (member.deletedAt ? null : (
                     <TouchableOpacity
                       key={member.userId}
                       style={styles.button}
@@ -73,7 +74,7 @@ export default function MembersModal({ visible, onClose, clubId, currentPath }: 
                         </RegularText>
                       </View>
                     </TouchableOpacity>
-                  ),
+                  )),
               )}
             </View>
           </View>
@@ -84,7 +85,8 @@ export default function MembersModal({ visible, onClose, clubId, currentPath }: 
             <View style={styles.buttonContainer}>
               {members?.map(
                 (member) =>
-                  member.role === 'officer' && (
+                  member.role === 'officer' &&
+                  (member.deletedAt ? null : (
                     <TouchableOpacity
                       key={member.userId}
                       style={styles.button}
@@ -113,7 +115,7 @@ export default function MembersModal({ visible, onClose, clubId, currentPath }: 
                         </RegularText>
                       </View>
                     </TouchableOpacity>
-                  ),
+                  )),
               )}
             </View>
           </View>
@@ -124,7 +126,8 @@ export default function MembersModal({ visible, onClose, clubId, currentPath }: 
             <View style={styles.buttonContainer}>
               {members?.map(
                 (member) =>
-                  member.role === 'member' && (
+                  member.role === 'member' &&
+                  (member.deletedAt ? null : (
                     <TouchableOpacity
                       key={member.userId}
                       style={styles.button}
@@ -153,7 +156,7 @@ export default function MembersModal({ visible, onClose, clubId, currentPath }: 
                         </RegularText>
                       </View>
                     </TouchableOpacity>
-                  ),
+                  )),
               )}
             </View>
           </View>
@@ -164,7 +167,8 @@ export default function MembersModal({ visible, onClose, clubId, currentPath }: 
             <View style={styles.buttonContainer}>
               {members?.map(
                 (member) =>
-                  member.role === 'on_leave' && (
+                  member.role === 'on_leave' &&
+                  (member.deletedAt ? null : (
                     <TouchableOpacity
                       key={member.userId}
                       style={styles.button}
@@ -193,7 +197,7 @@ export default function MembersModal({ visible, onClose, clubId, currentPath }: 
                         </RegularText>
                       </View>
                     </TouchableOpacity>
-                  ),
+                  )),
               )}
             </View>
           </View>
@@ -204,7 +208,8 @@ export default function MembersModal({ visible, onClose, clubId, currentPath }: 
             <View style={styles.buttonContainer}>
               {members?.map(
                 (member) =>
-                  member.role === 'graduate' && (
+                  member.role === 'graduate' &&
+                  (member.deletedAt ? null : (
                     <TouchableOpacity
                       key={member.userId}
                       style={styles.button}
@@ -233,7 +238,7 @@ export default function MembersModal({ visible, onClose, clubId, currentPath }: 
                         </RegularText>
                       </View>
                     </TouchableOpacity>
-                  ),
+                  )),
               )}
             </View>
           </View>

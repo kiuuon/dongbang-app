@@ -32,31 +32,30 @@ export default function WriteModal({ visible, onClose, clubId }: WriteModalProps
       <TouchableOpacity style={styles.backdrop} activeOpacity={1} onPress={onClose}>
         <View style={styles.container}>
           {/* 회장, 임원 */}
-          {myRole === 'president' ||
-            (myRole === 'officer' && (
-              <View style={styles.buttonContainer}>
-                <TouchableOpacity
-                  style={styles.button}
-                  onPress={() => {
-                    router.push(`/club/detail/${clubId}/members/manage`);
-                    onClose();
-                  }}
-                >
-                  <PersonIcon />
-                  <RegularText fontSize={16}>부원 관리</RegularText>
-                </TouchableOpacity>
-                <TouchableOpacity
-                  style={styles.button}
-                  onPress={() => {
-                    router.push(`/club/edit/${clubId}/info`);
-                    onClose();
-                  }}
-                >
-                  <EditIcon2 color="#F9A825" />
-                  <RegularText fontSize={16}>동아리 소개 수정</RegularText>
-                </TouchableOpacity>
-              </View>
-            ))}
+          {(myRole === 'president' || myRole === 'officer') && (
+            <View style={styles.buttonContainer}>
+              <TouchableOpacity
+                style={styles.button}
+                onPress={() => {
+                  router.push(`/club/detail/${clubId}/members/manage`);
+                  onClose();
+                }}
+              >
+                <PersonIcon />
+                <RegularText fontSize={16}>부원 관리</RegularText>
+              </TouchableOpacity>
+              <TouchableOpacity
+                style={styles.button}
+                onPress={() => {
+                  router.push(`/club/edit/${clubId}/info`);
+                  onClose();
+                }}
+              >
+                <EditIcon2 color="#F9A825" />
+                <RegularText fontSize={16}>동아리 정보 수정</RegularText>
+              </TouchableOpacity>
+            </View>
+          )}
           {/* 전체 */}
           <View style={styles.buttonContainer}>
             <TouchableOpacity
@@ -69,20 +68,18 @@ export default function WriteModal({ visible, onClose, clubId }: WriteModalProps
               <TagIcon />
               <RegularText fontSize={16}>활동명 변경</RegularText>
             </TouchableOpacity>
-            {myRole === 'president' ||
-              myRole === 'officer' ||
-              (myRole === 'member' && (
-                <TouchableOpacity
-                  style={styles.button}
-                  onPress={() => {
-                    router.push(`/feed/write/${clubId}`);
-                    onClose();
-                  }}
-                >
-                  <FeedIcon />
-                  <RegularText fontSize={16}>피드 작성</RegularText>
-                </TouchableOpacity>
-              ))}
+            {(myRole === 'president' || myRole === 'officer' || myRole === 'member') && (
+              <TouchableOpacity
+                style={styles.button}
+                onPress={() => {
+                  router.push(`/feed/write/${clubId}`);
+                  onClose();
+                }}
+              >
+                <FeedIcon />
+                <RegularText fontSize={16}>피드 작성</RegularText>
+              </TouchableOpacity>
+            )}
           </View>
         </View>
       </TouchableOpacity>

@@ -120,6 +120,8 @@ const styles = StyleSheet.create({
     width: '100%',
     height: 94,
     backgroundColor: COLORS.white,
+    borderTopWidth: 1,
+    borderTopColor: COLORS.background,
   },
   resetButton: {
     width: 101,

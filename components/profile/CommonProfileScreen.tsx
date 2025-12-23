@@ -9,7 +9,7 @@ import exploreStore from '@/stores/exploreStore';
 import CustomWebView from '@/components/common/CustomWebView';
 import CustomBottomSheet from '@/components/common/CustomBottomSheet';
 import LikesModal from '@/components/feed/modal/LikesBottomSheet';
-import TaggedClubModal from '@/components/feed/modal/TaggedClubBottomSheet';
+import TaggedClubBottomSheet from '@/components/feed/modal/TaggedClubBottomSheet';
 import TaggedUserModal from '@/components/feed/modal/TaggedUserBottomSheet';
 import SettingModal from '@/components/feed/modal/SettingBottomSheet';
 import ClubsModal from './ClubsModal';
@@ -34,7 +34,7 @@ function CommonProfileScreen({
   const [selectedFeedId, setSelectedFeedId] = useState<string>('');
   const [selectedAuthorId, setSelectedAuthorId] = useState<string | null>(null);
   const [taggedUsers, setTaggedUsers] = useState<
-    { user: { id: string; name: string; avatar: string; nickname: string } }[]
+    { user: { id: string; name: string; avatar: string; nickname: string; deleted_at: string | null } }[]
   >([]);
   const [taggedClubs, setTaggedClubs] = useState<{ club: { id: string; name: string; logo: string } }[]>([]);
   const [isClubsModalOpen, setIsClubsModalOpen] = useState(false);
@@ -81,7 +81,9 @@ function CommonProfileScreen({
               } else if (action === 'go to account setting page') {
                 router.push('/account-setting');
               } else if (action === 'tagged club click') {
-                setTaggedClubs(payload);
+                const { taggedClubs: taggedClubsPayload, feedId } = payload;
+                setTaggedClubs(taggedClubsPayload);
+                setSelectedFeedId(feedId);
                 setIsTaggedClubModalOpen(true);
               } else if (action === 'setting click') {
                 const { feedId, authorId } = payload;
@@ -192,7 +194,8 @@ function CommonProfileScreen({
         scrollViewHeight={(taggedClubs.length as number) > 4 ? 190 : '100%'}
         title="피드에 태그된 동아리"
       >
-        <TaggedClubModal
+        <TaggedClubBottomSheet
+          feedId={selectedFeedId}
           taggedClubs={taggedClubs}
           onClose={() => setIsTaggedClubModalOpen(false)}
           currentPath={currentPath === '/club' ? '' : currentPath}

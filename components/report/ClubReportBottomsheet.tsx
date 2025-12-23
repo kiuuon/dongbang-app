@@ -12,7 +12,7 @@ import BoldText from '../common/SemiBoldText';
 const REPORT_ITEMS = {
   falseInformation: '동아리 소개 내용이 사실과 다릅니다',
   illegal: '불법/위험 활동이 의심됩니다',
-  discrimination: '특정 인물/집단에 대한 혐오/차별을 조장합니다',
+  discrimination: '특정 인물/집단 혐오를 조장합니다',
 };
 
 function ClubReportBottomsheet({ clubId, onClose }: { clubId: string; onClose: () => void }) {

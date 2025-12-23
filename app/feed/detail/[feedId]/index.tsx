@@ -33,7 +33,7 @@ function FeedDetailScreen() {
   const [selectedCommentId, setSelectedCommentId] = useState<string | null>(null);
   const [selectedAuthorId, setSelectedAuthorId] = useState<string | null>(null);
   const [taggedUsers, setTaggedUsers] = useState<
-    { user: { id: string; name: string; avatar: string; nickname: string } }[]
+    { user: { id: string; name: string; avatar: string; nickname: string; deleted_at: string | null } }[]
   >([]);
   const [taggedClubs, setTaggedClubs] = useState<{ club: { id: string; name: string; logo: string } }[]>([]);
 
@@ -69,7 +69,8 @@ function FeedDetailScreen() {
             const { type, action, payload } = data;
             if (type === 'event') {
               if (action === 'tagged club click') {
-                setTaggedClubs(payload);
+                const { taggedClubs: taggedClubsPayload } = payload;
+                setTaggedClubs(taggedClubsPayload);
                 setIsTaggedClubBottomSheetOpen(true);
               } else if (action === 'setting click') {
                 const { authorId } = payload;
@@ -152,6 +153,7 @@ function FeedDetailScreen() {
         title="피드에 태그된 동아리"
       >
         <TaggedClubBottomSheet
+          feedId={feedId}
           taggedClubs={taggedClubs}
           onClose={() => setIsTaggedClubBottomSheetOpen(false)}
           currentPath="/feed/detail"
