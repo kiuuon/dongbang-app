@@ -1,5 +1,5 @@
+import { Linking } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
-
 import { router } from 'expo-router';
 
 import CustomWebView from '@/components/common/CustomWebView';
@@ -15,6 +15,8 @@ function TermsScreen() {
           if (type === 'event') {
             if (action === 'go to terms detail page') {
               router.push(`/setting/terms/${payload}`);
+            } else if (action === 'open GitHub repository') {
+              Linking.openURL('https://github.com/kiuuon/dongbang-app');
             }
           }
         }}
