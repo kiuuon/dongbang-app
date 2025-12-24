@@ -56,7 +56,7 @@ function SettingScreen() {
           <RegularText fontSize={14}>푸시 알림</RegularText>
           <ToggleIcon active={notificationPermissionStatus === 'granted'} />
         </TouchableOpacity>
-        <TouchableOpacity style={styles.button} onPress={() => {}}>
+        <TouchableOpacity style={styles.button} onPress={() => router.push('/setting/announcement')}>
           <RegularText fontSize={14}>공지사항</RegularText>
           <RightArrowIcon2 />
         </TouchableOpacity>
