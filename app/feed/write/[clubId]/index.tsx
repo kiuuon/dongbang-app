@@ -35,6 +35,7 @@ function FeedWriteScreen() {
       isPrivate: boolean;
       clubId: string;
       clubType: 'campus' | 'union';
+      universityId: number;
       selectedMembers: string[];
       selectedClubs: string[];
     }) =>
@@ -46,6 +47,7 @@ function FeedWriteScreen() {
         body.isPrivate,
         body.clubId,
         body.clubType,
+        body.universityId,
         body.selectedMembers,
         body.selectedClubs,
       ),
@@ -102,7 +104,7 @@ function FeedWriteScreen() {
             if (action === 'open tag modal') {
               setIsTagModalOpen(true);
             } else if (action === 'write feed') {
-              const { photos, title, content, clubType, isNicknameVisible, isPrivate } = payload;
+              const { photos, title, content, clubType, isNicknameVisible, isPrivate, universityId } = payload;
               const body = {
                 photos,
                 title: title || '',
@@ -111,6 +113,7 @@ function FeedWriteScreen() {
                 isPrivate,
                 clubId: clubId as string,
                 clubType,
+                universityId,
                 selectedMembers: draftSelectedMembers,
                 selectedClubs: draftSelectedClubs,
               };

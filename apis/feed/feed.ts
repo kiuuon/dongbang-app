@@ -8,6 +8,7 @@ export async function writeFeed(
   isPrivate: boolean,
   clubId: string,
   clubType: 'campus' | 'union',
+  universityId: number,
   selectedMembers: string[],
   selectedClubs: string[],
 ) {
@@ -19,6 +20,7 @@ export async function writeFeed(
     p_is_private: isPrivate,
     p_club_id: clubId,
     p_club_type: clubType,
+    p_university_id: universityId,
     p_selected_members: selectedMembers,
     p_selected_clubs: selectedClubs,
   });

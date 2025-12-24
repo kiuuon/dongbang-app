@@ -60,7 +60,7 @@ function SettingScreen() {
           <RegularText fontSize={14}>공지사항</RegularText>
           <RightArrowIcon2 />
         </TouchableOpacity>
-        <TouchableOpacity style={styles.button} onPress={() => {}}>
+        <TouchableOpacity style={styles.button} onPress={() => router.push('/setting/inquiry')}>
           <RegularText fontSize={14}>문의하기</RegularText>
           <RightArrowIcon2 />
         </TouchableOpacity>
