@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from 'react';
-import { AppState, RefreshControl, ScrollView } from 'react-native';
+import { RefreshControl, ScrollView } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { router } from 'expo-router';
 import * as Notifications from 'expo-notifications';
@@ -18,12 +18,7 @@ function NotificationScreen() {
     setRefreshing(false);
   };
   useEffect(() => {
-    const sub = AppState.addEventListener('change', (state) => {
-      if (state === 'active') {
-        Notifications.setBadgeCountAsync(0);
-      }
-    });
-    return () => sub.remove();
+    Notifications.setBadgeCountAsync(0);
   }, []);
 
   return (

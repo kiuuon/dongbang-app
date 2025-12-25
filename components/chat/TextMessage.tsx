@@ -69,6 +69,7 @@ function TextMessage({
             alignItems: 'flex-end',
             justifyContent: 'flex-end',
             gap: 4,
+            marginLeft: 48,
           }}
         >
           <View style={{ flexDirection: 'column', alignItems: 'flex-end' }}>
@@ -79,7 +80,7 @@ function TextMessage({
             ) : null}
             <RegularText fontSize={10}>{formatToTime(message.created_at)}</RegularText>
           </View>
-          <View style={{ backgroundColor: COLORS.primary, borderRadius: 12, padding: 12 }}>
+          <View style={{ backgroundColor: COLORS.primary, borderRadius: 12, padding: 12, flexShrink: 1 }}>
             <RegularText fontSize={14}>{displayContent}</RegularText>
           </View>
 
@@ -93,7 +94,14 @@ function TextMessage({
     return (
       <View
         ref={index === boundaryIndex ? boundaryMessageRef : null}
-        style={{ marginBottom: 8, flexDirection: 'row', alignItems: 'flex-end', justifyContent: 'flex-end', gap: 4 }}
+        style={{
+          marginBottom: 8,
+          flexDirection: 'row',
+          alignItems: 'flex-end',
+          justifyContent: 'flex-end',
+          gap: 4,
+          marginLeft: 48,
+        }}
       >
         <View style={{ flexDirection: 'column', alignItems: 'flex-end' }}>
           {message.unread_count && message.unread_count > 0 ? (
@@ -103,7 +111,7 @@ function TextMessage({
           ) : null}
           <RegularText fontSize={10}>{formatToTime(message.created_at)}</RegularText>
         </View>
-        <View style={{ backgroundColor: COLORS.primary, borderRadius: 12, padding: 12 }}>
+        <View style={{ backgroundColor: COLORS.primary, borderRadius: 12, padding: 12, flexShrink: 1 }}>
           <RegularText fontSize={14}>{displayContent}</RegularText>
         </View>
       </View>
@@ -141,7 +149,7 @@ function TextMessage({
             />
           )}
         </TouchableOpacity>
-        <View>
+        <View style={{ flexShrink: 1, marginRight: 48 }}>
           <BoldText
             fontSize={14}
             style={{ marginBottom: 4, color: message.sender?.deleted_at ? COLORS.gray2 : COLORS.black }}
@@ -152,7 +160,7 @@ function TextMessage({
             ref={index === boundaryIndex ? boundaryMessageRef : null}
             style={{ position: 'relative', marginBottom: 8, flexDirection: 'row', alignItems: 'flex-end', gap: 4 }}
           >
-            <View style={{ backgroundColor: COLORS.white, borderRadius: 12, padding: 12 }}>
+            <View style={{ backgroundColor: COLORS.white, borderRadius: 12, padding: 12, flexShrink: 1 }}>
               <RegularText fontSize={14}>{displayContent}</RegularText>
             </View>
             <View style={{ flexDirection: 'column', alignItems: 'flex-start' }}>
@@ -175,9 +183,9 @@ function TextMessage({
   return (
     <View
       ref={index === boundaryIndex ? boundaryMessageRef : null}
-      style={{ marginBottom: 8, marginLeft: 40, flexDirection: 'row', alignItems: 'flex-end', gap: 4 }}
+      style={{ marginBottom: 8, marginLeft: 40, flexDirection: 'row', alignItems: 'flex-end', gap: 4, marginRight: 48 }}
     >
-      <View style={{ backgroundColor: COLORS.white, borderRadius: 12, padding: 12 }}>
+      <View style={{ backgroundColor: COLORS.white, borderRadius: 12, padding: 12, flexShrink: 1 }}>
         <RegularText fontSize={14}>{displayContent}</RegularText>
       </View>
       <View style={{ flexDirection: 'column', alignItems: 'flex-start' }}>
