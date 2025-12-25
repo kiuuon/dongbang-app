@@ -1,19 +1,31 @@
 {
   "expo": {
-    "name": "dongbang-app",
+    "name": "동방",
     "slug": "dongbang-app",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/images/icon.png",
+    "splash": {
+      "image": "./assets/splash-icon.png",
+      "resizeMode": "contain",
+      "backgroundColor": "#ffffff"
+    },
     "scheme": "myapp",
     "userInterfaceStyle": "automatic",
     "newArchEnabled": true,
     "ios": {
-      "supportsTablet": true
+      "bundleIdentifier": "com.dongbang.www",
+      "buildNumber": "1.0.0",
+      "supportsTablet": false,
+      "infoPlist": {
+        "ITSAppUsesNonExemptEncryption": false
+      }
     },
     "android": {
+      "package": "com.dongbang.www",
+      "versionCode": 1,
       "adaptiveIcon": {
-        "foregroundImage": "./assets/images/adaptive-icon.png",
+        "foregroundImage": "./assets/images/icon.png",
         "backgroundColor": "#ffffff"
       }
     },
@@ -52,6 +64,12 @@
         "projectId": "932000c0-3dbf-448f-b653-ef3f1d95a2d2"
       }
     },
-    "owner": "kiuuon"
+    "owner": "kiuuon",
+    "runtimeVersion": {
+      "policy": "appVersion"
+    },
+    "updates": {
+      "url": "https://u.expo.dev/932000c0-3dbf-448f-b653-ef3f1d95a2d2"
+    }
   }
 }

@@ -7,6 +7,9 @@ export function usePushNotifications() {
   const router = useRouter();
   const pathname = usePathname();
 
+  // 1. 마지막 알림 응답 확인용 훅 추가
+  const lastResponse = Notifications.useLastNotificationResponse();
+
   const notificationListener = useRef<Notifications.EventSubscription | null>(null);
   const responseListener = useRef<Notifications.EventSubscription | null>(null);
   const currentChatRoomIdRef = useRef<string>('');
@@ -20,6 +23,25 @@ export function usePushNotifications() {
     currentChatRoomIdRef.current = currentChatRoomId;
     currentPathnameRef.current = pathname;
   }, [pathname]);
+
+  // 2. 앱이 꺼진 상태(Terminated)에서 알림 클릭 시 처리
+  useEffect(() => {
+    if (lastResponse && lastResponse.actionIdentifier === Notifications.DEFAULT_ACTION_IDENTIFIER) {
+      const { data } = lastResponse.notification.request.content;
+
+      // 내비게이션 준비 시간을 벌기 위해 아주 약간의 지연을 줍니다.
+      const timeout = setTimeout(() => {
+        if (data.type === 'chat_message' && data.chatRoomId) {
+          router.push(`/chats/${data.chatRoomId}`);
+        } else if (data.type === 'notification') {
+          router.push('/notification');
+        }
+      }, 500);
+
+      return () => clearTimeout(timeout);
+    }
+    return () => {};
+  }, [lastResponse, router]); // lastResponse가 변경될 때마다 실행
 
   useEffect(() => {
     // 앱 시작 시 푸시 토큰 등록
