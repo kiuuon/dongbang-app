@@ -14,7 +14,7 @@ export default {
       backgroundColor: '#ffffff',
     },
     ios: {
-      bundleIdentifier: 'com.dongbang.www',
+      bundleIdentifier: 'com.dongbang.app',
       buildNumber: '1.0.0',
       supportsTablet: false,
       infoPlist: {
@@ -22,7 +22,7 @@ export default {
       },
     },
     android: {
-      package: 'com.dongbang.www',
+      package: 'com.dongbang.app',
       versionCode: 1,
       // 핵심: EAS Secret(GOOGLE_SERVICES_JSON)이 있으면 그 경로를 사용하고, 없으면 로컬 파일을 사용함
       googleServicesFile: process.env.GOOGLE_SERVICES_JSON ?? './google-services.json',
