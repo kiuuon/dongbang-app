@@ -19,17 +19,20 @@ export default {
       supportsTablet: false,
       infoPlist: {
         ITSAppUsesNonExemptEncryption: false,
+        NSCameraUsageDescription: '사진을 촬영해 업로드하기 위해 카메라 접근 권한이 필요합니다.',
+        NSPhotoLibraryUsageDescription: '갤러리에 저장된 사진을 선택해 업로드하기 위해 권한이 필요합니다.',
+        NSPhotoLibraryAddUsageDescription: '촬영한 사진을 기기에 저장하기 위해 권한이 필요합니다.',
       },
     },
     android: {
       package: 'com.dongbang.dongbangapp',
       versionCode: 1,
-      // 핵심: EAS Secret(GOOGLE_SERVICES_JSON)이 있으면 그 경로를 사용하고, 없으면 로컬 파일을 사용함
       googleServicesFile: process.env.GOOGLE_SERVICES_JSON ?? './google-services.json',
       adaptiveIcon: {
         foregroundImage: './assets/images/icon.png',
         backgroundColor: '#ffffff',
       },
+      permissions: ['CAMERA', 'READ_EXTERNAL_STORAGE', 'WRITE_EXTERNAL_STORAGE', 'READ_MEDIA_IMAGES'],
     },
     web: {
       bundler: 'metro',
