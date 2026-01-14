@@ -100,7 +100,10 @@ function AccountSettingScreen() {
           <BoldText fontSize={14} style={{ color: COLORS.error, marginBottom: 8 }}>
             회원 탈퇴
           </BoldText>
-          <RegularText fontSize={12}>탈퇴 문구</RegularText>
+          <RegularText fontSize={12}>
+            탈퇴시 회원 정보와 프로필은 영구 삭제되어 복구할 수 없습니다. 단, 서비스 내에 작성한 콘텐츠(게시글, 댓글,
+            채팅 등)는 삭제되지 않으며, 작성자 정보는 &apos;(알수없음)&apos;으로 표시됩니다.
+          </RegularText>
           <TouchableOpacity
             style={{ flexDirection: 'row', alignItems: 'center', gap: 8, marginVertical: 19 }}
             onPress={() => setIsWithdrawalAgreed(!isWithdrawalAgreed)}
@@ -113,7 +116,7 @@ function AccountSettingScreen() {
                 backgroundColor: isWithdrawalAgreed ? COLORS.primary : COLORS.gray0,
               }}
             />
-            <RegularText fontSize={12}>동의합니다.</RegularText>
+            <RegularText fontSize={12}>회원탈퇴에 동의합니다.</RegularText>
           </TouchableOpacity>
           <TouchableOpacity
             style={{
