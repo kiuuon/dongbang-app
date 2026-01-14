@@ -5,11 +5,14 @@ import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { useFonts } from 'expo-font';
 import { BottomSheetModalProvider } from '@gorhom/bottom-sheet';
 import Toast from 'react-native-toast-message';
+import * as SplashScreen from 'expo-splash-screen';
 
 import pretendardRegular from '@/assets/fonts/Pretendard-Regular.otf';
 import pretendardSemiBold from '@/assets/fonts/Pretendard-SemiBold.otf';
 import { usePushNotifications } from '@/hooks/usePushNotifications';
 import { useRealtime } from '@/hooks/useRealTime';
+
+SplashScreen.preventAutoHideAsync();
 
 export const unstable_settings = {
   initialRouteName: 'index',

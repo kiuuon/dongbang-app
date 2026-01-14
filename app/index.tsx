@@ -2,6 +2,7 @@ import { useEffect } from 'react';
 import { Alert } from 'react-native';
 import { router } from 'expo-router';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import * as SplashScreen from 'expo-splash-screen';
 
 import { fetchSession } from '@/apis/auth';
 import { fetchUser } from '@/apis/user';
@@ -12,6 +13,8 @@ function Screen() {
       try {
         const session = await fetchSession();
         const user = await fetchUser();
+
+        await SplashScreen.hideAsync();
 
         if (session) {
           if (user) {
