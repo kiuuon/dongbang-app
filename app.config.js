@@ -32,7 +32,6 @@ export default {
         foregroundImage: './assets/images/icon.png',
         backgroundColor: '#ffffff',
       },
-      permissions: ['CAMERA', 'READ_EXTERNAL_STORAGE', 'WRITE_EXTERNAL_STORAGE', 'READ_MEDIA_IMAGES'],
     },
     web: {
       bundler: 'metro',
